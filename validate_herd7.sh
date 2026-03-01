@@ -3,7 +3,7 @@
 # Run: bash validate_herd7.sh
 # Requires: herd7 installed (opam install herd7)
 
-LITMUS_DIR="$(dirname "$0")/litmus_files"
+LITMUS_DIR="$(dirname "$0")/litmus_inf/litmus_files"
 RESULTS="$(dirname "$0")/herd7_results.json"
 PASS=0
 FAIL=0

@@ -11,10 +11,10 @@ This directory demonstrates LITMUS∞ running in a CI/CD pipeline.
 ## Quick Run
 
 ```bash
-# From litmus_inf/:
+# From the repository root:
 python3 examples/ci_demo/run_demo.py
 
-# Or using the CLI directly:
+# Or using the CLI directly (after pip install -e litmus_inf/):
 litmus-check --target arm examples/ci_demo/concurrent_queue.c
 litmus-check --target arm --warn-unrecognized examples/ci_demo/concurrent_queue.c
 ```

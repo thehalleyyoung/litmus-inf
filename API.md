@@ -1,7 +1,7 @@
 # LITMUS∞ — API Reference
 
 All features listed below are implemented and functional.
-Install from source only (not on PyPI): `cd litmus_inf && pip install -e .`
+Install from source only (not on PyPI): `pip install -e litmus_inf/`
 
 ## CLI: `litmus-check`
 

@@ -9,7 +9,7 @@ the output, and saves results as JSON.
 Usage:
     python3 run_demo.py
     # or:
-    cd litmus_inf && litmus-check --target arm examples/ci_demo/concurrent_queue.c
+    cd litmus_inf && litmus-check --target arm ../examples/ci_demo/concurrent_queue.c
 """
 
 import json
@@ -18,7 +18,7 @@ import sys
 import time
 
 # Ensure litmus_inf is importable
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'litmus_inf'))
 
 from ast_analyzer import ASTAnalyzer
 from litmus_check import find_source_files, extract_concurrency_snippets, check_snippet

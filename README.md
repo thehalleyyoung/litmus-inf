@@ -5,8 +5,7 @@ Advisory pre-screening tool that checks whether concurrent C/C++/CUDA code is sa
 ## 30-Second Quickstart
 
 ```bash
-cd litmus_inf
-pip install -e .           # install from source (not on PyPI)
+pip install -e litmus_inf/   # install from source (not on PyPI)
 litmus-check --target arm myfile.c
 ```
 
@@ -62,4 +61,4 @@ SAFE:   mp_fence                                           [Z3: UNSAT + Alethe p
 ## Documentation
 
 - [API.md](API.md) — API reference (CLI and Python)
-- [litmus_inf/paper.tex](litmus_inf/paper.tex) — full paper with methodology and proofs
+- [docs/paper.tex](docs/paper.tex) — full paper with methodology and proofs

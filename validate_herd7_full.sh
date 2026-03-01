@@ -10,7 +10,7 @@
 
 set -euo pipefail
 
-LITMUS_DIR="${1:-$(dirname "$0")/litmus_files}"
+LITMUS_DIR="${1:-$(dirname "$0")/litmus_inf/litmus_files}"
 RESULTS_FILE="$(dirname "$0")/paper_results_v4/herd7_validation.json"
 
 if ! command -v herd7 &>/dev/null; then

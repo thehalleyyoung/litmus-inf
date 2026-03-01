@@ -5,7 +5,7 @@ setup(
     name="litmus-inf",
     version="0.2.0",
     description="LITMUS∞: Cross-Architecture Memory Model Portability Checker",
-    long_description=open("README.md").read(),
+    long_description=open("../README.md").read(),
     long_description_content_type="text/markdown",
     author="Anonymous",
     license="MIT",
