@@ -1,0 +1,19 @@
+{
+  "pattern": "store_fwd_cross",
+  "model": "sparc",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_2": "1",
+    "rf_4": "0",
+    "ts_4": "3",
+    "ts_2": "5",
+    "rf_3": "1",
+    "ts_3": "2",
+    "ts_1": "1",
+    "ts_0": "4",
+    "ts_init_x": "0",
+    "ts_init_y": "0"
+  },
+  "hash": "54bceea9c9b56d0e"
+}

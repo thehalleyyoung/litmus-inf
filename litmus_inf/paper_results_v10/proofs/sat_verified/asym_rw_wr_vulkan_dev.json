@@ -1,0 +1,19 @@
+{
+  "pattern": "asym_rw_wr",
+  "model": "vulkan_dev",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "ts_4": "0",
+    "ts_2": "3",
+    "rf_0": "1",
+    "ts_3": "1",
+    "rf_5": "1",
+    "ts_5": "4",
+    "ts_1": "0",
+    "ts_0": "2",
+    "ts_init_x": "0",
+    "ts_init_y": "0"
+  },
+  "hash": "b9e955733e5729df"
+}

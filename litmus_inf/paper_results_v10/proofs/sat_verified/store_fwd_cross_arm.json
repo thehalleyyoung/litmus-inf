@@ -1,0 +1,19 @@
+{
+  "pattern": "store_fwd_cross",
+  "model": "arm",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_2": "1",
+    "rf_4": "0",
+    "ts_4": "1",
+    "ts_2": "3",
+    "rf_3": "1",
+    "ts_3": "2",
+    "ts_1": "1",
+    "ts_0": "2",
+    "ts_init_x": "0",
+    "ts_init_y": "0"
+  },
+  "hash": "ef1f50f85908aa7d"
+}

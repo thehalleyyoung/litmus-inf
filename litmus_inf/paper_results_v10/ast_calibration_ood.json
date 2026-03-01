@@ -1,0 +1,31 @@
+{
+  "n_ood": 50,
+  "confidence_bins": {
+    "[0.0, 0.5)": {
+      "n": 10,
+      "exact": 0
+    },
+    "[0.5, 0.8)": {
+      "n": 32,
+      "exact": 0
+    },
+    "[0.8, 0.9)": {
+      "n": 7,
+      "exact": 0
+    },
+    "[0.9, 1.0]": {
+      "n": 1,
+      "exact": 0
+    }
+  },
+  "coverage_analysis": {
+    "high_coverage": {
+      "n": 50,
+      "exact": 0
+    },
+    "low_coverage": {
+      "n": 0,
+      "exact": 0
+    }
+  }
+}

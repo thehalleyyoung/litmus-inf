@@ -1,0 +1,167 @@
+{
+  "model": "gpt-4.1-nano",
+  "n_snippets": 15,
+  "correct": 11,
+  "accuracy": 73.33333333333333,
+  "results": [
+    {
+      "id": "adv_rcu_dereference",
+      "expected": "rcu_publish",
+      "predicted": [
+        "rwc",
+        "rcu_publish",
+        "mp_fence"
+      ],
+      "match": true,
+      "confidence": 0.9,
+      "reasoning": "The code uses RCU mechanisms, which rely on read-write causality (rwc) and publish semantics (rcu_pu"
+    },
+    {
+      "id": "adv_seqlock_writer",
+      "expected": "seqlock_read",
+      "predicted": [
+        "seqlock_read"
+      ],
+      "match": true,
+      "confidence": 0.8,
+      "reasoning": "The code implements a seqlock pattern with explicit memory barriers (smp_wmb and smp_rmb) to enforce"
+    },
+    {
+      "id": "adv_hazard_ptr",
+      "expected": "hazard_ptr",
+      "predicted": [
+        "hazard_ptr"
+      ],
+      "match": true,
+      "confidence": 0.8,
+      "reasoning": "The code implements a hazard pointer pattern with explicit atomic loads and stores, using release an"
+    },
+    {
+      "id": "adv_treiber_push",
+      "expected": "lockfree_stack_push",
+      "predicted": [
+        "lockfree_stack_push"
+      ],
+      "match": true,
+      "confidence": 0.8,
+      "reasoning": "The code implements a lock-free stack push with a release store (compare_exchange_weak with memory_o"
+    },
+    {
+      "id": "adv_dcl",
+      "expected": "dcl_init",
+      "predicted": [
+        "dcl_init"
+      ],
+      "match": true,
+      "confidence": 0.9,
+      "reasoning": "The code implements double-checked locking with explicit acquire and release semantics, matching the"
+    },
+    {
+      "id": "adv_spsc_ring",
+      "expected": "lockfree_spsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "match": true,
+      "confidence": 0.9,
+      "reasoning": "The code implements a single-producer single-consumer lock-free ring buffer with release on store an"
+    },
+    {
+      "id": "adv_ticket_lock",
+      "expected": "ticket_lock",
+      "predicted": [
+        "ticket_lock",
+        "mp_fence"
+      ],
+      "match": true,
+      "confidence": 0.9,
+      "reasoning": "The code implements a ticket lock with explicit memory orders: fetch_add with relaxed, load with acq"
+    },
+    {
+      "id": "adv_peterson",
+      "expected": "peterson",
+      "predicted": [
+        "dekker",
+        "mp_fence"
+      ],
+      "match": false,
+      "confidence": 0.9,
+      "reasoning": "The code implements a mutual exclusion protocol similar to Dekker's algorithm, using relaxed stores "
+    },
+    {
+      "id": "adv_linux_kfifo",
+      "expected": "lockfree_spsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "match": true,
+      "confidence": 0.9,
+      "reasoning": "The code implements a lock-free single-producer single-consumer queue with explicit memory fences (s"
+    },
+    {
+      "id": "adv_cuda_ballot",
+      "expected": "gpu_mp_wg",
+      "predicted": [
+        "gpu_mp_wg",
+        "seqlock_read"
+      ],
+      "match": true,
+      "confidence": 0.8,
+      "reasoning": "The code models a warp-level shared memory synchronization pattern with a thread fence (__threadfenc"
+    },
+    {
+      "id": "adv_work_stealing",
+      "expected": "work_steal",
+      "predicted": [
+        "lockfree_stack_push",
+        "seqlock_read"
+      ],
+      "match": false,
+      "confidence": 0.8,
+      "reasoning": "The code implements a lock-free work-stealing deque with explicit fences: a release fence after stor"
+    },
+    {
+      "id": "adv_release_chain",
+      "expected": "rel_acq_chain",
+      "predicted": [
+        "rel_acq_chain"
+      ],
+      "match": true,
+      "confidence": 0.8,
+      "reasoning": "The code explicitly implements a release-acquire chain across three threads, which matches the 'rel_"
+    },
+    {
+      "id": "adv_folly_eventcount",
+      "expected": "sb",
+      "predicted": [
+        "mp_fence"
+      ],
+      "match": false,
+      "confidence": 0.8,
+      "reasoning": "The code uses a sequentially consistent fence before notify, which aligns with the mp_fence pattern,"
+    },
+    {
+      "id": "adv_mpsc_queue",
+      "expected": "lockfree_mpsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "match": false,
+      "confidence": 0.9,
+      "reasoning": "The code implements a lock-free single-producer, single-consumer queue with atomic exchange and stor"
+    },
+    {
+      "id": "adv_dekker_custom",
+      "expected": "dekker",
+      "predicted": [
+        "dekker"
+      ],
+      "match": true,
+      "confidence": 0.9,
+      "reasoning": "The code implements Dekker's mutual exclusion algorithm, which relies on shared flags and a turn var"
+    }
+  ]
+}

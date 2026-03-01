@@ -1,0 +1,185 @@
+{
+  "total": 15,
+  "exact_match": 13,
+  "top3_match": 13,
+  "no_match": 1,
+  "errors": 0,
+  "details": [
+    {
+      "name": "crypto_aes_ctr",
+      "expected": "mp",
+      "predicted": [],
+      "exact": false,
+      "top3": false,
+      "confidence": 0.7,
+      "time_s": 17.63
+    },
+    {
+      "name": "embedded_dma",
+      "expected": "mp",
+      "predicted": [
+        "mp",
+        "mp_fence"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.8,
+      "time_s": 2.06
+    },
+    {
+      "name": "network_packet_ring",
+      "expected": "mp_fence",
+      "predicted": [
+        "mp_fence",
+        "lockfree_spsc_queue"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 2.51
+    },
+    {
+      "name": "lockfree_treiber_stack",
+      "expected": "lockfree_stack_push",
+      "predicted": [
+        "lockfree_stack_push",
+        "rmw_cas_mp"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 2.26
+    },
+    {
+      "name": "simd_parallel_reduce",
+      "expected": "gpu_mp_wg",
+      "predicted": [
+        "gpu_mp_wg"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.9,
+      "time_s": 2.95
+    },
+    {
+      "name": "coroutine_channel",
+      "expected": "mp_fence",
+      "predicted": [
+        "mp_fence",
+        "mp_data"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 2.27
+    },
+    {
+      "name": "kernel_rcu_update",
+      "expected": "rcu_publish",
+      "predicted": [
+        "rcu_publish",
+        "mp_fence"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.9,
+      "time_s": 3.97
+    },
+    {
+      "name": "seqlock_reader",
+      "expected": "seqlock_read",
+      "predicted": [
+        "seqlock_read"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 1.98
+    },
+    {
+      "name": "work_stealing_deque",
+      "expected": "work_steal",
+      "predicted": [
+        "work_steal",
+        "mp_fence"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.9,
+      "time_s": 2.33
+    },
+    {
+      "name": "hazard_pointer_scan",
+      "expected": "hazard_ptr",
+      "predicted": [
+        "hazard_ptr",
+        "mp_fence"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 2.76
+    },
+    {
+      "name": "dcl_singleton",
+      "expected": "dcl_init",
+      "predicted": [
+        "dcl_init",
+        "mp_fence"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 2.84
+    },
+    {
+      "name": "spsc_ring_buffer",
+      "expected": "lockfree_spsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.9,
+      "time_s": 4.87
+    },
+    {
+      "name": "cuda_reduction_xwg",
+      "expected": "gpu_mp_dev",
+      "predicted": [
+        "gpu_mp_dev",
+        "gpu_mp_wg"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.85,
+      "time_s": 3.34
+    },
+    {
+      "name": "ms_queue_enqueue",
+      "expected": "ms_queue_enq",
+      "predicted": [
+        "lockfree_stack_push",
+        "rmw_cas_mp"
+      ],
+      "exact": false,
+      "top3": false,
+      "confidence": 0.8,
+      "time_s": 2.64
+    },
+    {
+      "name": "ticket_lock_impl",
+      "expected": "ticket_lock",
+      "predicted": [
+        "ticket_lock"
+      ],
+      "exact": true,
+      "top3": true,
+      "confidence": 0.95,
+      "time_s": 1.62
+    }
+  ],
+  "exact_rate": 0.8666666666666667,
+  "top3_rate": 0.8666666666666667
+}

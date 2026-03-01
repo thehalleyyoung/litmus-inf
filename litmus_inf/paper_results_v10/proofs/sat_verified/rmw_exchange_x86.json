@@ -1,0 +1,22 @@
+{
+  "pattern": "rmw_exchange",
+  "model": "x86",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "ts_4": "3",
+    "rf_4": "2",
+    "ts_1": "1",
+    "ts_2": "6",
+    "co_y_1_2": "False",
+    "rf_1": "0",
+    "rf_5": "0",
+    "co_y_2_1": "True",
+    "ts_3": "2",
+    "ts_init_x": "0",
+    "ts_init_y": "0",
+    "ts_0": "5",
+    "ts_5": "4"
+  },
+  "hash": "7e1992f39b929b90"
+}

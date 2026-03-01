@@ -1,0 +1,21 @@
+{
+  "gpt_4_1_nano": {
+    "exact_rate": 0.4,
+    "top3_rate": 0.4666666666666667,
+    "exact": 6,
+    "top3": 7,
+    "total": 15
+  },
+  "gpt_4_1": {
+    "exact_rate": 0.9333333333333333,
+    "top3_rate": 0.9333333333333333,
+    "exact": 14,
+    "top3": 14,
+    "total": 15
+  },
+  "baseline_ast": {
+    "exact_rate": 0.13,
+    "top3_rate": 0.217,
+    "note": "Pure syntactic AST matching on adversarial OOD snippets"
+  }
+}

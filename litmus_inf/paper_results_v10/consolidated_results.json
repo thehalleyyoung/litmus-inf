@@ -1,0 +1,80 @@
+{
+  "experiment_date": "2025-07-18",
+  "smt_validation": {
+    "total_pairs": 1400,
+    "patterns": 140,
+    "architectures": 10,
+    "unsat_safe": 597,
+    "sat_unsafe": 803,
+    "timeouts": 0,
+    "errors": 0,
+    "crossval_mismatches": 0,
+    "note": "All 1400 pairs verified, SMT agrees with enumeration checker on every pair"
+  },
+  "dsl_cat_correspondence": {
+    "total_checks": 348,
+    "agree": 347,
+    "disagree": 1,
+    "agreement_rate": 99.7,
+    "mismatch_pattern": "mp_fence_wr on RISC-V (asymmetric fence expressiveness gap)",
+    "per_model": {
+      "x86tso": {
+        "total": 116,
+        "agree": 116,
+        "rate": 100.0
+      },
+      "aarch64": {
+        "total": 116,
+        "agree": 116,
+        "rate": 100.0
+      },
+      "riscv": {
+        "total": 116,
+        "agree": 115,
+        "rate": 99.1
+      }
+    }
+  },
+  "benchmark": {
+    "total_snippets": 203,
+    "exact_match": 196,
+    "top3_match": 197,
+    "exact_accuracy": 96.6,
+    "top3_accuracy": 97.0,
+    "categories": 16
+  },
+  "severity_classification": {
+    "total_unsafe": 803,
+    "data_race": 689,
+    "security_vulnerability": 44,
+    "benign": 70,
+    "all_z3_certified": true
+  },
+  "llm_ood_evaluation": {
+    "gpt_4_1_nano": {
+      "n": 15,
+      "correct": 11,
+      "accuracy": 73.3
+    },
+    "gpt_5_chat_latest": {
+      "n": 15,
+      "correct": 13,
+      "accuracy": 86.7
+    },
+    "note": "All LLM-identified patterns undergo full SMT verification (soundness preserved)"
+  },
+  "compositional_reasoning": {
+    "examples": 5,
+    "architectures_tested": [
+      "x86",
+      "arm",
+      "riscv"
+    ],
+    "total_analyses": 15,
+    "disjoint_compositions": 0,
+    "shared_variable_interactions": 15,
+    "safe": 2,
+    "unsafe": 13,
+    "note": "Conservative overapproximation: shared variables flagged, individual patterns SMT-verified"
+  }
+}

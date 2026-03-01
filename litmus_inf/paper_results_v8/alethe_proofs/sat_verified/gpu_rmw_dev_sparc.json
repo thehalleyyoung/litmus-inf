@@ -1,0 +1,20 @@
+{
+  "pattern": "gpu_rmw_dev",
+  "model": "sparc",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "ts_4": "0",
+    "ts_init_x": "0",
+    "ts_2": "2",
+    "rf_1": "0",
+    "rf_3": "1",
+    "rf_5": "0",
+    "ts_3": "3",
+    "ts_1": "1",
+    "ts_init_y": "0",
+    "ts_0": "5",
+    "ts_5": "4"
+  },
+  "hash": "7b8df62516d3c0b7"
+}

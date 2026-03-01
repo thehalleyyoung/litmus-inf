@@ -1,0 +1,143 @@
+{
+  "model": "gpt-5-chat-latest",
+  "n_snippets": 15,
+  "correct": 13,
+  "accuracy": 86.66666666666667,
+  "results": [
+    {
+      "id": "adv_rcu_dereference",
+      "expected": "rcu_publish",
+      "predicted": [
+        "rcu_publish",
+        "mp"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_seqlock_writer",
+      "expected": "seqlock_read",
+      "predicted": [
+        "seqlock_read",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_hazard_ptr",
+      "expected": "hazard_ptr",
+      "predicted": [
+        "hazard_ptr",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_treiber_push",
+      "expected": "lockfree_stack_push",
+      "predicted": [
+        "lockfree_stack_push",
+        "rmw_cas_mp"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_dcl",
+      "expected": "dcl_init",
+      "predicted": [
+        "dcl_init",
+        "mp_data"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_spsc_ring",
+      "expected": "lockfree_spsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_ticket_lock",
+      "expected": "ticket_lock",
+      "predicted": [
+        "ticket_lock",
+        "rel_acq_chain"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_peterson",
+      "expected": "peterson",
+      "predicted": [
+        "dekker",
+        "peterson"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_linux_kfifo",
+      "expected": "lockfree_spsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_cuda_ballot",
+      "expected": "gpu_mp_wg",
+      "predicted": [
+        "gpu_mp_wg",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_work_stealing",
+      "expected": "work_steal",
+      "predicted": [
+        "work_steal",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_release_chain",
+      "expected": "rel_acq_chain",
+      "predicted": [
+        "rel_acq_chain",
+        "mp_fence"
+      ],
+      "match": true
+    },
+    {
+      "id": "adv_folly_eventcount",
+      "expected": "sb",
+      "predicted": [
+        "mp_fence",
+        "mp"
+      ],
+      "match": false
+    },
+    {
+      "id": "adv_mpsc_queue",
+      "expected": "lockfree_mpsc_queue",
+      "predicted": [
+        "lockfree_spsc_queue",
+        "mp_fence"
+      ],
+      "match": false
+    },
+    {
+      "id": "adv_dekker_custom",
+      "expected": "dekker",
+      "predicted": [
+        "dekker",
+        "peterson"
+      ],
+      "match": true
+    }
+  ]
+}

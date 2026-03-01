@@ -1,0 +1,21 @@
+{
+  "pattern": "ticket_lock",
+  "model": "arm",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_2": "0",
+    "rf_4": "1",
+    "ts_4": "2",
+    "ts_2": "1",
+    "ts_init_y": "0",
+    "rf_0": "0",
+    "ts_3": "1",
+    "ts_5": "2",
+    "ts_init_z": "0",
+    "ts_1": "2",
+    "ts_0": "1",
+    "ts_init_x": "0"
+  },
+  "hash": "96379b9683ea19c6"
+}

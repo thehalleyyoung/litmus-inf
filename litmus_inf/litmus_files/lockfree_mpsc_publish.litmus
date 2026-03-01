@@ -1,0 +1,27 @@
+C lockfree_mpsc_publish
+
+{ int x=0; int y=0; int z=0; }
+
+P0(
+  int* x, int* z
+) {
+  WRITE_ONCE(*x, 1);
+  WRITE_ONCE(*z, 1);
+}
+
+P1(
+  int* y, int* z
+) {
+  WRITE_ONCE(*y, 1);
+  WRITE_ONCE(*z, 2);
+}
+
+P2(
+  int* x, int* y, int* z
+) {
+  int r0 = READ_ONCE(*z);
+  int r1 = READ_ONCE(*x);
+  int r2 = READ_ONCE(*y);
+}
+
+exists (2:r0=2 /\ 2:r1=0)

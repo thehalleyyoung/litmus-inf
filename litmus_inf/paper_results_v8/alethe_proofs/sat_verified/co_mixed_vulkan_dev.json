@@ -1,0 +1,18 @@
+{
+  "pattern": "co_mixed",
+  "model": "vulkan_dev",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_2": "1",
+    "ts_2": "4",
+    "rf_1": "2",
+    "ts_3": "1",
+    "co_x_1_2": "False",
+    "co_x_2_1": "True",
+    "ts_0": "3",
+    "ts_1": "2",
+    "ts_init_x": "0"
+  },
+  "hash": "f05f4f2ac54d87d3"
+}

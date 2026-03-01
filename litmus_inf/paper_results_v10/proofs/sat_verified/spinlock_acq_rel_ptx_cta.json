@@ -1,0 +1,27 @@
+{
+  "pattern": "spinlock_acq_rel",
+  "model": "ptx_cta",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "ts_4": "1",
+    "rf_6": "0",
+    "ts_2": "5",
+    "ts_6": "3",
+    "co_y_2_3": "False",
+    "co_y_2_1": "False",
+    "ts_init_x": "0",
+    "ts_0": "3",
+    "ts_init_y": "0",
+    "rf_4": "0",
+    "co_y_1_2": "True",
+    "co_y_1_3": "False",
+    "co_y_3_2": "True",
+    "rf_0": "3",
+    "ts_3": "6",
+    "ts_5": "2",
+    "co_y_3_1": "True",
+    "ts_1": "4"
+  },
+  "hash": "c688835f01b70c43"
+}

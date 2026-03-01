@@ -1,0 +1,2150 @@
+{
+  "experiment": "SMT-backed compositional verification",
+  "frame_rule_verification": {
+    "total": 9,
+    "verified": 9,
+    "rate": 1.0,
+    "results": [
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 19.31,
+        "program": "producer_consumer_completion",
+        "arch": "x86"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 12.84,
+        "program": "producer_consumer_completion",
+        "arch": "arm"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 15.99,
+        "program": "producer_consumer_completion",
+        "arch": "riscv"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 18.22,
+        "program": "lockfree_queue_two_stage",
+        "arch": "x86"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 16.6,
+        "program": "lockfree_queue_two_stage",
+        "arch": "arm"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 15.5,
+        "program": "lockfree_queue_two_stage",
+        "arch": "riscv"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 9.72,
+        "program": "rcu_update_read",
+        "arch": "x86"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 10.3,
+        "program": "rcu_update_read",
+        "arch": "arm"
+      },
+      {
+        "frame_rule_holds": true,
+        "a_result": "sat",
+        "b_result": "sat",
+        "combined_result": "sat",
+        "a_safe": false,
+        "b_safe": false,
+        "combined_safe": false,
+        "expected_safe": false,
+        "time_ms": 10.65,
+        "program": "rcu_update_read",
+        "arch": "riscv"
+      }
+    ]
+  },
+  "interaction_witnesses": {
+    "total": 18,
+    "unsafe_found": 14,
+    "safe": 4,
+    "results": [
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "done",
+          "flag"
+        ],
+        "n_interactions": 325,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corw",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "s",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_ctrl_store",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "asym_ww_rw",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "producer_consumer_ring",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "cowr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "amoswap",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "hazard_ptr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "asym_rw_wr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "store_fwd",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "flag_sync_bidirectional",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 117.41,
+        "program": "shared_flag_mp_sb",
+        "arch": "x86"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "done",
+          "flag"
+        ],
+        "n_interactions": 325,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corw",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "s",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_store",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "asym_ww_rw",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "producer_consumer_ring",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "cowr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "amoswap",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "hazard_ptr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "asym_rw_wr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "store_fwd",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "flag_sync_bidirectional",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 125.1,
+        "program": "shared_flag_mp_sb",
+        "arch": "arm"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "done",
+          "flag"
+        ],
+        "n_interactions": 325,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corw",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "s",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_store",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "asym_ww_rw",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "producer_consumer_ring",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "cowr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "amoswap",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "hazard_ptr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "asym_rw_wr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "store_fwd",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "flag_sync_bidirectional",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 100.2,
+        "program": "shared_flag_mp_sb",
+        "arch": "riscv"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "buffer",
+          "top"
+        ],
+        "n_interactions": 21,
+        "individual_results": [
+          {
+            "pattern": "sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "cowr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "amoswap",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "hazard_ptr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "store_fwd",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "flag_sync_bidirectional",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 33.11,
+        "program": "work_steal_shared_buffer",
+        "arch": "x86"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "buffer",
+          "top"
+        ],
+        "n_interactions": 21,
+        "individual_results": [
+          {
+            "pattern": "sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "cowr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "amoswap",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "hazard_ptr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "store_fwd",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "flag_sync_bidirectional",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 108.7,
+        "program": "work_steal_shared_buffer",
+        "arch": "arm"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "buffer",
+          "top"
+        ],
+        "n_interactions": 21,
+        "individual_results": [
+          {
+            "pattern": "sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "cowr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "amoswap",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_sb",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "hazard_ptr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "store_fwd",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "flag_sync_bidirectional",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 49.7,
+        "program": "work_steal_shared_buffer",
+        "arch": "riscv"
+      },
+      {
+        "interaction_unsafe": false,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data_a",
+          "data_b",
+          "epoch_a",
+          "epoch_b"
+        ],
+        "n_interactions": 156,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": true,
+            "smt_result": "unsat"
+          }
+        ],
+        "conservative_safe": true,
+        "smt_result": "unsat",
+        "time_ms": 120.81,
+        "program": "epoch_reclamation_disjoint",
+        "arch": "x86"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data_a",
+          "data_b",
+          "epoch_a",
+          "epoch_b"
+        ],
+        "n_interactions": 156,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 123.11,
+        "program": "epoch_reclamation_disjoint",
+        "arch": "arm"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data_a",
+          "data_b",
+          "epoch_a",
+          "epoch_b"
+        ],
+        "n_interactions": 156,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 150.82,
+        "program": "epoch_reclamation_disjoint",
+        "arch": "riscv"
+      },
+      {
+        "interaction_unsafe": false,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "refcount"
+        ],
+        "n_interactions": 78,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": true,
+            "smt_result": "unsat"
+          }
+        ],
+        "conservative_safe": true,
+        "smt_result": "unsat",
+        "time_ms": 55.36,
+        "program": "shared_counter_rw",
+        "arch": "x86"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "refcount"
+        ],
+        "n_interactions": 78,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 41.89,
+        "program": "shared_counter_rw",
+        "arch": "arm"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "refcount"
+        ],
+        "n_interactions": 78,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 41.15,
+        "program": "shared_counter_rw",
+        "arch": "riscv"
+      },
+      {
+        "interaction_unsafe": false,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "seq"
+        ],
+        "n_interactions": 153,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "seqlock_read",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "seqlock_write",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_diff_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "work_steal",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "publish_array",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": true,
+            "smt_result": "unsat"
+          }
+        ],
+        "conservative_safe": true,
+        "smt_result": "unsat",
+        "time_ms": 64.21,
+        "program": "seqlock_shared_seq",
+        "arch": "x86"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "seq"
+        ],
+        "n_interactions": 153,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "seqlock_read",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "seqlock_write",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_diff_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "work_steal",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "publish_array",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 71.04,
+        "program": "seqlock_shared_seq",
+        "arch": "arm"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "seq"
+        ],
+        "n_interactions": 153,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "seqlock_read",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "seqlock_write",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_diff_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "work_steal",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "publish_array",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 60.53,
+        "program": "seqlock_shared_seq",
+        "arch": "riscv"
+      },
+      {
+        "interaction_unsafe": false,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "flag"
+        ],
+        "n_interactions": 78,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": true,
+            "smt_result": "unsat"
+          }
+        ],
+        "conservative_safe": true,
+        "smt_result": "unsat",
+        "time_ms": 42.64,
+        "program": "shared_mp_fenced",
+        "arch": "x86"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "flag"
+        ],
+        "n_interactions": 78,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 43.59,
+        "program": "shared_mp_fenced",
+        "arch": "arm"
+      },
+      {
+        "interaction_unsafe": true,
+        "has_shared_variables": true,
+        "shared_variables": [
+          "data",
+          "flag"
+        ],
+        "n_interactions": 78,
+        "individual_results": [
+          {
+            "pattern": "mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "corr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "mp_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_st",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mp_dmb_ld",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "lockfree_spsc_queue",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rel_acq_mp",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "mca_ww_rr",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "dep_data_addr",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "dep_ctrl_load",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "rcu_publish",
+            "safe": false,
+            "smt_result": "sat"
+          },
+          {
+            "pattern": "full_vs_light_barrier",
+            "safe": true,
+            "smt_result": "unsat"
+          },
+          {
+            "pattern": "write_release_read_acquire",
+            "safe": false,
+            "smt_result": "sat"
+          }
+        ],
+        "conservative_safe": false,
+        "smt_result": "sat",
+        "time_ms": 42.5,
+        "program": "shared_mp_fenced",
+        "arch": "riscv"
+      }
+    ]
+  },
+  "rg_smt_agreement": {
+    "total": 18,
+    "agree": 14,
+    "rate": 0.7778,
+    "results": [
+      {
+        "program": "shared_flag_mp_sb",
+        "arch": "x86",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": false
+      },
+      {
+        "program": "shared_flag_mp_sb",
+        "arch": "arm",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "shared_flag_mp_sb",
+        "arch": "riscv",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "work_steal_shared_buffer",
+        "arch": "x86",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": false
+      },
+      {
+        "program": "work_steal_shared_buffer",
+        "arch": "arm",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "work_steal_shared_buffer",
+        "arch": "riscv",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "epoch_reclamation_disjoint",
+        "arch": "x86",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": true,
+        "smt_result": "unsat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "epoch_reclamation_disjoint",
+        "arch": "arm",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "epoch_reclamation_disjoint",
+        "arch": "riscv",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "shared_counter_rw",
+        "arch": "x86",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": true,
+        "smt_result": "unsat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "shared_counter_rw",
+        "arch": "arm",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "shared_counter_rw",
+        "arch": "riscv",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "seqlock_shared_seq",
+        "arch": "x86",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": true,
+        "smt_result": "unsat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "seqlock_shared_seq",
+        "arch": "arm",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "seqlock_shared_seq",
+        "arch": "riscv",
+        "rg_safe": false,
+        "rg_type": "shared_rg_unsafe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "shared_mp_fenced",
+        "arch": "x86",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": true,
+        "smt_result": "unsat",
+        "rg_smt_agree": true
+      },
+      {
+        "program": "shared_mp_fenced",
+        "arch": "arm",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": false
+      },
+      {
+        "program": "shared_mp_fenced",
+        "arch": "riscv",
+        "rg_safe": true,
+        "rg_type": "shared_rg_safe",
+        "smt_safe": false,
+        "smt_result": "sat",
+        "rg_smt_agree": false
+      }
+    ]
+  },
+  "summary": {
+    "frame_rule_verified": "9/9",
+    "interaction_witnesses_found": 14,
+    "rg_smt_agreement": "14/18"
+  }
+}

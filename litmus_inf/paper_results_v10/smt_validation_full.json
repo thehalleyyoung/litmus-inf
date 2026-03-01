@@ -1,0 +1,8 @@
+{
+  "total_pairs": 1400,
+  "sat": 240,
+  "unsat": 1160,
+  "timeout": 0,
+  "errors": 0,
+  "notes": "Full 140 patterns x 10 architectures. Zero timeouts, zero errors."
+}

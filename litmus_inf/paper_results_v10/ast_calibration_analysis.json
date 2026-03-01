@@ -1,0 +1,213 @@
+{
+  "n_total": 203,
+  "overall_exact_rate": 0.9655172413793104,
+  "overall_top3_rate": 0.9704433497536946,
+  "calibration_bins": [
+    {
+      "bin_range": "[0.8, 0.9)",
+      "n_snippets": 5,
+      "avg_confidence": 0.882,
+      "actual_accuracy": 1.0,
+      "gap": 0.118
+    },
+    {
+      "bin_range": "[0.9, 1.0)",
+      "n_snippets": 13,
+      "avg_confidence": 0.945,
+      "actual_accuracy": 1.0,
+      "gap": 0.055
+    }
+  ],
+  "threshold_analysis": [
+    {
+      "threshold": 0.0,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.1,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.2,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.3,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.4,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.5,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.6,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.7,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.8,
+      "coverage": 1.0,
+      "n_above": 203,
+      "n_fallback": 0,
+      "exact_accuracy": 0.966,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.931,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.937,
+        0.986
+      ]
+    },
+    {
+      "threshold": 0.9,
+      "coverage": 0.975,
+      "n_above": 198,
+      "n_fallback": 5,
+      "exact_accuracy": 0.965,
+      "top3_accuracy": 0.97,
+      "exact_wilson_ci": [
+        0.929,
+        0.983
+      ],
+      "top3_wilson_ci": [
+        0.935,
+        0.986
+      ]
+    },
+    {
+      "threshold": 1.0,
+      "coverage": 0.911,
+      "n_above": 185,
+      "n_fallback": 18,
+      "exact_accuracy": 0.962,
+      "top3_accuracy": 0.968,
+      "exact_wilson_ci": [
+        0.924,
+        0.982
+      ],
+      "top3_wilson_ci": [
+        0.931,
+        0.985
+      ]
+    }
+  ],
+  "optimal_threshold": 0.0,
+  "optimal_f1": 0.983,
+  "expected_calibration_error": 0.0064,
+  "coverage_confidence_analysis": {
+    "high_coverage_n": 203,
+    "high_coverage_exact_rate": 0.9655172413793104,
+    "low_coverage_n": 0,
+    "low_coverage_exact_rate": 0.0
+  },
+  "interpretation": {
+    "ece_note": "ECE = 0.0064 (lower is better; <0.1 is well-calibrated, >0.2 is poorly calibrated)",
+    "optimal_threshold_note": "Threshold 0.0 maximizes F1(coverage, accuracy) at 0.983",
+    "recommendation": "Use coverage_confidence < 0.5 as the LLM fallback trigger"
+  }
+}

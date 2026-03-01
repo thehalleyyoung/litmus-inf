@@ -1,0 +1,23 @@
+C publish_array_fence
+
+{ int x=0; int y=0; int z=0; }
+
+P0(
+  int* x, int* y, int* z
+) {
+  WRITE_ONCE(*x, 1);
+  WRITE_ONCE(*y, 1);
+  smp_mb();
+  WRITE_ONCE(*z, 1);
+}
+
+P1(
+  int* x, int* y, int* z
+) {
+  int r0 = READ_ONCE(*z);
+  smp_mb();
+  int r1 = READ_ONCE(*x);
+  int r2 = READ_ONCE(*y);
+}
+
+exists (1:r0=1 /\ 1:r1=0)

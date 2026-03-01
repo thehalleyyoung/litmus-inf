@@ -1,0 +1,765 @@
+{
+  "n_total": 241,
+  "n_curated": 203,
+  "n_adversarial": 23,
+  "n_ood_variant": 15,
+  "overall_exact": 0.8299,
+  "overall_exact_ci": [
+    0.7774,
+    0.872
+  ],
+  "overall_top3": 0.8506,
+  "overall_top3_ci": [
+    0.8001,
+    0.8901
+  ],
+  "ece": 0.08384,
+  "ece_interpretation": "acceptable",
+  "selective_prediction": {
+    "curve": [
+      {
+        "threshold": 0.0,
+        "coverage": 1.0,
+        "accuracy": 0.8299,
+        "risk": 0.1701,
+        "n_selected": 241,
+        "n_rejected": 0,
+        "wilson_ci": [
+          0.7774,
+          0.872
+        ]
+      },
+      {
+        "threshold": 0.05,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.1,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.15,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.2,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.25,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.3,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.35,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.4,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.45,
+        "coverage": 0.9959,
+        "accuracy": 0.8333,
+        "risk": 0.1667,
+        "n_selected": 240,
+        "n_rejected": 1,
+        "wilson_ci": [
+          0.781,
+          0.8752
+        ]
+      },
+      {
+        "threshold": 0.5,
+        "coverage": 0.9834,
+        "accuracy": 0.8439,
+        "risk": 0.1561,
+        "n_selected": 237,
+        "n_rejected": 4,
+        "wilson_ci": [
+          0.7922,
+          0.8846
+        ]
+      },
+      {
+        "threshold": 0.55,
+        "coverage": 0.9834,
+        "accuracy": 0.8439,
+        "risk": 0.1561,
+        "n_selected": 237,
+        "n_rejected": 4,
+        "wilson_ci": [
+          0.7922,
+          0.8846
+        ]
+      },
+      {
+        "threshold": 0.6,
+        "coverage": 0.9585,
+        "accuracy": 0.8658,
+        "risk": 0.1342,
+        "n_selected": 231,
+        "n_rejected": 10,
+        "wilson_ci": [
+          0.8158,
+          0.9038
+        ]
+      },
+      {
+        "threshold": 0.65,
+        "coverage": 0.9378,
+        "accuracy": 0.885,
+        "risk": 0.115,
+        "n_selected": 226,
+        "n_rejected": 15,
+        "wilson_ci": [
+          0.8368,
+          0.9203
+        ]
+      },
+      {
+        "threshold": 0.7,
+        "coverage": 0.8963,
+        "accuracy": 0.9259,
+        "risk": 0.0741,
+        "n_selected": 216,
+        "n_rejected": 25,
+        "wilson_ci": [
+          0.8831,
+          0.9539
+        ]
+      },
+      {
+        "threshold": 0.75,
+        "coverage": 0.8838,
+        "accuracy": 0.939,
+        "risk": 0.061,
+        "n_selected": 213,
+        "n_rejected": 28,
+        "wilson_ci": [
+          0.8984,
+          0.964
+        ]
+      },
+      {
+        "threshold": 0.8,
+        "coverage": 0.8755,
+        "accuracy": 0.9479,
+        "risk": 0.0521,
+        "n_selected": 211,
+        "n_rejected": 30,
+        "wilson_ci": [
+          0.9091,
+          0.9706
+        ]
+      },
+      {
+        "threshold": 0.85,
+        "coverage": 0.8672,
+        "accuracy": 0.9569,
+        "risk": 0.0431,
+        "n_selected": 209,
+        "n_rejected": 32,
+        "wilson_ci": [
+          0.9202,
+          0.9772
+        ]
+      },
+      {
+        "threshold": 0.9,
+        "coverage": 0.8382,
+        "accuracy": 0.9554,
+        "risk": 0.0446,
+        "n_selected": 202,
+        "n_rejected": 39,
+        "wilson_ci": [
+          0.9175,
+          0.9764
+        ]
+      },
+      {
+        "threshold": 0.95,
+        "coverage": 0.8008,
+        "accuracy": 0.9637,
+        "risk": 0.0363,
+        "n_selected": 193,
+        "n_rejected": 48,
+        "wilson_ci": [
+          0.927,
+          0.9823
+        ]
+      },
+      {
+        "threshold": 1.0,
+        "coverage": 0.7759,
+        "accuracy": 0.9626,
+        "risk": 0.0374,
+        "n_selected": 187,
+        "n_rejected": 54,
+        "wilson_ci": [
+          0.9248,
+          0.9818
+        ]
+      }
+    ],
+    "aurc": 0.01824,
+    "auroc": 0.8986,
+    "n_correct": 200,
+    "n_incorrect": 41
+  },
+  "optimal_threshold": {
+    "threshold": 0.95,
+    "coverage": 0.8008,
+    "accuracy": 0.9637,
+    "risk": 0.0363,
+    "n_selected": 193,
+    "n_rejected": 48,
+    "wilson_ci": [
+      0.927,
+      0.9823
+    ]
+  },
+  "calibration_bins": [
+    {
+      "bin_range": "[0.0, 0.1)",
+      "n": 1,
+      "avg_confidence": 0.0,
+      "accuracy": 0.0,
+      "gap": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ]
+    },
+    {
+      "bin_range": "[0.4, 0.5)",
+      "n": 3,
+      "avg_confidence": 0.4672,
+      "accuracy": 0.0,
+      "gap": 0.4672,
+      "wilson_ci": [
+        0,
+        0.5615
+      ]
+    },
+    {
+      "bin_range": "[0.5, 0.6)",
+      "n": 6,
+      "avg_confidence": 0.5659,
+      "accuracy": 0.0,
+      "gap": 0.5659,
+      "wilson_ci": [
+        0,
+        0.3903
+      ]
+    },
+    {
+      "bin_range": "[0.6, 0.7)",
+      "n": 15,
+      "avg_confidence": 0.6544,
+      "accuracy": 0.0,
+      "gap": 0.6544,
+      "wilson_ci": [
+        0,
+        0.2039
+      ]
+    },
+    {
+      "bin_range": "[0.7, 0.8)",
+      "n": 5,
+      "avg_confidence": 0.7378,
+      "accuracy": 0.0,
+      "gap": 0.7378,
+      "wilson_ci": [
+        0,
+        0.4345
+      ]
+    },
+    {
+      "bin_range": "[0.8, 0.9)",
+      "n": 9,
+      "avg_confidence": 0.8639,
+      "accuracy": 0.7778,
+      "gap": 0.0861,
+      "wilson_ci": [
+        0.4526,
+        0.9368
+      ]
+    },
+    {
+      "bin_range": "[0.9, 1.0)",
+      "n": 15,
+      "avg_confidence": 0.9419,
+      "accuracy": 0.8667,
+      "gap": 0.0752,
+      "wilson_ci": [
+        0.6212,
+        0.9626
+      ]
+    }
+  ],
+  "source_breakdown": {
+    "curated": {
+      "n": 203,
+      "exact_match": 196,
+      "exact_rate": 0.9655,
+      "exact_wilson_ci": [
+        0.9305,
+        0.9832
+      ],
+      "top3_match": 197,
+      "top3_rate": 0.9704,
+      "top3_wilson_ci": [
+        0.937,
+        0.9864
+      ],
+      "avg_confidence": 0.9944
+    },
+    "adversarial": {
+      "n": 23,
+      "exact_match": 2,
+      "exact_rate": 0.087,
+      "exact_wilson_ci": [
+        0.0242,
+        0.268
+      ],
+      "top3_match": 3,
+      "top3_rate": 0.1304,
+      "top3_wilson_ci": [
+        0.0454,
+        0.3213
+      ],
+      "avg_confidence": 0.6419
+    },
+    "ood_variant": {
+      "n": 15,
+      "exact_match": 2,
+      "exact_rate": 0.1333,
+      "exact_wilson_ci": [
+        0.0374,
+        0.3788
+      ],
+      "top3_match": 5,
+      "top3_rate": 0.3333,
+      "top3_wilson_ci": [
+        0.1518,
+        0.5829
+      ],
+      "avg_confidence": 0.7169
+    }
+  },
+  "domain_breakdown": {
+    "allocator": {
+      "n": 3,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.4385,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "application": {
+      "n": 23,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.8569,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "array_access": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.6677
+    },
+    "basic": {
+      "n": 5,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.5655,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "c11_atomics": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.932
+    },
+    "coherence": {
+      "n": 6,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.6097,
+        1.0
+      ],
+      "avg_confidence": 0.9693
+    },
+    "cpp_atomics": {
+      "n": 21,
+      "exact_rate": 0.9048,
+      "wilson_ci": [
+        0.7109,
+        0.9735
+      ],
+      "avg_confidence": 0.9942
+    },
+    "crypto": {
+      "n": 2,
+      "exact_rate": 0.5,
+      "wilson_ci": [
+        0.0945,
+        0.9055
+      ],
+      "avg_confidence": 0.7053
+    },
+    "cuda": {
+      "n": 3,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.5615
+      ],
+      "avg_confidence": 0.602
+    },
+    "data_structure": {
+      "n": 15,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.7961,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "database": {
+      "n": 3,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.5615
+      ],
+      "avg_confidence": 0.6874
+    },
+    "dependency": {
+      "n": 5,
+      "exact_rate": 0.6,
+      "wilson_ci": [
+        0.2307,
+        0.8824
+      ],
+      "avg_confidence": 1.001
+    },
+    "embedded": {
+      "n": 7,
+      "exact_rate": 0.1429,
+      "wilson_ci": [
+        0.0257,
+        0.5131
+      ],
+      "avg_confidence": 0.6192
+    },
+    "fenced": {
+      "n": 14,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.7847,
+        1
+      ],
+      "avg_confidence": 0.9756
+    },
+    "function_wrapping": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.6677
+    },
+    "game_engine": {
+      "n": 2,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.6576
+      ],
+      "avg_confidence": 0.7194
+    },
+    "gpu": {
+      "n": 19,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.8318,
+        1
+      ],
+      "avg_confidence": 0.9832
+    },
+    "gpu_cuda": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.4692
+    },
+    "hft": {
+      "n": 4,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.4899
+      ],
+      "avg_confidence": 0.6235
+    },
+    "inline_asm": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.6248
+    },
+    "kernel": {
+      "n": 16,
+      "exact_rate": 0.875,
+      "wilson_ci": [
+        0.6398,
+        0.965
+      ],
+      "avg_confidence": 0.9921
+    },
+    "kernel_macros": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.9175
+    },
+    "mca": {
+      "n": 2,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.3424,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "multi_thread": {
+      "n": 15,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.7961,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "mutual_exclusion": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.7629
+    },
+    "network": {
+      "n": 2,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.6576
+      ],
+      "avg_confidence": 0.6095
+    },
+    "real_code": {
+      "n": 23,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.8569,
+        1
+      ],
+      "avg_confidence": 0.9975
+    },
+    "ring_buffer": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.7585
+    },
+    "riscv": {
+      "n": 8,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.6756,
+        1
+      ],
+      "avg_confidence": 0.9727
+    },
+    "rmw_cas": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.4772
+    },
+    "seqlock": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.5572
+    },
+    "struct_access": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.6677
+    },
+    "synchronization": {
+      "n": 27,
+      "exact_rate": 0.963,
+      "wilson_ci": [
+        0.8172,
+        0.9934
+      ],
+      "avg_confidence": 1.0007
+    },
+    "systems": {
+      "n": 3,
+      "exact_rate": 1.0,
+      "wilson_ci": [
+        0.4385,
+        1
+      ],
+      "avg_confidence": 1.001
+    },
+    "variable_naming": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.7248
+    },
+    "volatile_style": {
+      "n": 1,
+      "exact_rate": 0.0,
+      "wilson_ci": [
+        0,
+        0.7935
+      ],
+      "avg_confidence": 0.6677
+    }
+  },
+  "confidence_distribution": {
+    "correct": {
+      "n": 200,
+      "mean": 0.9929,
+      "min": 0.8581,
+      "max": 1.001
+    },
+    "incorrect": {
+      "n": 41,
+      "mean": 0.7026,
+      "min": 0.0,
+      "max": 1.001
+    }
+  },
+  "methodology": {
+    "ece": "Expected Calibration Error: weighted average of |accuracy - confidence| across bins",
+    "auroc": "Area Under ROC: how well confidence discriminates correct from incorrect predictions",
+    "aurc": "Area Under Risk-Coverage: integral of error rate as coverage decreases",
+    "selective_prediction": "At threshold t, AST handles snippets with confidence >= t; rest sent to LLM"
+  }
+}

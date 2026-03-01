@@ -1,0 +1,298 @@
+{
+  "expressiveness_analysis": {
+    "total_features": 18,
+    "fully_expressible": 10,
+    "partially_expressible": 3,
+    "not_expressible": 5,
+    "expressibility_rate": 0.6388888888888888,
+    "feature_details": {
+      "fully_expressible": [
+        "basic_relaxation",
+        "dependency_preservation",
+        "fence_ordering",
+        "multi_copy_atomicity",
+        "coherence_order",
+        "reads_from",
+        "from_reads",
+        "ghb_acyclicity",
+        "fence_cost_model",
+        "gpu_scope"
+      ],
+      "partially_expressible": [
+        "asymmetric_fence",
+        "set_operations",
+        "event_annotations"
+      ],
+      "not_expressible": [
+        "recursive_ppo",
+        "conditional_ppo",
+        "derived_relations",
+        "transitive_closure",
+        "external_internal"
+      ]
+    },
+    "impact_on_supported_models": {
+      "affects_none": [
+        "recursive_ppo",
+        "derived_relations",
+        "external_internal"
+      ],
+      "may_affect": [
+        "conditional_ppo",
+        "transitive_closure"
+      ],
+      "practical_impact": "1/348 mismatches (0.3%) on supported models"
+    },
+    "mismatch_root_cause": {
+      "pattern": "mp_fence_wr",
+      "model": "RISC-V (RVWMO)",
+      "root_cause": "DSL fence model is symmetric (type-pair set). RISC-V fence w,r is asymmetric: orders W\u2192R without implying W\u2192W.",
+      "dsl_behavior": "DSL fence ordering W\u2192R is correctly handled, but the mp_fence_wr pattern requires distinguishing fence w,r (W\u2192R only) from fence rw,rw (all pairs). DSL cannot express this distinction.",
+      "resolution": "Built-in RISC-V model uses hardcoded asymmetric fence semantics. The 1/348 mismatch is a DSL expressiveness limitation, not a correctness bug.",
+      "status": "RESOLVED: documented limitation with correct built-in fallback."
+    },
+    "expressiveness_theorem": {
+      "statement": "The LITMUS\u221e DSL expresses all memory model features needed for x86-TSO and ARMv8 (both 100% correspondence). For RISC-V RVWMO, the DSL expresses all features except asymmetric fences, achieving 99.1% correspondence (115/116).",
+      "proof": "By enumeration of .cat features. The 10 fully-expressible features cover all axioms in x86tso.cat and aarch64.cat. The 1 partially-expressible feature (asymmetric fences) affects only RISC-V fence w,r, causing a single mismatch out of 116 RISC-V checks.",
+      "consequence": "For the 4 supported CPU models, the DSL limitation affects exactly 1 out of 348 checks (0.3%). The built-in checker handles this correctly."
+    },
+    "comparison_table": {
+      "dsl_advantages_over_cat": [
+        "Fence cost model (not in .cat)",
+        "Severity classification",
+        "Automatic fence recommendation",
+        "GPU scope hierarchy"
+      ],
+      "cat_advantages_over_dsl": [
+        "Full relational algebra",
+        "Recursive relation definitions",
+        "Conditional model specifications",
+        "Transitive closure operator",
+        "User-defined derived relations",
+        "Asymmetric fence specifications",
+        "Event-set operations"
+      ]
+    }
+  },
+  "dsl_cat_validation": {
+    "validation_type": "DSL-to-.cat formal correspondence",
+    "models_validated": [
+      "x86tso",
+      "aarch64",
+      "riscv"
+    ],
+    "total_checks": 348,
+    "total_agree": 347,
+    "total_disagree": 1,
+    "overall_agreement_rate": 99.7,
+    "overall_wilson_95ci": [
+      98.4,
+      99.9
+    ],
+    "per_model": {
+      "x86tso": {
+        "model": "x86tso",
+        "cat_reference": "x86tso.cat (Owens, Sarkar, Sewell 2009)",
+        "dsl_model": "x86_TSO",
+        "structural_match": {
+          "relaxed_pairs_match": true,
+          "preserves_deps_match": true,
+          "multi_copy_atomic_match": true
+        },
+        "total": 116,
+        "agree": 116,
+        "disagree": 0,
+        "agreement_rate": 100.0,
+        "wilson_95ci": [
+          96.8,
+          100.0
+        ],
+        "mismatches": [],
+        "herd7_triple": {
+          "total": 57,
+          "all_three_agree": 57
+        }
+      },
+      "aarch64": {
+        "model": "aarch64",
+        "cat_reference": "aarch64.cat (Pulte et al. POPL 2018)",
+        "dsl_model": "AArch64",
+        "structural_match": {
+          "relaxed_pairs_match": true,
+          "preserves_deps_match": true,
+          "multi_copy_atomic_match": true
+        },
+        "total": 116,
+        "agree": 116,
+        "disagree": 0,
+        "agreement_rate": 100.0,
+        "wilson_95ci": [
+          96.8,
+          100.0
+        ],
+        "mismatches": [],
+        "herd7_triple": {
+          "total": 57,
+          "all_three_agree": 57
+        }
+      },
+      "riscv": {
+        "model": "riscv",
+        "cat_reference": "riscv.cat (RISC-V ISA spec, Chapter 14)",
+        "dsl_model": "RVWMO",
+        "structural_match": {
+          "relaxed_pairs_match": true,
+          "preserves_deps_match": true,
+          "multi_copy_atomic_match": true
+        },
+        "total": 116,
+        "agree": 115,
+        "disagree": 1,
+        "agreement_rate": 99.1,
+        "wilson_95ci": [
+          95.3,
+          99.8
+        ],
+        "mismatches": [
+          {
+            "pattern": "mp_fence_wr",
+            "reference_allowed": true,
+            "dsl_allowed": false,
+            "agrees": false,
+            "herd7_allowed": true,
+            "herd7_agrees_ref": true,
+            "herd7_agrees_dsl": false,
+            "model": "riscv"
+          }
+        ],
+        "herd7_triple": {
+          "total": 57,
+          "all_three_agree": 56
+        }
+      }
+    },
+    "all_mismatches": [
+      {
+        "pattern": "mp_fence_wr",
+        "reference_allowed": true,
+        "dsl_allowed": false,
+        "agrees": false,
+        "herd7_allowed": true,
+        "herd7_agrees_ref": true,
+        "herd7_agrees_dsl": false,
+        "model": "riscv"
+      }
+    ]
+  },
+  "cat_features": {
+    "basic_relaxation": {
+      "description": "Per-type-pair relaxation (W\u2192R, W\u2192W, R\u2192R, R\u2192W)",
+      "expressible": true,
+      "coverage": "Complete",
+      "note": "DSL directly supports 4 type-pair relaxation specifications."
+    },
+    "dependency_preservation": {
+      "description": "Address, data, control dependencies preserved in ppo",
+      "expressible": true,
+      "coverage": "Complete",
+      "note": "DSL preserves all dependency types uniformly."
+    },
+    "fence_ordering": {
+      "description": "Fence instructions that order specified type pairs",
+      "expressible": true,
+      "coverage": "Complete for symmetric fences",
+      "note": "DSL fences are symmetric: fence F ordering (A,B) means F orders all A\u2192B pairs. Covers dmb, mfence, fence rw,rw."
+    },
+    "multi_copy_atomicity": {
+      "description": "Whether stores are visible to all threads simultaneously",
+      "expressible": true,
+      "coverage": "Binary flag",
+      "note": "DSL supports declaring a model as non-MCA."
+    },
+    "coherence_order": {
+      "description": "Total order on stores to each address (co)",
+      "expressible": true,
+      "coverage": "Complete",
+      "note": "co totalization is handled by the SMT/enumeration engine."
+    },
+    "reads_from": {
+      "description": "rf relation: each load reads from some store",
+      "expressible": true,
+      "coverage": "Complete",
+      "note": "rf enumeration is handled by the verification engine."
+    },
+    "from_reads": {
+      "description": "fr relation: derived from rf and co",
+      "expressible": true,
+      "coverage": "Complete",
+      "note": "fr is derived automatically."
+    },
+    "ghb_acyclicity": {
+      "description": "Global happens-before acyclicity check",
+      "expressible": true,
+      "coverage": "Complete",
+      "note": "ghb acyclicity is the core verification check."
+    },
+    "fence_cost_model": {
+      "description": "Relative cost/weight assigned to fence types",
+      "expressible": true,
+      "coverage": "DSL extension beyond .cat",
+      "note": "DSL extends .cat with analytical cost weights for fence optimization."
+    },
+    "gpu_scope": {
+      "description": "GPU scope hierarchy (workgroup, device)",
+      "expressible": true,
+      "coverage": "Built-in, not DSL-defined",
+      "note": "GPU scoping uses dedicated code rather than DSL."
+    },
+    "asymmetric_fence": {
+      "description": "Fences with asymmetric direction semantics (e.g., RISC-V fence w,r orders W\u2192R but NOT W\u2192W)",
+      "expressible": "Partial",
+      "coverage": "Limitation: DSL fence F ordering W\u2192R also implies inclusion in full barrier semantics. RISC-V fence w,r is W\u2192R only; DSL cannot distinguish from a full fence that also orders W\u2192R.",
+      "note": "This causes the 1/348 mismatch on mp_fence_wr/RISC-V. The built-in checker handles it correctly.",
+      "workaround": "Built-in RISC-V model uses hardcoded asymmetric fence logic."
+    },
+    "recursive_ppo": {
+      "description": "Recursive preserved program order (self-referential ppo definitions)",
+      "expressible": false,
+      "coverage": "Not needed for standard models (x86-TSO, ARMv8, RVWMO)",
+      "note": "Recursive ppo arises in Power/POWER model. Not needed for x86, ARM, or RISC-V."
+    },
+    "conditional_ppo": {
+      "description": "Conditional preserved program order based on event properties",
+      "expressible": false,
+      "coverage": "Conditional .cat constructs are used for parameterized models.",
+      "note": "DSL models are non-conditional. Each model is a fixed specification."
+    },
+    "derived_relations": {
+      "description": "User-defined derived relations via relational algebra",
+      "expressible": false,
+      "coverage": "The .cat language supports full relational algebra (union, intersection, composition, transitive closure). DSL is declarative.",
+      "note": "DSL trades expressiveness for simplicity. Complex derived relations must be hardcoded."
+    },
+    "transitive_closure": {
+      "description": "Transitive closure operator on relations",
+      "expressible": false,
+      "coverage": "Used in C11 memory model for happens-before. DSL uses fixed ghb construction.",
+      "note": "The DSL computes ghb using a fixed formula, not user-definable transitive closures."
+    },
+    "set_operations": {
+      "description": "Set operations on events (filtering by type, address, thread)",
+      "expressible": "Partial",
+      "coverage": "Fence specs cover type-pair filtering. General event-set filtering not supported.",
+      "note": "The DSL supports type-pair filtering via fence specifications. General set operations (e.g., filter by address, thread, value) are not user-expressible."
+    },
+    "external_internal": {
+      "description": "Distinction between internal (same-thread) and external (cross-thread) relations",
+      "expressible": false,
+      "coverage": "The verification engine internally distinguishes rfe/rfi, coe/coi. Not user-configurable.",
+      "note": "Internal/external distinction is hardcoded in the verification engine."
+    },
+    "event_annotations": {
+      "description": "Annotations on events (memory order, scope, access mode)",
+      "expressible": "Partial",
+      "coverage": "C11 memory orders are handled by the built-in checker. Custom annotations not DSL-expressible.",
+      "note": "Release-acquire semantics are built into the verification engine."
+    }
+  }
+}

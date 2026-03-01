@@ -1,0 +1,1551 @@
+{
+  "ast_baseline": {
+    "n_total": 50,
+    "exact_match": 0,
+    "top3_match": 1,
+    "per_category": {
+      "cryptography": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "embedded": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "networking": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "lockfree": {
+        "total": 8,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.3244156195108769
+        ]
+      },
+      "gpu": {
+        "total": 5,
+        "exact": 0,
+        "top3": 1,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "kernel": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "synchronization": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "async": {
+        "total": 3,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.5615060804490177
+        ]
+      },
+      "database": {
+        "total": 4,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.48990002040399916
+        ]
+      },
+      "simd": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      }
+    },
+    "details": [
+      {
+        "name": "crypto_aes_ctr",
+        "category": "cryptography",
+        "expected": "mp",
+        "predicted": [
+          "gpu_coherence_wr",
+          "mp_rfi",
+          "sb_rfi"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "crypto_chacha_nonce",
+        "category": "cryptography",
+        "expected": "mp_fence",
+        "predicted": [
+          "producer_consumer_ring",
+          "mp",
+          "s"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "crypto_hmac_key_update",
+        "category": "cryptography",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "sb_partial_fence_wr",
+          "cowr_fence"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "crypto_rng_pool",
+        "category": "cryptography",
+        "expected": "mp",
+        "predicted": [
+          "gpu_coherence_wr",
+          "amoswap",
+          "store_fwd"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "crypto_tls_session",
+        "category": "cryptography",
+        "expected": "mp_fence",
+        "predicted": [],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "embedded_dma",
+        "category": "embedded",
+        "expected": "mp",
+        "predicted": [
+          "gpu_coherence_wr",
+          "cowr",
+          "corw"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "embedded_uart_flag",
+        "category": "embedded",
+        "expected": "mp",
+        "predicted": [
+          "gpu_coherence_wr",
+          "corw",
+          "lockfree_stack_pop"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "embedded_watchdog",
+        "category": "embedded",
+        "expected": "corr",
+        "predicted": [
+          "gpu_coherence_wr",
+          "amoswap",
+          "store_fwd"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "embedded_sensor_pub",
+        "category": "embedded",
+        "expected": "seqlock_read",
+        "predicted": [
+          "gpu_coherence_wr",
+          "peterson",
+          "s"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "embedded_mailbox",
+        "category": "embedded",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "cowr",
+          "corw"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "network_packet_ring",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "cowr_fence",
+          "gpu_coherence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "network_conn_table",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "cowr_fence",
+          "sb_partial_fence_wr",
+          "gpu_coherence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "network_refcount",
+        "category": "networking",
+        "expected": "amoswap",
+        "predicted": [
+          "corw",
+          "mp",
+          "sb"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "network_flow_state",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "cowr_fence",
+          "sb_partial_fence_wr",
+          "gpu_coherence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "network_zero_copy",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "mp_dmb_st",
+          "mp_partial_fence_ww"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_treiber_stack",
+        "category": "lockfree",
+        "expected": "lockfree_stack_push",
+        "predicted": [
+          "gpu_coherence_wr",
+          "mp",
+          "lb"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_ms_queue",
+        "category": "lockfree",
+        "expected": "ms_queue_enq",
+        "predicted": [
+          "gpu_coherence_wr",
+          "s",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_spsc_bounded",
+        "category": "lockfree",
+        "expected": "lockfree_spsc_queue",
+        "predicted": [
+          "cowr_fence",
+          "sb_partial_fence_wr",
+          "gpu_coherence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_hazard_ptr",
+        "category": "lockfree",
+        "expected": "hazard_ptr",
+        "predicted": [
+          "gpu_coherence_wr",
+          "corw",
+          "lockfree_stack_pop"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_work_steal",
+        "category": "lockfree",
+        "expected": "work_steal",
+        "predicted": [
+          "mp_dmb_st",
+          "mp_partial_fence_ww",
+          "sb_partial_fence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_epoch_reclaim",
+        "category": "lockfree",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_dmb_st",
+          "mp_partial_fence_ww",
+          "lb_fence"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_mpmc_queue",
+        "category": "lockfree",
+        "expected": "lockfree_spsc_queue",
+        "predicted": [
+          "gpu_coherence_wr",
+          "peterson",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "lockfree_harris_list",
+        "category": "lockfree",
+        "expected": "lockfree_stack_push",
+        "predicted": [
+          "gpu_coherence_wr",
+          "s",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "gpu_reduction",
+        "category": "gpu",
+        "expected": "gpu_mp_wg",
+        "predicted": [
+          "gpu_lb_wg",
+          "gpu_mp_wg",
+          "gpu_sb_wg"
+        ],
+        "exact": false,
+        "top3": true
+      },
+      {
+        "name": "gpu_cross_block_reduce",
+        "category": "gpu",
+        "expected": "gpu_mp_dev",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "cowr_fence",
+          "gpu_rmw_dev"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "gpu_producer_consumer",
+        "category": "gpu",
+        "expected": "gpu_mp_dev",
+        "predicted": [
+          "gpu_lb_xwg_dev",
+          "cowr_fence",
+          "gpu_lb_wg"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "gpu_warp_scan",
+        "category": "gpu",
+        "expected": "gpu_mp_wg",
+        "predicted": [
+          "gpu_coherence_wr",
+          "cowr",
+          "corw"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "gpu_persistent_kernel",
+        "category": "gpu",
+        "expected": "gpu_mp_dev",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "gpu_rmw_dev",
+          "cowr_fence"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "kernel_rcu_update",
+        "category": "kernel",
+        "expected": "rcu_publish",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "mp_dmb_st",
+          "peterson_fence"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "kernel_seqlock",
+        "category": "kernel",
+        "expected": "seqlock_read",
+        "predicted": [
+          "gpu_coherence_wr",
+          "peterson",
+          "s"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "kernel_percpu_counter",
+        "category": "kernel",
+        "expected": "mp",
+        "predicted": [
+          "gpu_coherence_wr",
+          "s",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "kernel_completion",
+        "category": "kernel",
+        "expected": "mp_fence",
+        "predicted": [
+          "cowr_fence",
+          "sb_partial_fence_wr",
+          "gpu_coherence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "kernel_spinlock_release",
+        "category": "kernel",
+        "expected": "sb_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "s",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "sync_dcl_singleton",
+        "category": "synchronization",
+        "expected": "dcl_init",
+        "predicted": [
+          "gpu_coherence_wr",
+          "sb_rfi",
+          "amoswap"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "sync_ticket_lock",
+        "category": "synchronization",
+        "expected": "ticket_lock",
+        "predicted": [
+          "gpu_coherence_wr",
+          "peterson",
+          "s"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "sync_condition_var",
+        "category": "synchronization",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "corw",
+          "lockfree_stack_pop"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "sync_barrier",
+        "category": "synchronization",
+        "expected": "mp_fence",
+        "predicted": [
+          "lb",
+          "corw",
+          "s"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "sync_rwlock",
+        "category": "synchronization",
+        "expected": "dekker",
+        "predicted": [
+          "gpu_coherence_wr",
+          "ticket_lock",
+          "lockfree_stack_pop"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "async_channel",
+        "category": "async",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "mp_rfi",
+          "sb_rfi"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "async_future_promise",
+        "category": "async",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "amoswap",
+          "store_fwd"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "async_task_queue",
+        "category": "async",
+        "expected": "mp_fence",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "mp_dmb_st",
+          "mp_partial_fence_ww"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "db_skiplist_insert",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "coww_fence",
+          "mp_dmb_st",
+          "mp_partial_fence_ww"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "db_write_batch",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "cowr_fence",
+          "sb_partial_fence_wr",
+          "gpu_coherence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "db_mvcc_snapshot",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "corw",
+          "producer_consumer_ring"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "db_log_flush",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "cowr_fence",
+          "sb_partial_fence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "simd_gather_scatter",
+        "category": "simd",
+        "expected": "mp_fence",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "mp_dmb_st",
+          "mp_partial_fence_ww"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "simd_vector_publish",
+        "category": "simd",
+        "expected": "mp_fence",
+        "predicted": [
+          "gpu_coherence_wr",
+          "cowr_fence",
+          "sb_partial_fence_wr"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "riscv_lr_sc",
+        "category": "simd",
+        "expected": "amoswap",
+        "predicted": [
+          "mp_dmb_ld",
+          "mp_partial_fence_rr",
+          "full_vs_light_barrier"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "arm_exclusive_monitor",
+        "category": "simd",
+        "expected": "sb_fence",
+        "predicted": [
+          "sb_partial_fence_wr",
+          "mp_dmb_st",
+          "mp_partial_fence_ww"
+        ],
+        "exact": false,
+        "top3": false
+      },
+      {
+        "name": "x86_cmpxchg_publish",
+        "category": "simd",
+        "expected": "dcl_init",
+        "predicted": [],
+        "exact": false,
+        "top3": false
+      }
+    ],
+    "exact_rate": 0.0,
+    "top3_rate": 0.02,
+    "exact_wilson_ci": [
+      0,
+      0.07135003417431873
+    ],
+    "top3_wilson_ci": [
+      0.0035391680889764604,
+      0.10495686471836953
+    ]
+  },
+  "llm_evaluation": {
+    "model": "gpt-4.1-nano",
+    "n_total": 50,
+    "exact_match": 17,
+    "top3_match": 18,
+    "no_match": 8,
+    "errors": 0,
+    "per_category": {
+      "cryptography": {
+        "total": 5,
+        "exact": 1,
+        "top3": 1,
+        "exact_rate": 0.2,
+        "top3_rate": 0.2,
+        "exact_wilson_ci": [
+          0.03622316096978745,
+          0.6244717358814613
+        ],
+        "top3_wilson_ci": [
+          0.03622316096978745,
+          0.6244717358814613
+        ]
+      },
+      "embedded": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ],
+        "top3_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "networking": {
+        "total": 5,
+        "exact": 2,
+        "top3": 2,
+        "exact_rate": 0.4,
+        "top3_rate": 0.4,
+        "exact_wilson_ci": [
+          0.1176182311592533,
+          0.769280067791163
+        ],
+        "top3_wilson_ci": [
+          0.1176182311592533,
+          0.769280067791163
+        ]
+      },
+      "lockfree": {
+        "total": 8,
+        "exact": 6,
+        "top3": 6,
+        "exact_rate": 0.75,
+        "top3_rate": 0.75,
+        "exact_wilson_ci": [
+          0.40926987910258916,
+          0.9285223111419724
+        ],
+        "top3_wilson_ci": [
+          0.40926987910258916,
+          0.9285223111419724
+        ]
+      },
+      "gpu": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ],
+        "top3_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      },
+      "kernel": {
+        "total": 5,
+        "exact": 2,
+        "top3": 3,
+        "exact_rate": 0.4,
+        "top3_rate": 0.6,
+        "exact_wilson_ci": [
+          0.1176182311592533,
+          0.769280067791163
+        ],
+        "top3_wilson_ci": [
+          0.23071993220883708,
+          0.8823817688407467
+        ]
+      },
+      "synchronization": {
+        "total": 5,
+        "exact": 2,
+        "top3": 2,
+        "exact_rate": 0.4,
+        "top3_rate": 0.4,
+        "exact_wilson_ci": [
+          0.1176182311592533,
+          0.769280067791163
+        ],
+        "top3_wilson_ci": [
+          0.1176182311592533,
+          0.769280067791163
+        ]
+      },
+      "async": {
+        "total": 3,
+        "exact": 1,
+        "top3": 1,
+        "exact_rate": 0.3333333333333333,
+        "top3_rate": 0.3333333333333333,
+        "exact_wilson_ci": [
+          0.0614903152761605,
+          0.7923450448735121
+        ],
+        "top3_wilson_ci": [
+          0.0614903152761605,
+          0.7923450448735121
+        ]
+      },
+      "database": {
+        "total": 4,
+        "exact": 3,
+        "top3": 3,
+        "exact_rate": 0.75,
+        "top3_rate": 0.75,
+        "exact_wilson_ci": [
+          0.3006360524426366,
+          0.9544139373553637
+        ],
+        "top3_wilson_ci": [
+          0.3006360524426366,
+          0.9544139373553637
+        ]
+      },
+      "simd": {
+        "total": 5,
+        "exact": 0,
+        "top3": 0,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "exact_wilson_ci": [
+          0,
+          0.43449149475208104
+        ],
+        "top3_wilson_ci": [
+          0,
+          0.43449149475208104
+        ]
+      }
+    },
+    "details": [
+      {
+        "name": "crypto_aes_ctr",
+        "category": "cryptography",
+        "expected": "mp",
+        "predicted": [
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 22.502,
+        "error": false
+      },
+      {
+        "name": "crypto_chacha_nonce",
+        "category": "cryptography",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.117,
+        "error": false
+      },
+      {
+        "name": "crypto_hmac_key_update",
+        "category": "cryptography",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.764,
+        "error": false
+      },
+      {
+        "name": "crypto_rng_pool",
+        "category": "cryptography",
+        "expected": "mp",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 2.334,
+        "error": false
+      },
+      {
+        "name": "crypto_tls_session",
+        "category": "cryptography",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.678,
+        "error": false
+      },
+      {
+        "name": "embedded_dma",
+        "category": "embedded",
+        "expected": "mp",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.215,
+        "error": false
+      },
+      {
+        "name": "embedded_uart_flag",
+        "category": "embedded",
+        "expected": "mp",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.214,
+        "error": false
+      },
+      {
+        "name": "embedded_watchdog",
+        "category": "embedded",
+        "expected": "corr",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.078,
+        "error": false
+      },
+      {
+        "name": "embedded_sensor_pub",
+        "category": "embedded",
+        "expected": "seqlock_read",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.517,
+        "error": false
+      },
+      {
+        "name": "embedded_mailbox",
+        "category": "embedded",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.168,
+        "error": false
+      },
+      {
+        "name": "network_packet_ring",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 0.939,
+        "error": false
+      },
+      {
+        "name": "network_conn_table",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 0.998,
+        "error": false
+      },
+      {
+        "name": "network_refcount",
+        "category": "networking",
+        "expected": "amoswap",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.933,
+        "error": false
+      },
+      {
+        "name": "network_flow_state",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "sb"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.907,
+        "error": false
+      },
+      {
+        "name": "network_zero_copy",
+        "category": "networking",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.395,
+        "error": false
+      },
+      {
+        "name": "lockfree_treiber_stack",
+        "category": "lockfree",
+        "expected": "lockfree_stack_push",
+        "predicted": [
+          "lockfree_stack_push"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.594,
+        "error": false
+      },
+      {
+        "name": "lockfree_ms_queue",
+        "category": "lockfree",
+        "expected": "ms_queue_enq",
+        "predicted": [
+          "lockfree_spsc_queue"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.244,
+        "error": false
+      },
+      {
+        "name": "lockfree_spsc_bounded",
+        "category": "lockfree",
+        "expected": "lockfree_spsc_queue",
+        "predicted": [
+          "lockfree_spsc_queue"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.926,
+        "error": false
+      },
+      {
+        "name": "lockfree_hazard_ptr",
+        "category": "lockfree",
+        "expected": "hazard_ptr",
+        "predicted": [
+          "hazard_ptr"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.187,
+        "error": false
+      },
+      {
+        "name": "lockfree_work_steal",
+        "category": "lockfree",
+        "expected": "work_steal",
+        "predicted": [
+          "mp_fence",
+          "lockfree_spsc_queue"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.466,
+        "error": false
+      },
+      {
+        "name": "lockfree_epoch_reclaim",
+        "category": "lockfree",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.533,
+        "error": false
+      },
+      {
+        "name": "lockfree_mpmc_queue",
+        "category": "lockfree",
+        "expected": "lockfree_spsc_queue",
+        "predicted": [
+          "lockfree_spsc_queue",
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 2.599,
+        "error": false
+      },
+      {
+        "name": "lockfree_harris_list",
+        "category": "lockfree",
+        "expected": "lockfree_stack_push",
+        "predicted": [
+          "lockfree_stack_push"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.815,
+        "error": false
+      },
+      {
+        "name": "gpu_reduction",
+        "category": "gpu",
+        "expected": "gpu_mp_wg",
+        "predicted": [
+          "gpu_barrier_scope_mismatch"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 2.051,
+        "error": false
+      },
+      {
+        "name": "gpu_cross_block_reduce",
+        "category": "gpu",
+        "expected": "gpu_mp_dev",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 0.978,
+        "error": false
+      },
+      {
+        "name": "gpu_producer_consumer",
+        "category": "gpu",
+        "expected": "gpu_mp_dev",
+        "predicted": [
+          "mp",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.638,
+        "error": false
+      },
+      {
+        "name": "gpu_warp_scan",
+        "category": "gpu",
+        "expected": "gpu_mp_wg",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 0.886,
+        "error": false
+      },
+      {
+        "name": "gpu_persistent_kernel",
+        "category": "gpu",
+        "expected": "gpu_mp_dev",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 2.629,
+        "error": false
+      },
+      {
+        "name": "kernel_rcu_update",
+        "category": "kernel",
+        "expected": "rcu_publish",
+        "predicted": [
+          "rwc",
+          "rcu_publish"
+        ],
+        "exact": false,
+        "top3": true,
+        "time_s": 1.37,
+        "error": false
+      },
+      {
+        "name": "kernel_seqlock",
+        "category": "kernel",
+        "expected": "seqlock_read",
+        "predicted": [
+          "seqlock_read"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.406,
+        "error": false
+      },
+      {
+        "name": "kernel_percpu_counter",
+        "category": "kernel",
+        "expected": "mp",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.561,
+        "error": false
+      },
+      {
+        "name": "kernel_completion",
+        "category": "kernel",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.219,
+        "error": false
+      },
+      {
+        "name": "kernel_spinlock_release",
+        "category": "kernel",
+        "expected": "sb_fence",
+        "predicted": [
+          "dekker"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.053,
+        "error": false
+      },
+      {
+        "name": "sync_dcl_singleton",
+        "category": "synchronization",
+        "expected": "dcl_init",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.24,
+        "error": false
+      },
+      {
+        "name": "sync_ticket_lock",
+        "category": "synchronization",
+        "expected": "ticket_lock",
+        "predicted": [
+          "ticket_lock"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 0.95,
+        "error": false
+      },
+      {
+        "name": "sync_condition_var",
+        "category": "synchronization",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.125,
+        "error": false
+      },
+      {
+        "name": "sync_barrier",
+        "category": "synchronization",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence",
+          "rwc"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 5.329,
+        "error": false
+      },
+      {
+        "name": "sync_rwlock",
+        "category": "synchronization",
+        "expected": "dekker",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 0.932,
+        "error": false
+      },
+      {
+        "name": "async_channel",
+        "category": "async",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 0.91,
+        "error": false
+      },
+      {
+        "name": "async_future_promise",
+        "category": "async",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 2.089,
+        "error": false
+      },
+      {
+        "name": "async_task_queue",
+        "category": "async",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.141,
+        "error": false
+      },
+      {
+        "name": "db_skiplist_insert",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp",
+          "rwc"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.389,
+        "error": false
+      },
+      {
+        "name": "db_write_batch",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence",
+          "rwc"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.542,
+        "error": false
+      },
+      {
+        "name": "db_mvcc_snapshot",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence",
+          "rwc"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.938,
+        "error": false
+      },
+      {
+        "name": "db_log_flush",
+        "category": "database",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "time_s": 1.764,
+        "error": false
+      },
+      {
+        "name": "simd_gather_scatter",
+        "category": "simd",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp",
+          "rwc"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 3.464,
+        "error": false
+      },
+      {
+        "name": "simd_vector_publish",
+        "category": "simd",
+        "expected": "mp_fence",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.177,
+        "error": false
+      },
+      {
+        "name": "riscv_lr_sc",
+        "category": "simd",
+        "expected": "amoswap",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.249,
+        "error": false
+      },
+      {
+        "name": "arm_exclusive_monitor",
+        "category": "simd",
+        "expected": "sb_fence",
+        "predicted": [],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.649,
+        "error": false
+      },
+      {
+        "name": "x86_cmpxchg_publish",
+        "category": "simd",
+        "expected": "dcl_init",
+        "predicted": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "time_s": 1.493,
+        "error": false
+      }
+    ],
+    "timings": [
+      22.50244903564453,
+      1.1166939735412598,
+      1.7641088962554932,
+      2.3341710567474365,
+      1.677927017211914,
+      1.2148609161376953,
+      1.214050054550171,
+      1.077986717224121,
+      1.5165200233459473,
+      1.1680939197540283,
+      0.9392890930175781,
+      0.9982960224151611,
+      1.9334430694580078,
+      1.9070870876312256,
+      1.395399808883667,
+      1.5944790840148926,
+      1.2444288730621338,
+      1.9262042045593262,
+      1.1866798400878906,
+      1.4655706882476807,
+      1.5333428382873535,
+      2.5990262031555176,
+      1.8148877620697021,
+      2.051301956176758,
+      0.9780538082122803,
+      1.6383662223815918,
+      0.8858628273010254,
+      2.629248857498169,
+      1.3703241348266602,
+      1.4056928157806396,
+      1.561373233795166,
+      1.2188007831573486,
+      1.0530529022216797,
+      1.2397198677062988,
+      0.9501392841339111,
+      1.1246862411499023,
+      5.328894853591919,
+      0.9323620796203613,
+      0.9104640483856201,
+      2.08864426612854,
+      1.1409049034118652,
+      1.3890690803527832,
+      1.5417490005493164,
+      1.9377317428588867,
+      1.764404058456421,
+      3.4642481803894043,
+      1.1773531436920166,
+      1.2490599155426025,
+      1.6487560272216797,
+      1.4928808212280273
+    ],
+    "exact_rate": 0.34,
+    "top3_rate": 0.36,
+    "exact_wilson_ci": [
+      0.2243676963506106,
+      0.47846431458517147
+    ],
+    "top3_wilson_ci": [
+      0.24138562967182875,
+      0.49859237989698046
+    ],
+    "timing_stats": {
+      "mean_s": 2.0059628248214723,
+      "median_s": 1.4655706882476807,
+      "max_s": 22.50244903564453,
+      "total_s": 100.29814124107361
+    }
+  },
+  "methodology": {
+    "n_snippets": 50,
+    "categories": 10,
+    "snippet_construction": "adversarial out-of-distribution concurrent code",
+    "adversarial_criteria": [
+      "Real-world API idioms (not canonical litmus test form)",
+      "Complex control flow (loops, conditionals, function calls)",
+      "Domain-specific macros and abstractions",
+      "Multi-statement patterns spanning 5+ operations"
+    ],
+    "statistical_tests": [
+      "Wilson score 95% CI",
+      "per-category breakdown"
+    ]
+  }
+}

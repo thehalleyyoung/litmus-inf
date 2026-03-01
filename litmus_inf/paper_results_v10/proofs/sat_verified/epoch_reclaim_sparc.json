@@ -1,0 +1,20 @@
+{
+  "pattern": "epoch_reclaim",
+  "model": "sparc",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_4": "1",
+    "ts_4": "2",
+    "co_y_1_2": "True",
+    "ts_2": "3",
+    "rf_1": "1",
+    "ts_3": "1",
+    "co_y_2_1": "False",
+    "ts_1": "2",
+    "ts_0": "1",
+    "ts_init_x": "0",
+    "ts_init_y": "0"
+  },
+  "hash": "0572072af9b39a75"
+}

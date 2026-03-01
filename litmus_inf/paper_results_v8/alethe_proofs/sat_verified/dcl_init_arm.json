@@ -1,0 +1,19 @@
+{
+  "pattern": "dcl_init",
+  "model": "arm",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_4": "0",
+    "ts_4": "1",
+    "ts_2": "2",
+    "rf_0": "0",
+    "rf_3": "1",
+    "ts_3": "3",
+    "ts_1": "2",
+    "ts_0": "1",
+    "ts_init_x": "0",
+    "ts_init_y": "0"
+  },
+  "hash": "fddb3d8df117b043"
+}

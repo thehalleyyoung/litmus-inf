@@ -1,0 +1,22 @@
+{
+  "pattern": "rmw_fetch_add",
+  "model": "opencl_wg",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "ts_4": "4",
+    "ts_5": "5",
+    "ts_1": "2",
+    "ts_2": "6",
+    "rf_0": "0",
+    "rf_3": "1",
+    "rf_5": "0",
+    "ts_3": "3",
+    "co_x_1_2": "True",
+    "ts_init_x": "0",
+    "ts_0": "1",
+    "ts_init_y": "0",
+    "co_x_2_1": "False"
+  },
+  "hash": "8309f080d9b72e09"
+}

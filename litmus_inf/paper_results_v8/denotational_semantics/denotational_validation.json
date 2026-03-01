@@ -1,0 +1,30 @@
+{
+  "builtin_validation": {
+    "total": 464,
+    "agreements": 463,
+    "agreement_rate": "99.8%",
+    "wilson_ci": [
+      0.9879,
+      0.9996
+    ],
+    "disagreements": [
+      {
+        "pattern": "mp_fence_wr",
+        "model": "riscv",
+        "operational": "unsafe",
+        "denotational": "safe"
+      }
+    ]
+  },
+  "custom_validation": {
+    "total": 348,
+    "agreements": 348,
+    "rate": "100.0%",
+    "description": "DSL-parsed models vs builtin denotations"
+  },
+  "engine_stats": {
+    "total_evaluations": 812,
+    "total_candidates_enumerated": 11270,
+    "cache_hits": 348
+  }
+}

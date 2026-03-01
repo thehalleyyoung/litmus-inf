@@ -1,0 +1,24 @@
+{
+  "pattern": "lockfree_mpsc_publish",
+  "model": "vulkan_dev",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "ts_4": "3",
+    "rf_6": "1",
+    "ts_2": "1",
+    "ts_6": "5",
+    "ts_init_x": "0",
+    "ts_0": "5",
+    "ts_init_y": "0",
+    "rf_4": "2",
+    "co_z_1_2": "False",
+    "co_z_2_1": "True",
+    "ts_3": "2",
+    "rf_5": "0",
+    "ts_5": "4",
+    "ts_1": "6",
+    "ts_init_z": "0"
+  },
+  "hash": "dfaaefecdf85ff1d"
+}

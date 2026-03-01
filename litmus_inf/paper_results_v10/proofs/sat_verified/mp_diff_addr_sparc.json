@@ -1,0 +1,21 @@
+{
+  "pattern": "mp_diff_addr",
+  "model": "sparc",
+  "verdict": "sat",
+  "model_verified": true,
+  "model_values": {
+    "rf_4": "0",
+    "ts_4": "3",
+    "ts_init_y": "0",
+    "ts_2": "1",
+    "rf_3": "1",
+    "rf_5": "0",
+    "ts_3": "2",
+    "ts_5": "4",
+    "ts_init_z": "0",
+    "ts_1": "4",
+    "ts_0": "5",
+    "ts_init_x": "0"
+  },
+  "hash": "bebfe4a858a1ea19"
+}

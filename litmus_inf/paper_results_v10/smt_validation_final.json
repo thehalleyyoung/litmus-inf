@@ -1,0 +1,7 @@
+{
+  "total_pairs": 1400,
+  "sat": 803,
+  "unsat": 597,
+  "errors": 0,
+  "crossval_mismatches": 0
+}

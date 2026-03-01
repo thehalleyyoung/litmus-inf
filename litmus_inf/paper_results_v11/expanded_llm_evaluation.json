@@ -1,0 +1,1368 @@
+{
+  "methodology": {
+    "n_total": 35,
+    "n_adversarial": 23,
+    "n_expanded": 12,
+    "adversarial_construction": "Snippets from 7+ domains deliberately chosen OOD: embedded systems, lock-free DS, cryptography, networking, SIMD, coroutines, kernel code, GCC builtins, seqlock, hazard pointers",
+    "evaluation_protocol": "Each snippet sent to LLM with pattern catalog. Exact match and top-3 match recorded. Wilson CIs computed."
+  },
+  "ast_only_baseline": {
+    "exact_rate": 0.0571,
+    "exact_wilson_ci": [
+      0.0158,
+      0.1861
+    ],
+    "top3_rate": 0.0857
+  },
+  "gpt_4_1_nano": {
+    "model": "gpt-4.1-nano",
+    "n_total": 35,
+    "n_exact": 14,
+    "n_top3": 17,
+    "n_errors": 0,
+    "exact_rate": 0.4,
+    "exact_wilson_ci": [
+      0.2555,
+      0.5643
+    ],
+    "top3_rate": 0.4857,
+    "top3_wilson_ci": [
+      0.3299,
+      0.6443
+    ],
+    "domain_breakdown": {
+      "embedded": {
+        "n": 7,
+        "exact_rate": 0.2857,
+        "top3_rate": 0.2857,
+        "wilson_ci": [
+          0.0822,
+          0.6411
+        ]
+      },
+      "hft": {
+        "n": 4,
+        "exact_rate": 0.25,
+        "top3_rate": 0.5,
+        "wilson_ci": [
+          0.0456,
+          0.6994
+        ]
+      },
+      "game_engine": {
+        "n": 2,
+        "exact_rate": 0.5,
+        "top3_rate": 0.5,
+        "wilson_ci": [
+          0.0945,
+          0.9055
+        ]
+      },
+      "cuda": {
+        "n": 3,
+        "exact_rate": 0.3333,
+        "top3_rate": 0.3333,
+        "wilson_ci": [
+          0.0615,
+          0.7923
+        ]
+      },
+      "crypto": {
+        "n": 2,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.3424,
+          1
+        ]
+      },
+      "database": {
+        "n": 3,
+        "exact_rate": 0.3333,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.0615,
+          0.7923
+        ]
+      },
+      "network": {
+        "n": 2,
+        "exact_rate": 0.5,
+        "top3_rate": 0.5,
+        "wilson_ci": [
+          0.0945,
+          0.9055
+        ]
+      },
+      "gcc_builtins": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "c11_acquire_release": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "lock_free_queue": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "x86_asm": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "cuda_shared": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "rcu": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "ticket_lock": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "seqlock": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "hazard_pointer": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "kernel_scheduler": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "spsc_buffer": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "epoch_protection": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      }
+    },
+    "difficulty_breakdown": {
+      "medium": {
+        "n": 13,
+        "exact_rate": 0.3846,
+        "wilson_ci": [
+          0.1771,
+          0.6448
+        ]
+      },
+      "hard": {
+        "n": 16,
+        "exact_rate": 0.5,
+        "wilson_ci": [
+          0.28,
+          0.72
+        ]
+      },
+      "adversarial": {
+        "n": 5,
+        "exact_rate": 0.0,
+        "wilson_ci": [
+          0,
+          0.4345
+        ]
+      },
+      "easy": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      }
+    },
+    "per_snippet_results": [
+      {
+        "id": "emb_01",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "embedded",
+        "difficulty": "medium"
+      },
+      {
+        "id": "emb_02",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "embedded",
+        "difficulty": "hard"
+      },
+      {
+        "id": "emb_03",
+        "expected": "mp_fence",
+        "predicted": null,
+        "all_predictions": [],
+        "exact": false,
+        "top3": false,
+        "domain": "embedded",
+        "difficulty": "hard"
+      },
+      {
+        "id": "emb_04",
+        "expected": "mp",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "medium"
+      },
+      {
+        "id": "hft_01",
+        "expected": "mp_fence",
+        "predicted": "rwc",
+        "all_predictions": [
+          "rwc",
+          "cowr",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "hft",
+        "difficulty": "hard"
+      },
+      {
+        "id": "hft_02",
+        "expected": "mp_fence",
+        "predicted": "lockfree_spsc_queue",
+        "all_predictions": [
+          "lockfree_spsc_queue",
+          "rwc",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "hft",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "hft_03",
+        "expected": "mp_fence",
+        "predicted": "hazard_ptr",
+        "all_predictions": [
+          "hazard_ptr"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "hft",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "game_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "seqlock_read"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "game_engine",
+        "difficulty": "hard"
+      },
+      {
+        "id": "game_02",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp",
+          "rwc"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "game_engine",
+        "difficulty": "medium"
+      },
+      {
+        "id": "cuda_01",
+        "expected": "corr",
+        "predicted": null,
+        "all_predictions": [],
+        "exact": false,
+        "top3": false,
+        "domain": "cuda",
+        "difficulty": "medium"
+      },
+      {
+        "id": "cuda_02",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "cuda",
+        "difficulty": "hard"
+      },
+      {
+        "id": "cuda_03",
+        "expected": "gpu_mp_dev",
+        "predicted": "gpu_barrier_scope_mismatch",
+        "all_predictions": [
+          "gpu_barrier_scope_mismatch"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "cuda",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "crypto_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "rwc",
+          "cowr"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "crypto",
+        "difficulty": "hard"
+      },
+      {
+        "id": "db_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "rwc",
+          "cowr"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "database",
+        "difficulty": "hard"
+      },
+      {
+        "id": "db_02",
+        "expected": "mp_fence",
+        "predicted": "rwc",
+        "all_predictions": [
+          "rwc",
+          "cowr",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "database",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "net_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "cowr"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "network",
+        "difficulty": "medium"
+      },
+      {
+        "id": "net_02",
+        "expected": "mp_fence",
+        "predicted": "lockfree_stack_push",
+        "all_predictions": [
+          "lockfree_stack_push"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "network",
+        "difficulty": "hard"
+      },
+      {
+        "id": "sb_01",
+        "expected": "dekker",
+        "predicted": "dekker",
+        "all_predictions": [
+          "dekker"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "hft",
+        "difficulty": "hard"
+      },
+      {
+        "id": "adv_01",
+        "expected": "peterson",
+        "predicted": "dekker",
+        "all_predictions": [
+          "dekker"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "embedded",
+        "difficulty": "medium"
+      },
+      {
+        "id": "adv_02",
+        "expected": "mp_fence",
+        "predicted": "seqlock_read",
+        "all_predictions": [
+          "seqlock_read"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "embedded",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "adv_03",
+        "expected": "iriw",
+        "predicted": "iriw",
+        "all_predictions": [
+          "iriw"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "crypto",
+        "difficulty": "medium"
+      },
+      {
+        "id": "adv_04",
+        "expected": "mp_fence",
+        "predicted": "lb",
+        "all_predictions": [
+          "lb",
+          "mp_fence",
+          "cowr"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "database",
+        "difficulty": "medium"
+      },
+      {
+        "id": "adv_05",
+        "expected": "sb",
+        "predicted": "sb",
+        "all_predictions": [
+          "sb"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "easy"
+      },
+      {
+        "id": "exp_ood_1",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "gcc_builtins",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_2",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "c11_acquire_release",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_3",
+        "expected": "mp",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "lock_free_queue",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_4",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "x86_asm",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_5",
+        "expected": "gpu_mp_wg",
+        "predicted": "gpu_barrier_scope_mismatch",
+        "all_predictions": [
+          "gpu_barrier_scope_mismatch"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "cuda_shared",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_6",
+        "expected": "rcu_publish",
+        "predicted": null,
+        "all_predictions": [],
+        "exact": false,
+        "top3": false,
+        "domain": "rcu",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_7",
+        "expected": "ticket_lock",
+        "predicted": "ticket_lock",
+        "all_predictions": [
+          "ticket_lock"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "ticket_lock",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_8",
+        "expected": "seqlock_read",
+        "predicted": "seqlock_read",
+        "all_predictions": [
+          "seqlock_read",
+          "rwc",
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "seqlock",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_9",
+        "expected": "hazard_ptr",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "hazard_pointer",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_10",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "kernel_scheduler",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_11",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "spsc_buffer",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_12",
+        "expected": "seqlock_read",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "rwc"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "epoch_protection",
+        "difficulty": "hard"
+      }
+    ]
+  },
+  "gpt_5_chat_latest": {
+    "model": "gpt-5-chat-latest",
+    "n_total": 35,
+    "n_exact": 20,
+    "n_top3": 30,
+    "n_errors": 0,
+    "exact_rate": 0.5714,
+    "exact_wilson_ci": [
+      0.4086,
+      0.7202
+    ],
+    "top3_rate": 0.8571,
+    "top3_wilson_ci": [
+      0.7062,
+      0.9374
+    ],
+    "domain_breakdown": {
+      "embedded": {
+        "n": 7,
+        "exact_rate": 0.5714,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2505,
+          0.8418
+        ]
+      },
+      "hft": {
+        "n": 4,
+        "exact_rate": 0.25,
+        "top3_rate": 0.5,
+        "wilson_ci": [
+          0.0456,
+          0.6994
+        ]
+      },
+      "game_engine": {
+        "n": 2,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.3424,
+          1
+        ]
+      },
+      "cuda": {
+        "n": 3,
+        "exact_rate": 0.3333,
+        "top3_rate": 0.6667,
+        "wilson_ci": [
+          0.0615,
+          0.7923
+        ]
+      },
+      "crypto": {
+        "n": 2,
+        "exact_rate": 0.5,
+        "top3_rate": 0.5,
+        "wilson_ci": [
+          0.0945,
+          0.9055
+        ]
+      },
+      "database": {
+        "n": 3,
+        "exact_rate": 0.3333,
+        "top3_rate": 0.6667,
+        "wilson_ci": [
+          0.0615,
+          0.7923
+        ]
+      },
+      "network": {
+        "n": 2,
+        "exact_rate": 0.5,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.0945,
+          0.9055
+        ]
+      },
+      "gcc_builtins": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "c11_acquire_release": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "lock_free_queue": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "x86_asm": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "cuda_shared": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "rcu": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "ticket_lock": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "seqlock": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "hazard_pointer": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "kernel_scheduler": {
+        "n": 1,
+        "exact_rate": 0.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0,
+          0.7935
+        ]
+      },
+      "spsc_buffer": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      },
+      "epoch_protection": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "top3_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      }
+    },
+    "difficulty_breakdown": {
+      "medium": {
+        "n": 13,
+        "exact_rate": 0.6154,
+        "wilson_ci": [
+          0.3552,
+          0.8229
+        ]
+      },
+      "hard": {
+        "n": 16,
+        "exact_rate": 0.625,
+        "wilson_ci": [
+          0.3864,
+          0.8152
+        ]
+      },
+      "adversarial": {
+        "n": 5,
+        "exact_rate": 0.2,
+        "wilson_ci": [
+          0.0362,
+          0.6245
+        ]
+      },
+      "easy": {
+        "n": 1,
+        "exact_rate": 1.0,
+        "wilson_ci": [
+          0.2065,
+          1
+        ]
+      }
+    },
+    "per_snippet_results": [
+      {
+        "id": "emb_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "medium"
+      },
+      {
+        "id": "emb_02",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "publish_array"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "hard"
+      },
+      {
+        "id": "emb_03",
+        "expected": "mp_fence",
+        "predicted": "lockfree_spsc_queue",
+        "all_predictions": [
+          "lockfree_spsc_queue",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "hard"
+      },
+      {
+        "id": "emb_04",
+        "expected": "mp",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "mp"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "medium"
+      },
+      {
+        "id": "hft_01",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp",
+          "publish_array",
+          "rcu_publish"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "hft",
+        "difficulty": "hard"
+      },
+      {
+        "id": "hft_02",
+        "expected": "mp_fence",
+        "predicted": "lockfree_spsc_queue",
+        "all_predictions": [
+          "lockfree_spsc_queue",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "hft",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "hft_03",
+        "expected": "mp_fence",
+        "predicted": "hazard_ptr",
+        "all_predictions": [
+          "hazard_ptr",
+          "rcu_publish"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "hft",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "game_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "dcl_init"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "game_engine",
+        "difficulty": "hard"
+      },
+      {
+        "id": "game_02",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "game_engine",
+        "difficulty": "medium"
+      },
+      {
+        "id": "cuda_01",
+        "expected": "corr",
+        "predicted": null,
+        "all_predictions": [],
+        "exact": false,
+        "top3": false,
+        "domain": "cuda",
+        "difficulty": "medium"
+      },
+      {
+        "id": "cuda_02",
+        "expected": "mp_fence",
+        "predicted": "gpu_mp_dev",
+        "all_predictions": [
+          "gpu_mp_dev",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "cuda",
+        "difficulty": "hard"
+      },
+      {
+        "id": "cuda_03",
+        "expected": "gpu_mp_dev",
+        "predicted": "gpu_mp_dev",
+        "all_predictions": [
+          "gpu_mp_dev",
+          "gpu_barrier_scope_mismatch"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "cuda",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "crypto_01",
+        "expected": "mp_fence",
+        "predicted": "rcu_publish",
+        "all_predictions": [
+          "rcu_publish",
+          "rmw_cas_mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "crypto",
+        "difficulty": "hard"
+      },
+      {
+        "id": "db_01",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "rel_acq_chain"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "database",
+        "difficulty": "hard"
+      },
+      {
+        "id": "db_02",
+        "expected": "mp_fence",
+        "predicted": "rcu_publish",
+        "all_predictions": [
+          "rcu_publish",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "database",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "net_01",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp",
+          "lockfree_spsc_queue",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "network",
+        "difficulty": "medium"
+      },
+      {
+        "id": "net_02",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "lockfree_spsc_queue",
+          "publish_array"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "network",
+        "difficulty": "hard"
+      },
+      {
+        "id": "sb_01",
+        "expected": "dekker",
+        "predicted": "dekker",
+        "all_predictions": [
+          "dekker"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "hft",
+        "difficulty": "hard"
+      },
+      {
+        "id": "adv_01",
+        "expected": "peterson",
+        "predicted": "peterson",
+        "all_predictions": [
+          "peterson",
+          "dekker"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "medium"
+      },
+      {
+        "id": "adv_02",
+        "expected": "mp_fence",
+        "predicted": "seqlock_read",
+        "all_predictions": [
+          "seqlock_read",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "adversarial"
+      },
+      {
+        "id": "adv_03",
+        "expected": "iriw",
+        "predicted": "iriw",
+        "all_predictions": [
+          "iriw"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "crypto",
+        "difficulty": "medium"
+      },
+      {
+        "id": "adv_04",
+        "expected": "mp_fence",
+        "predicted": "mp_addr",
+        "all_predictions": [
+          "mp_addr",
+          "mp"
+        ],
+        "exact": false,
+        "top3": false,
+        "domain": "database",
+        "difficulty": "medium"
+      },
+      {
+        "id": "adv_05",
+        "expected": "sb",
+        "predicted": "sb",
+        "all_predictions": [
+          "sb"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "embedded",
+        "difficulty": "easy"
+      },
+      {
+        "id": "exp_ood_1",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "gcc_builtins",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_2",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "c11_acquire_release",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_3",
+        "expected": "mp",
+        "predicted": "lockfree_spsc_queue",
+        "all_predictions": [
+          "lockfree_spsc_queue",
+          "mp"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "lock_free_queue",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_4",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "mp"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "x86_asm",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_5",
+        "expected": "gpu_mp_wg",
+        "predicted": "gpu_mp_wg",
+        "all_predictions": [
+          "gpu_mp_wg"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "cuda_shared",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_6",
+        "expected": "rcu_publish",
+        "predicted": "rcu_publish",
+        "all_predictions": [
+          "rcu_publish",
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "rcu",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_7",
+        "expected": "ticket_lock",
+        "predicted": "ticket_lock",
+        "all_predictions": [
+          "ticket_lock"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "ticket_lock",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_8",
+        "expected": "seqlock_read",
+        "predicted": "seqlock_read",
+        "all_predictions": [
+          "seqlock_read",
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "seqlock",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_9",
+        "expected": "hazard_ptr",
+        "predicted": "hazard_ptr",
+        "all_predictions": [
+          "hazard_ptr",
+          "rcu_publish"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "hazard_pointer",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_10",
+        "expected": "mp_fence",
+        "predicted": "mp",
+        "all_predictions": [
+          "mp",
+          "mp_fence"
+        ],
+        "exact": false,
+        "top3": true,
+        "domain": "kernel_scheduler",
+        "difficulty": "hard"
+      },
+      {
+        "id": "exp_ood_11",
+        "expected": "mp_fence",
+        "predicted": "mp_fence",
+        "all_predictions": [
+          "mp_fence",
+          "lockfree_spsc_queue"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "spsc_buffer",
+        "difficulty": "medium"
+      },
+      {
+        "id": "exp_ood_12",
+        "expected": "seqlock_read",
+        "predicted": "seqlock_read",
+        "all_predictions": [
+          "seqlock_read",
+          "mp_fence"
+        ],
+        "exact": true,
+        "top3": true,
+        "domain": "epoch_protection",
+        "difficulty": "hard"
+      }
+    ]
+  },
+  "model_comparison": {
+    "models": [
+      "AST-only",
+      "gpt-4.1-nano",
+      "gpt-5-chat-latest"
+    ],
+    "exact_rates": [
+      0.0571,
+      0.4,
+      0.5714
+    ],
+    "top3_rates": [
+      0.0857,
+      0.4857,
+      0.8571
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "total_pairs": 1400,
+  "sat": 407,
+  "unsat": 993,
+  "errors": 0,
+  "cpu_crossval_mismatches": 0
+}

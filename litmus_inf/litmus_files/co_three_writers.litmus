@@ -1,0 +1,29 @@
+C co_three_writers
+
+{ int x=0; }
+
+P0(
+  int* x
+) {
+  WRITE_ONCE(*x, 1);
+}
+
+P1(
+  int* x
+) {
+  WRITE_ONCE(*x, 2);
+}
+
+P2(
+  int* x
+) {
+  WRITE_ONCE(*x, 3);
+}
+
+P3(
+  int* x
+) {
+  int r0 = READ_ONCE(*x);
+}
+
+exists (3:r0=1)

@@ -1,0 +1,66 @@
+{
+  "evaluation_methodology": {
+    "n_snippets": 50,
+    "n_categories": 10,
+    "categories": [
+      "cryptography",
+      "embedded",
+      "networking",
+      "lockfree",
+      "gpu",
+      "kernel",
+      "synchronization",
+      "async",
+      "database",
+      "simd"
+    ],
+    "adversarial_construction": "Snippets use real-world API idioms, complex control flow, domain-specific macros. None are in canonical litmus test form.",
+    "statistical_tests": "Wilson score 95% confidence intervals for all rates"
+  },
+  "ast_baseline": {
+    "exact_match": 0,
+    "n": 50,
+    "rate": 0.0,
+    "wilson_ci": [
+      0.0,
+      0.071
+    ]
+  },
+  "gpt_4_1_nano": {
+    "exact_match": 17,
+    "top3_match": 18,
+    "n": 50,
+    "exact_rate": 0.34,
+    "top3_rate": 0.36,
+    "exact_wilson_ci": [
+      0.2243676963506106,
+      0.47846431458517147
+    ],
+    "top3_wilson_ci": [
+      0.24138562967182875,
+      0.49859237989698046
+    ]
+  },
+  "gpt_5_chat": {
+    "exact_match": 35,
+    "top3_match": 39,
+    "n": 50,
+    "exact_rate": 0.7,
+    "top3_rate": 0.78,
+    "exact_wilson_ci": [
+      0.562493877226366,
+      0.8089661091039063
+    ],
+    "top3_wilson_ci": [
+      0.6475818431054045,
+      0.8724621377569771
+    ]
+  },
+  "original_15_snippet_context": {
+    "note": "The original paper reported 14/15 (93.3%) with GPT-4.1 on the initial 15-snippet adversarial set. The extended 50-snippet evaluation uses a superset of those categories with harder, more diverse snippets.",
+    "original_wilson_ci_exact": [
+      0.702,
+      0.988
+    ]
+  }
+}
