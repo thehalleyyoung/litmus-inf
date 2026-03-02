@@ -1,0 +1,838 @@
+{
+  "experiment": "Rigorous LLM pattern recognition evaluation",
+  "n_snippets": 40,
+  "n_categories": 8,
+  "categories": [
+    "application",
+    "coherence",
+    "dependency_patterns",
+    "gpu",
+    "kernel_patterns",
+    "lock_free",
+    "message_passing",
+    "store_buffering"
+  ],
+  "models_evaluated": [
+    "gpt-4.1-nano"
+  ],
+  "model_results": {
+    "gpt-4.1-nano": {
+      "model": "gpt-4.1-nano",
+      "n_snippets": 40,
+      "exact_match": 21,
+      "exact_rate": 0.525,
+      "exact_ci_95": [
+        0.375,
+        0.6706
+      ],
+      "top3_match": 21,
+      "top3_rate": 0.525,
+      "top3_ci_95": [
+        0.375,
+        0.6706
+      ],
+      "no_match": 1,
+      "errors": 0,
+      "per_category": {
+        "application": {
+          "exact": 4,
+          "top3": 4,
+          "total": 5,
+          "exact_rate": 0.8,
+          "top3_rate": 0.8,
+          "exact_ci_95": [
+            0.3755,
+            0.9638
+          ],
+          "avg_time_s": 0.937
+        },
+        "coherence": {
+          "exact": 1,
+          "top3": 1,
+          "total": 3,
+          "exact_rate": 0.3333,
+          "top3_rate": 0.3333,
+          "exact_ci_95": [
+            0.0615,
+            0.7923
+          ],
+          "avg_time_s": 0.693
+        },
+        "dependency_patterns": {
+          "exact": 0,
+          "top3": 0,
+          "total": 4,
+          "exact_rate": 0.0,
+          "top3_rate": 0.0,
+          "exact_ci_95": [
+            0,
+            0.4899
+          ],
+          "avg_time_s": 0.835
+        },
+        "gpu": {
+          "exact": 1,
+          "top3": 1,
+          "total": 5,
+          "exact_rate": 0.2,
+          "top3_rate": 0.2,
+          "exact_ci_95": [
+            0.0362,
+            0.6245
+          ],
+          "avg_time_s": 0.814
+        },
+        "kernel_patterns": {
+          "exact": 5,
+          "top3": 5,
+          "total": 5,
+          "exact_rate": 1.0,
+          "top3_rate": 1.0,
+          "exact_ci_95": [
+            0.5655,
+            1
+          ],
+          "avg_time_s": 0.757
+        },
+        "lock_free": {
+          "exact": 5,
+          "top3": 5,
+          "total": 8,
+          "exact_rate": 0.625,
+          "top3_rate": 0.625,
+          "exact_ci_95": [
+            0.3057,
+            0.8632
+          ],
+          "avg_time_s": 0.95
+        },
+        "message_passing": {
+          "exact": 3,
+          "top3": 3,
+          "total": 5,
+          "exact_rate": 0.6,
+          "top3_rate": 0.6,
+          "exact_ci_95": [
+            0.2307,
+            0.8824
+          ],
+          "avg_time_s": 1.498
+        },
+        "store_buffering": {
+          "exact": 2,
+          "top3": 2,
+          "total": 5,
+          "exact_rate": 0.4,
+          "top3_rate": 0.4,
+          "exact_ci_95": [
+            0.1176,
+            0.7693
+          ],
+          "avg_time_s": 1.121
+        }
+      },
+      "confusion_matrix": {
+        "matrix": {
+          "COH": {
+            "COH": 2,
+            "GPU": 0,
+            "LOCKFREE": 0,
+            "MP": 1,
+            "NO_MATCH": 0,
+            "SB": 0,
+            "SYNC": 0
+          },
+          "GPU": {
+            "COH": 0,
+            "GPU": 3,
+            "LOCKFREE": 0,
+            "MP": 2,
+            "NO_MATCH": 0,
+            "SB": 0,
+            "SYNC": 0
+          },
+          "LOCKFREE": {
+            "COH": 0,
+            "GPU": 0,
+            "LOCKFREE": 5,
+            "MP": 0,
+            "NO_MATCH": 1,
+            "SB": 0,
+            "SYNC": 1
+          },
+          "MP": {
+            "COH": 0,
+            "GPU": 0,
+            "LOCKFREE": 0,
+            "MP": 10,
+            "NO_MATCH": 0,
+            "SB": 2,
+            "SYNC": 1
+          },
+          "SB": {
+            "COH": 0,
+            "GPU": 0,
+            "LOCKFREE": 1,
+            "MP": 2,
+            "NO_MATCH": 0,
+            "SB": 2,
+            "SYNC": 0
+          },
+          "SYNC": {
+            "COH": 0,
+            "GPU": 0,
+            "LOCKFREE": 0,
+            "MP": 1,
+            "NO_MATCH": 0,
+            "SB": 0,
+            "SYNC": 4
+          }
+        },
+        "per_family_accuracy": {
+          "COH": {
+            "correct": 2,
+            "total": 3,
+            "accuracy": 0.6667,
+            "ci_95": [
+              0.2077,
+              0.9385
+            ]
+          },
+          "GPU": {
+            "correct": 3,
+            "total": 5,
+            "accuracy": 0.6,
+            "ci_95": [
+              0.2307,
+              0.8824
+            ]
+          },
+          "LOCKFREE": {
+            "correct": 5,
+            "total": 7,
+            "accuracy": 0.7143,
+            "ci_95": [
+              0.3589,
+              0.9178
+            ]
+          },
+          "MP": {
+            "correct": 10,
+            "total": 15,
+            "accuracy": 0.6667,
+            "ci_95": [
+              0.4171,
+              0.8482
+            ]
+          },
+          "SB": {
+            "correct": 2,
+            "total": 5,
+            "accuracy": 0.4,
+            "ci_95": [
+              0.1176,
+              0.7693
+            ]
+          },
+          "SYNC": {
+            "correct": 4,
+            "total": 5,
+            "accuracy": 0.8,
+            "ci_95": [
+              0.3755,
+              0.9638
+            ]
+          }
+        },
+        "families": [
+          "COH",
+          "GPU",
+          "LOCKFREE",
+          "MP",
+          "NO_MATCH",
+          "SB",
+          "SYNC"
+        ]
+      },
+      "calibration": {
+        "bins": {
+          "0.8-1.0": {
+            "avg_confidence": 0.905,
+            "accuracy": 0.525,
+            "n_samples": 40,
+            "gap": 0.38
+          }
+        },
+        "expected_calibration_error": 0.38,
+        "n_bins": 5
+      },
+      "details": [
+        {
+          "name": "mp_basic_flag",
+          "category": "message_passing",
+          "expected": "mp",
+          "predicted": [
+            "mp"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.9,
+          "reasoning": "Thread 0 writes data then flag; Thread 1 reads flag then data, matching message passing pattern.",
+          "time_s": 3.314,
+          "error": false
+        },
+        {
+          "name": "mp_struct_init",
+          "category": "message_passing",
+          "expected": "mp",
+          "predicted": [
+            "rcu_publish"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.95,
+          "reasoning": "Producer stores new_node pointer with atomic_store, consumer loads pointer with atomic_load; pattern matches RCU publish",
+          "time_s": 1.301,
+          "error": false
+        },
+        {
+          "name": "mp_with_release_acquire",
+          "category": "message_passing",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "release store followed by acquire load with explicit fences matches message passing pattern",
+          "time_s": 0.879,
+          "error": false
+        },
+        {
+          "name": "mp_kernel_rcu_assign",
+          "category": "message_passing",
+          "expected": "rcu_publish",
+          "predicted": [
+            "rcu_publish"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "The code performs a write to a pointer with a memory barrier (smp_wmb) followed by an RCU publish pattern (rcu_assign_pointer), ensuring proper publication of the new configuration.",
+          "time_s": 1.18,
+          "error": false
+        },
+        {
+          "name": "mp_dma_transfer",
+          "category": "message_passing",
+          "expected": "mp",
+          "predicted": [
+            "wrc"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "The code shows a store (writel) followed by a memory barrier (wmb) and then a read, indicating a write-read causality pattern.",
+          "time_s": 0.814,
+          "error": false
+        },
+        {
+          "name": "sb_basic",
+          "category": "store_buffering",
+          "expected": "sb",
+          "predicted": [
+            "sb"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.9,
+          "reasoning": "each thread stores then loads other's variable, matching store buffering pattern",
+          "time_s": 1.069,
+          "error": false
+        },
+        {
+          "name": "sb_dekker_pattern",
+          "category": "store_buffering",
+          "expected": "dekker",
+          "predicted": [
+            "dekker"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "This code implements Dekker's mutual exclusion algorithm using flag and turn variables to ensure mutual exclusion and proper synchronization.",
+          "time_s": 1.179,
+          "error": false
+        },
+        {
+          "name": "sb_peterson",
+          "category": "store_buffering",
+          "expected": "peterson",
+          "predicted": [
+            "mp"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.9,
+          "reasoning": "Both threads write to 'interested' and 'victim' variables, then read the other's variables, matching message passing pattern.",
+          "time_s": 1.103,
+          "error": false
+        },
+        {
+          "name": "sb_with_mfence",
+          "category": "store_buffering",
+          "expected": "sb_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.95,
+          "reasoning": "Explicit store followed by load with MFENCE indicates message passing with full fences on both threads.",
+          "time_s": 1.253,
+          "error": false
+        },
+        {
+          "name": "sb_spinlock_try",
+          "category": "store_buffering",
+          "expected": "sb",
+          "predicted": [
+            "ticket_lock"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.9,
+          "reasoning": "The code implements a lock with atomic stores and loads on separate variables, resembling a ticket lock pattern with fetch-and-add and spin on the ticket variables.",
+          "time_s": 0.999,
+          "error": false
+        },
+        {
+          "name": "lf_treiber_push",
+          "category": "lock_free",
+          "expected": "lockfree_stack_push",
+          "predicted": [
+            "lockfree_stack_push"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "The code implements a lock-free stack push/pop using CAS on the head pointer, which matches the lockfree_stack_push pattern.",
+          "time_s": 1.829,
+          "error": false
+        },
+        {
+          "name": "lf_msqueue_enq",
+          "category": "lock_free",
+          "expected": "ms_queue_enq",
+          "predicted": [],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.9,
+          "reasoning": "This code implements a lock-free enqueue operation on a queue using CAS on tail->next and tail pointers, characteristic of lock-free queue algorithms.",
+          "time_s": 0.816,
+          "error": false
+        },
+        {
+          "name": "lf_spsc_ring",
+          "category": "lock_free",
+          "expected": "lockfree_spsc_queue",
+          "predicted": [
+            "lockfree_spsc_queue"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Producer writes data then updates index with smp_wmb; consumer reads index then data with smp_rmb, matching lock-free SPSC queue pattern.",
+          "time_s": 0.861,
+          "error": false
+        },
+        {
+          "name": "lf_hazard_protect",
+          "category": "lock_free",
+          "expected": "hazard_ptr",
+          "predicted": [
+            "hazard_ptr"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "The code uses hazard pointers to publish and check pointers before reclamation, matching the hazard_ptr pattern.",
+          "time_s": 0.799,
+          "error": false
+        },
+        {
+          "name": "lf_work_steal",
+          "category": "lock_free",
+          "expected": "work_steal",
+          "predicted": [
+            "lockfree_spsc_queue"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.9,
+          "reasoning": "Producer stores data and updates tail with release fence; consumer loads tail and data with acquire loads, matching lock-free SPSC queue pattern.",
+          "time_s": 0.928,
+          "error": false
+        },
+        {
+          "name": "lf_ticket_lock",
+          "category": "lock_free",
+          "expected": "ticket_lock",
+          "predicted": [
+            "ticket_lock"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Atomic fetch_add and atomic store with spin-wait indicate a ticket lock pattern.",
+          "time_s": 0.657,
+          "error": false
+        },
+        {
+          "name": "lf_dcl_singleton",
+          "category": "lock_free",
+          "expected": "dcl_init",
+          "predicted": [
+            "rcu_publish"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "The code uses atomic_load_acquire and atomic_store_release to implement a read-side critical section typical of RCU patterns, ensuring safe publication of the singleton instance.",
+          "time_s": 0.811,
+          "error": false
+        },
+        {
+          "name": "lf_seqlock_read",
+          "category": "lock_free",
+          "expected": "seqlock_read",
+          "predicted": [
+            "seqlock_read"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "The code implements a sequence lock pattern with atomic load, store release, and load acquire to ensure consistent read of data with versioning.",
+          "time_s": 0.899,
+          "error": false
+        },
+        {
+          "name": "gpu_wg_reduction",
+          "category": "gpu",
+          "expected": "gpu_mp_wg",
+          "predicted": [
+            "gpu_mp_wg"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.9,
+          "reasoning": "The code uses __syncthreads() within a block, which enforces a workgroup-level synchronization, matching the GPU MP within same workgroup pattern.",
+          "time_s": 0.844,
+          "error": false
+        },
+        {
+          "name": "gpu_cross_block_atomic",
+          "category": "gpu",
+          "expected": "gpu_mp_dev",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.95,
+          "reasoning": "The code uses __threadfence() before atomicInc, indicating a message passing pattern with explicit fences to ensure ordering across threads.",
+          "time_s": 0.707,
+          "error": false
+        },
+        {
+          "name": "gpu_scope_mismatch",
+          "category": "gpu",
+          "expected": "gpu_barrier_scope_mismatch",
+          "predicted": [
+            "gpu_mp_wg"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "The code uses __syncthreads() within a workgroup to synchronize data and flag updates, which matches the GPU MP within same workgroup pattern.",
+          "time_s": 1.015,
+          "error": false
+        },
+        {
+          "name": "gpu_device_mp",
+          "category": "gpu",
+          "expected": "gpu_mp_dev",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.95,
+          "reasoning": "Explicit threadfence() calls on both threads indicate a message passing pattern with full fences ensuring ordering.",
+          "time_s": 0.7,
+          "error": false
+        },
+        {
+          "name": "gpu_sb_workgroup",
+          "category": "gpu",
+          "expected": "gpu_sb_wg",
+          "predicted": [
+            "gpu_mp_wg"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.95,
+          "reasoning": "Threads within the same workgroup synchronize with __syncthreads(), which acts as a barrier ensuring memory operations are visible across threads in the workgroup.",
+          "time_s": 0.802,
+          "error": false
+        },
+        {
+          "name": "kernel_smp_mb",
+          "category": "kernel_patterns",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Writer uses store with smp_wmb() before setting valid; reader checks valid then uses smp_rmb() before reading data, matching message passing with explicit fences.",
+          "time_s": 0.871,
+          "error": false
+        },
+        {
+          "name": "kernel_completion",
+          "category": "kernel_patterns",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "release-acquire pattern with explicit fences for synchronization between threads",
+          "time_s": 0.655,
+          "error": false
+        },
+        {
+          "name": "kernel_kfifo",
+          "category": "kernel_patterns",
+          "expected": "lockfree_spsc_queue",
+          "predicted": [
+            "lockfree_spsc_queue"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Producer writes data then updates index with smp_wmb; consumer reads index then data with smp_rmb, matching lock-free SPSC queue pattern.",
+          "time_s": 0.776,
+          "error": false
+        },
+        {
+          "name": "kernel_per_cpu",
+          "category": "kernel_patterns",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Explicit store to shared variable followed by a memory barrier, then another thread reads the flag and uses a read barrier before accessing shared data, matching message passing with fences.",
+          "time_s": 0.879,
+          "error": false
+        },
+        {
+          "name": "kernel_rcu_list_add",
+          "category": "kernel_patterns",
+          "expected": "rcu_publish",
+          "predicted": [
+            "rcu_publish"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Writer publishes new data with store, then updates pointer with synchronize_rcu; reader uses rcu_read_lock to ensure visibility.",
+          "time_s": 0.605,
+          "error": false
+        },
+        {
+          "name": "app_database_wal",
+          "category": "application",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "The writer uses an atomic store with release semantics, and the reader uses an atomic load with acquire semantics, indicating a message passing pattern with explicit fences.",
+          "time_s": 1.127,
+          "error": false
+        },
+        {
+          "name": "app_event_flag",
+          "category": "application",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "atomic_store_release and atomic_load_acquire form a message passing pattern with explicit release-acquire semantics",
+          "time_s": 0.689,
+          "error": false
+        },
+        {
+          "name": "app_ref_count_release",
+          "category": "application",
+          "expected": "mp_fence",
+          "predicted": [
+            "rwc"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "The code uses release on decrement and acquire on load, forming a read-write causality pattern.",
+          "time_s": 0.761,
+          "error": false
+        },
+        {
+          "name": "app_config_reload",
+          "category": "application",
+          "expected": "mp",
+          "predicted": [
+            "mp"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.8,
+          "reasoning": "atomic_store followed by atomic_load across threads indicates message passing pattern",
+          "time_s": 1.34,
+          "error": false
+        },
+        {
+          "name": "app_cancellation_token",
+          "category": "application",
+          "expected": "mp_fence",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.95,
+          "reasoning": "Atomic store with release and atomic load with acquire form a message passing pattern with explicit fences.",
+          "time_s": 0.767,
+          "error": false
+        },
+        {
+          "name": "dep_addr_dependency",
+          "category": "dependency_patterns",
+          "expected": "mp_addr",
+          "predicted": [
+            "mp"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "Thread 0 writes to x and y; Thread 1 reads y then uses r0 as address dependency, indicating message passing pattern.",
+          "time_s": 0.73,
+          "error": false
+        },
+        {
+          "name": "dep_data_dependency",
+          "category": "dependency_patterns",
+          "expected": "mp_data",
+          "predicted": [
+            "sb"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.9,
+          "reasoning": "Both threads perform stores to different variables and then loads from the other thread's variable, matching store buffering pattern.",
+          "time_s": 0.704,
+          "error": false
+        },
+        {
+          "name": "dep_control_dependency",
+          "category": "dependency_patterns",
+          "expected": "mp",
+          "predicted": [
+            "sb"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.9,
+          "reasoning": "each thread stores then loads other's variable, leading to store buffering pattern",
+          "time_s": 0.883,
+          "error": false
+        },
+        {
+          "name": "dep_release_acquire_chain",
+          "category": "dependency_patterns",
+          "expected": "rel_acq_chain",
+          "predicted": [
+            "mp_fence"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.95,
+          "reasoning": "Use of release on store and acquire on load with atomic operations indicates message passing pattern.",
+          "time_s": 1.024,
+          "error": false
+        },
+        {
+          "name": "coh_read_read",
+          "category": "coherence",
+          "expected": "corr",
+          "predicted": [
+            "corr"
+          ],
+          "exact": true,
+          "top3": true,
+          "confidence": 0.8,
+          "reasoning": "Both threads read the same variable x without synchronization, requiring coherence to ensure consistent view.",
+          "time_s": 0.769,
+          "error": false
+        },
+        {
+          "name": "coh_write_read",
+          "category": "coherence",
+          "expected": "cowr",
+          "predicted": [
+            "mp"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "Thread 0 performs a store then a load of the same variable, which aligns with message passing pattern.",
+          "time_s": 0.645,
+          "error": false
+        },
+        {
+          "name": "coh_write_write",
+          "category": "coherence",
+          "expected": "coww",
+          "predicted": [
+            "corr"
+          ],
+          "exact": false,
+          "top3": false,
+          "confidence": 0.8,
+          "reasoning": "All threads read the same variable x without synchronization, indicating a coherence read-read pattern where all see the same order of writes.",
+          "time_s": 0.666,
+          "error": false
+        }
+      ]
+    }
+  },
+  "methodology": {
+    "snippets": "40 adversarial snippets across 8 categories",
+    "confidence_intervals": "Wilson score intervals (95%)",
+    "calibration": "5-bin calibration analysis",
+    "confusion_matrix": "Pattern family level",
+    "soundness_note": "All LLM predictions undergo full SMT verification; LLM affects recall only, not soundness."
+  }
+}

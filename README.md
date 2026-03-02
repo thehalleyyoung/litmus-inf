@@ -1,11 +1,11 @@
 # LITMUS∞: SMT-Verified Memory Model Portability Checking
 
-Advisory pre-screening tool that checks whether concurrent C/C++/CUDA code is safe to port from x86 to ARM, RISC-V, or GPU architectures. Every result carries an independently checkable proof certificate (Alethe resolution proofs for UNSAT, self-certifying models for SAT), cross-validated across Z3 and CVC5 (two independent solver implementations). Pattern-level tool (140 known concurrency idioms covering 85.4% of documented real-world concurrency bugs), not a full-program verifier.
+Advisory pre-screening tool that checks whether concurrent C/C++/CUDA code is safe to port across architectures. Every verdict carries a proof certificate, cross-validated across two independent SMT solvers.
 
 ## 30-Second Quickstart
 
 ```bash
-pip install -e litmus_inf/   # install from source (not on PyPI)
+cd litmus_inf && pip install -e .
 litmus-check --target arm myfile.c
 ```
 
@@ -16,33 +16,34 @@ SAFE:   mp_fence                                           [Z3: UNSAT + Alethe p
 2 patterns matched, 1 unsafe, 1 safe  (8ms)
 ```
 
+JSON output for CI pipelines:
+```bash
+litmus-check --target arm --json src/ | jq '.unsafe_patterns'
+```
+
 ## Key Results
 
 | Metric | Value | Evidence |
 |--------|-------|----------|
-| Z3 certificate coverage | **1,400/1,400 (100%)** | 597 UNSAT proofs + 803 SAT witnesses |
-| Cross-solver validation | **1,400/1,400 agreement** | Z3 + CVC5 (independent solver); Wilson CI [99.7%, 100%] |
-| LLM-assisted OOD accuracy | **57.1% exact (80.0% top-3)** | GPT-5 on 35 adversarial OOD snippets; Wilson CI [40.9%, 72.0%] |
-| Alethe proof certificates | **993 UNSAT + 407 SAT** | Avg 106.4 steps; independently checkable |
-| CPU cross-validation | **228/228** | herd7 internal consistency |
-| GPU external validation | **94/94** | Published litmus tests + PTX/Vulkan specs |
-| DSL-to-.cat correspondence | **170/171 (99.4%)** | TSO, ARM, RISC-V |
-| Code recognition (curated) | **96.6% exact, 97.0% top-3** | n=203 benchmark snippets |
-| Bug coverage | **35/41 (85.4%)** | Documented real-world concurrency bugs |
-| Severity classification | **689 data_race, 44 security, 70 benign** | 803 unsafe pairs |
-| Pattern library | **140 patterns** | Classical, RMW, lock-free, seqlock, RCU, etc. |
-| Speed | **sub-second** | Full 1,400-pair analysis: <1ms per pattern |
+| Z3 certificates | **1,400/1,400** | 597 UNSAT proofs + 803 SAT witnesses |
+| Cross-solver (Z3+CVC5) | **1,400/1,400** | Wilson CI [99.7%, 100%] |
+| Proof validation | **69/69 SMT re-check** | Independent re-verification [94.7%, 100%] |
+| LLM recognition | **52.5% exact** | 40 adversarial snippets, 8 categories, CI [37.5%, 67.1%] |
+| Compositional FP rate | **8.3%** | 60 analyses, CI [3.6%, 18.1%] |
+| herd7 consistency | **228/228** | CPU models |
+| GPU external validation | **94/94** | Published specs |
+| Bug coverage | **35/41 (85.4%)** | Documented real-world bugs |
+| Pattern library | **140 patterns** | Classical, lock-free, RCU, GPU |
+| Speed | **<6ms per check** | avg 5.4ms per pattern-model pair |
 
-## Limitations
+## Limitations (Honest)
 
-- **Advisory pre-screening only:** matches code against 140 fixed patterns — cannot discover novel bugs or verify whole programs
-- **Bug coverage is 85.4%:** 6/41 documented bugs are out-of-scope for litmus testing
-- **Z3+CVC5 cross-validation:** both solvers agree on all 1,400 verdicts
-- **GPU models:** 94/94 external cross-validation; not hardware-tested
-- **Compositionality:** exact for disjoint vars, conservative for shared vars
-- **Fence costs are analytical weights:** not measured hardware latencies
-- **Severity taxonomy:** CWE-calibrated, not CVE-validated
-- **LLM mode requires API key:** set OPENAI_API_KEY for LLM-assisted recognition
+- **140 fixed patterns** — cannot discover novel bugs or verify whole programs
+- **Compositional FP rate 8.3%** — conservative analysis over-flags some shared-variable programs
+- **LLM accuracy 52.5%** — dependency patterns (0%) and GPU (20%) are weak
+- **GPU models are specification-based** — not hardware-tested (94/94 external cross-validation)
+- **Fence costs are analytical** — not measured hardware latencies
+- **LLM mode requires OPENAI_API_KEY**
 - **Not on PyPI** — install from source only
 
 ## Supported Architectures

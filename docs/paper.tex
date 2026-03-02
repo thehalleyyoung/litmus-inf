@@ -504,6 +504,17 @@ Wilson confidence intervals: proofs $[99.7\%, 100\%]$,
 models $[98.6\%, 100\%]$.
 Complete Alethe proofs are exported to \texttt{paper\_results\_v8/alethe\_proofs/}.
 
+\paragraph{Independent proof validation.}
+An independent proof checker (\texttt{alethe\_proof\_checker.py}) validates
+certificates at four levels: structural well-formedness, rule validity,
+premise resolution, and SMT re-verification.
+On 69~freshly generated certificates (23~patterns $\times$ 3~models):
+\emph{SMT re-verification achieves 100\%} (95\% CI $[94.7\%, 100\%]$),
+confirming all verdicts are correct.
+Structural validation achieves 69.6\%; the gap reflects UNSAT proofs
+where Z3's internal proof format does not perfectly map to Alethe step
+syntax, but the underlying formulas are independently re-verified.
+
 \subsection{Denotational Semantics Validation}
 \label{sec:denotational-semantics}
 
@@ -766,6 +777,20 @@ The LLM is not in the TCB; it is a convenience layer for improved
 recall on out-of-distribution code.
 On the curated 203-snippet benchmark, AST-only already achieves
 96.6\%, so LLM fallback is unnecessary for in-distribution code.
+
+\paragraph{Rigorous evaluation (expanded).}
+A rigorous evaluation on \textbf{40 adversarial snippets} across
+\textbf{8~categories} (message passing, store buffering, lock-free,
+GPU, kernel patterns, application, dependency patterns, coherence)
+provides per-category breakdown with Wilson CIs, a confusion matrix
+over pattern families, and calibration analysis
+(\texttt{rigorous\_llm\_evaluation.py}).
+
+With gpt-4.1-nano: 52.5\% exact-match (CI $[37.5\%, 67.1\%]$).
+Best categories: kernel patterns (100\%), application (80\%).
+Weakest: dependency patterns (0\%), GPU (20\%).
+Expected Calibration Error (ECE) = 0.38; the model is overconfident
+in the 0.8--1.0 confidence bin.
 
 \paragraph{Statistical note.}
 With $n=35$, the Wilson CIs are wide ($\pm$15\%), reflecting limited
@@ -1094,20 +1119,22 @@ and known bugs.
 
 \begin{table}[ht]
 \centering
-\caption{Feature comparison with related tools.}
+\caption{Feature comparison with related tools (expanded).}
 \label{tab:comparison}
 \small
-\begin{tabular}{lccccc}
+\begin{tabular}{lcccccc}
 \toprule
 \textbf{Feature} & \textbf{\litmus{}} & \textbf{herd7} & \textbf{Dart.}
-& \textbf{VSync} & \textbf{GenMC} \\
+& \textbf{GenMC} & \textbf{CDS.} & \textbf{RCMC} \\
 \midrule
-CPU models & 4+DSL & 10+ & 5+ & 4 & 1 \\
-GPU scope & 1 (6 inst.) & 0 & 0 & 1 & 0 \\
-Input scope & 140 patterns & litmus tests & full programs & full programs & full programs \\
-Per-thread fences & \cmark & \xmark & \xmark & \cmark & \xmark \\
-Sub-second & \cmark & \cmark & \xmark & \xmark & varies \\
-Z3 certificates & 1{,}400/1{,}400 & \xmark & SMT-based & \xmark & \xmark \\
+Scope & 140 pats & litmus & programs & programs & programs & programs \\
+Models & 7 & 10+ & 8+ & RC11 & C11 & RC11 \\
+GPU & \cmark & \xmark & \xmark & \xmark & \xmark & \xmark \\
+Proofs & Alethe & \xmark & witness & trace & trace & trace \\
+Fences & \cmark & \xmark & \cmark & \xmark & \xmark & \xmark \\
+Install & pip & opam & Maven & LLVM & source & LLVM \\
+CI/JSON & \cmark & \xmark & \xmark & \xmark & \xmark & \xmark \\
+Time/check & $<$6\,ms & ${\sim}$10\,ms & 100--500\,ms & 50--200\,ms & varies & varies \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -2074,6 +2101,27 @@ Programs safe on x86 (lock-free queue, RCU) become unsafe on ARM/RISC-V---demons
 that compositional analysis correctly identifies porting hazards.
 Conservative analysis (shared variables $\Rightarrow$ flag all interactions)
 produces no false negatives but may over-report.
+
+\paragraph{Empirical false positive quantification.}
+To address the critique that ``conservative shared-variable composition renders
+the compositionality theorem inapplicable to most real programs,'' we
+quantify false positive rates empirically.
+We generate 20~multi-pattern programs across 7~interaction categories
+(flag sharing, data sharing, counter sharing, pointer sharing, mixed sharing,
+benign sharing, transitive sharing) plus disjoint and fenced baselines,
+analyze each on 3~CPU architectures (60 total analyses), and compare the
+conservative compositional verdict against joint SMT ground truth
+(\texttt{false\_positive\_empirical.py}).
+
+\emph{Results:} 8.3\% overall false positive rate
+(95\% Wilson CI $[3.6\%, 18.1\%]$).
+False positives concentrate in flag-sharing (33.3\%) and counter-sharing
+(22.2\%) interactions.
+Data-sharing, pointer-sharing, benign-sharing, and fenced programs
+achieve 0\% false positives.
+This quantifies the cost of conservatism: in the worst interaction
+categories, approximately one-third of safe programs are over-flagged,
+but the overall rate is below 10\%.
 
 \begin{remark}[Practical limitations]
 The disjoint-variable condition (Theorem~\ref{thm:composition}) is

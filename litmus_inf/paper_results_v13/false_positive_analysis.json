@@ -1,0 +1,731 @@
+{
+  "experiment": "Compositional false positive rate analysis",
+  "description": "Compares conservative compositional analysis against joint SMT ground truth to quantify false positive rates. A false positive occurs when conservative analysis flags a program as unsafe but joint SMT analysis proves it safe.",
+  "n_programs": 20,
+  "n_architectures": 3,
+  "total_analyses": 60,
+  "overall": {
+    "false_positives": 5,
+    "true_positives": 44,
+    "true_negatives": 1,
+    "fp_rate": 0.0833,
+    "fp_ci_95": [
+      0.0361,
+      0.1807
+    ],
+    "precision": 0.898,
+    "soundness": "VIOLATED"
+  },
+  "shared_variable_analyses": {
+    "total": 57,
+    "false_positives": 5,
+    "fp_rate": 0.0877,
+    "fp_ci_95": [
+      0.0381,
+      0.1895
+    ]
+  },
+  "per_category": {
+    "benign_sharing": {
+      "total": 6,
+      "false_positives": 0,
+      "true_positives": 6,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.3903
+      ]
+    },
+    "counter_sharing": {
+      "total": 9,
+      "false_positives": 2,
+      "true_positives": 4,
+      "true_negatives": 1,
+      "fp_rate": 0.2222,
+      "fp_ci_95": [
+        0.0632,
+        0.5474
+      ]
+    },
+    "data_sharing": {
+      "total": 9,
+      "false_positives": 0,
+      "true_positives": 9,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.2992
+      ]
+    },
+    "disjoint_baseline": {
+      "total": 6,
+      "false_positives": 0,
+      "true_positives": 5,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.3903
+      ]
+    },
+    "fenced_sharing": {
+      "total": 3,
+      "false_positives": 0,
+      "true_positives": 2,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.5615
+      ]
+    },
+    "flag_sharing": {
+      "total": 9,
+      "false_positives": 3,
+      "true_positives": 6,
+      "true_negatives": 0,
+      "fp_rate": 0.3333,
+      "fp_ci_95": [
+        0.1206,
+        0.6458
+      ]
+    },
+    "mixed_sharing": {
+      "total": 6,
+      "false_positives": 0,
+      "true_positives": 3,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.3903
+      ]
+    },
+    "pointer_sharing": {
+      "total": 9,
+      "false_positives": 0,
+      "true_positives": 6,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.2992
+      ]
+    },
+    "transitive_sharing": {
+      "total": 3,
+      "false_positives": 0,
+      "true_positives": 3,
+      "true_negatives": 0,
+      "fp_rate": 0.0,
+      "fp_ci_95": [
+        0,
+        0.5615
+      ]
+    }
+  },
+  "details": [
+    {
+      "program": "flag_share_mp_sb",
+      "arch": "x86",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 119.77
+    },
+    {
+      "program": "flag_share_mp_sb",
+      "arch": "arm",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 101.03
+    },
+    {
+      "program": "flag_share_mp_sb",
+      "arch": "riscv",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 89.52
+    },
+    {
+      "program": "flag_share_mp_sb_fenced",
+      "arch": "x86",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": true,
+      "is_false_positive": true,
+      "time_ms": 93.96
+    },
+    {
+      "program": "flag_share_mp_sb_fenced",
+      "arch": "arm",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": true,
+      "is_false_positive": true,
+      "time_ms": 177.27
+    },
+    {
+      "program": "flag_share_mp_sb_fenced",
+      "arch": "riscv",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": true,
+      "is_false_positive": true,
+      "time_ms": 121.82
+    },
+    {
+      "program": "data_share_mp_wrc",
+      "arch": "x86",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 108.59
+    },
+    {
+      "program": "data_share_mp_wrc",
+      "arch": "arm",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 107.63
+    },
+    {
+      "program": "data_share_mp_wrc",
+      "arch": "riscv",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 137.69
+    },
+    {
+      "program": "data_share_sb_corr",
+      "arch": "x86",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 26.94
+    },
+    {
+      "program": "data_share_sb_corr",
+      "arch": "arm",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 32.36
+    },
+    {
+      "program": "data_share_sb_corr",
+      "arch": "riscv",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 29.05
+    },
+    {
+      "program": "counter_share_mp_rmw",
+      "arch": "x86",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": true,
+      "is_false_positive": false,
+      "time_ms": 47.42
+    },
+    {
+      "program": "counter_share_mp_rmw",
+      "arch": "arm",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": true,
+      "is_false_positive": true,
+      "time_ms": 45.2
+    },
+    {
+      "program": "counter_share_mp_rmw",
+      "arch": "riscv",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": true,
+      "is_false_positive": true,
+      "time_ms": 48.42
+    },
+    {
+      "program": "ptr_share_publish_read",
+      "arch": "x86",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 92.39
+    },
+    {
+      "program": "ptr_share_publish_read",
+      "arch": "arm",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 94.46
+    },
+    {
+      "program": "ptr_share_publish_read",
+      "arch": "riscv",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 89.95
+    },
+    {
+      "program": "mixed_share_3way",
+      "arch": "x86",
+      "category": "mixed_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 106.66
+    },
+    {
+      "program": "mixed_share_3way",
+      "arch": "arm",
+      "category": "mixed_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 109.33
+    },
+    {
+      "program": "mixed_share_3way",
+      "arch": "riscv",
+      "category": "mixed_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 115.55
+    },
+    {
+      "program": "benign_readonly_share",
+      "arch": "x86",
+      "category": "benign_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 65.93
+    },
+    {
+      "program": "benign_readonly_share",
+      "arch": "arm",
+      "category": "benign_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 150.69
+    },
+    {
+      "program": "benign_readonly_share",
+      "arch": "riscv",
+      "category": "benign_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 88.74
+    },
+    {
+      "program": "benign_both_readonly",
+      "arch": "x86",
+      "category": "benign_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 59.03
+    },
+    {
+      "program": "benign_both_readonly",
+      "arch": "arm",
+      "category": "benign_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 38.08
+    },
+    {
+      "program": "benign_both_readonly",
+      "arch": "riscv",
+      "category": "benign_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 39.89
+    },
+    {
+      "program": "transitive_abc_chain",
+      "arch": "x86",
+      "category": "transitive_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 78.47
+    },
+    {
+      "program": "transitive_abc_chain",
+      "arch": "arm",
+      "category": "transitive_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 75.58
+    },
+    {
+      "program": "transitive_abc_chain",
+      "arch": "riscv",
+      "category": "transitive_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 73.22
+    },
+    {
+      "program": "disjoint_mp_sb",
+      "arch": "x86",
+      "category": "disjoint_baseline",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 88.19
+    },
+    {
+      "program": "disjoint_mp_sb",
+      "arch": "arm",
+      "category": "disjoint_baseline",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 91.31
+    },
+    {
+      "program": "disjoint_mp_sb",
+      "arch": "riscv",
+      "category": "disjoint_baseline",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 84.01
+    },
+    {
+      "program": "disjoint_mp_mp",
+      "arch": "x86",
+      "category": "disjoint_baseline",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 99.59
+    },
+    {
+      "program": "disjoint_mp_mp",
+      "arch": "arm",
+      "category": "disjoint_baseline",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 93.67
+    },
+    {
+      "program": "disjoint_mp_mp",
+      "arch": "riscv",
+      "category": "disjoint_baseline",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 146.24
+    },
+    {
+      "program": "fenced_shared_mp_mp",
+      "arch": "x86",
+      "category": "fenced_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 214.57
+    },
+    {
+      "program": "fenced_shared_mp_mp",
+      "arch": "arm",
+      "category": "fenced_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 206.54
+    },
+    {
+      "program": "fenced_shared_mp_mp",
+      "arch": "riscv",
+      "category": "fenced_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 227.29
+    },
+    {
+      "program": "sb_shared_with_observer",
+      "arch": "x86",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 31.08
+    },
+    {
+      "program": "sb_shared_with_observer",
+      "arch": "arm",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 29.94
+    },
+    {
+      "program": "sb_shared_with_observer",
+      "arch": "riscv",
+      "category": "data_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 28.33
+    },
+    {
+      "program": "iriw_shared_reads",
+      "arch": "x86",
+      "category": "mixed_sharing",
+      "has_shared_vars": false,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 4.96
+    },
+    {
+      "program": "iriw_shared_reads",
+      "arch": "arm",
+      "category": "mixed_sharing",
+      "has_shared_vars": false,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 5.66
+    },
+    {
+      "program": "iriw_shared_reads",
+      "arch": "riscv",
+      "category": "mixed_sharing",
+      "has_shared_vars": false,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 5.73
+    },
+    {
+      "program": "dekker_shared_flag",
+      "arch": "x86",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 40.32
+    },
+    {
+      "program": "dekker_shared_flag",
+      "arch": "arm",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 53.6
+    },
+    {
+      "program": "dekker_shared_flag",
+      "arch": "riscv",
+      "category": "flag_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 51.69
+    },
+    {
+      "program": "work_steal_shared_buffer",
+      "arch": "x86",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 138.49
+    },
+    {
+      "program": "work_steal_shared_buffer",
+      "arch": "arm",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 120.07
+    },
+    {
+      "program": "work_steal_shared_buffer",
+      "arch": "riscv",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 98.06
+    },
+    {
+      "program": "seqlock_multi_reader",
+      "arch": "x86",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 108.84
+    },
+    {
+      "program": "seqlock_multi_reader",
+      "arch": "arm",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 172.24
+    },
+    {
+      "program": "seqlock_multi_reader",
+      "arch": "riscv",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 154.9
+    },
+    {
+      "program": "refcount_reclaim",
+      "arch": "x86",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 63.17
+    },
+    {
+      "program": "refcount_reclaim",
+      "arch": "arm",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 50.68
+    },
+    {
+      "program": "refcount_reclaim",
+      "arch": "riscv",
+      "category": "counter_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 52.56
+    },
+    {
+      "program": "rcu_multi_reader",
+      "arch": "x86",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": true,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 100.25
+    },
+    {
+      "program": "rcu_multi_reader",
+      "arch": "arm",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 119.0
+    },
+    {
+      "program": "rcu_multi_reader",
+      "arch": "riscv",
+      "category": "pointer_sharing",
+      "has_shared_vars": true,
+      "conservative_safe": false,
+      "joint_smt_safe": false,
+      "is_false_positive": false,
+      "time_ms": 162.46
+    }
+  ]
+}

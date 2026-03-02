@@ -94,7 +94,7 @@ GPU_PATTERNS = [
 
 
 def build_llm_prompt(code: str, target_arch: str = None) -> str:
-    """Build the LLM prompt for pattern recognition."""
+    """Build the LLM prompt for pattern recognition with few-shot examples."""
     pattern_list = "\n".join(
         f"  - {name}: {desc}" for name, desc in CORE_PATTERNS
     )
@@ -106,9 +106,7 @@ def build_llm_prompt(code: str, target_arch: str = None) -> str:
     if target_arch:
         target_info = f"\nTarget architecture: {target_arch}"
     
-    return f"""You are a concurrency expert analyzing C/C++/CUDA code for weak memory ordering hazards.
-
-Given the following concurrent code, identify which memory ordering pattern(s) from this catalog best match the code's synchronization behavior. Focus on the ORDERING RELATIONSHIPS between memory operations across threads.
+    return f"""You are a concurrency expert. Identify which memory ordering pattern from the catalog matches this code.
 
 PATTERN CATALOG (CPU):
 {pattern_list}
@@ -116,22 +114,35 @@ PATTERN CATALOG (CPU):
 GPU PATTERNS (for CUDA/OpenCL/Vulkan code):
 {gpu_list}
 
-RULES:
-1. Look for the fundamental ordering relationship: which stores must be visible before which loads across threads.
-2. If the code uses fences/barriers, match to the fenced version (e.g., mp_fence instead of mp).
-3. If the code uses C11 atomics with release/acquire, that's equivalent to a fence.
-4. If no pattern matches well, say "no_match".
-5. Return up to 3 pattern names, most likely first.
-6. Consider that different variable names map to the abstract variables x, y, z.
+KEY RULES:
+1. Focus on ordering between stores and loads ACROSS threads.
+2. release/acquire or smp_wmb/smp_rmb or atomic_store_release/atomic_load_acquire → use the _fence variant (e.g., mp_fence).
+3. Plain stores followed by plain loads with no barrier → use the bare variant (e.g., mp).
+4. RCU patterns (rcu_assign_pointer, rcu_dereference) → rcu_publish.
+5. SeqLock (load seq, load data, load seq) → seqlock_read.
+6. Hazard pointers (hp[tid] = ptr, barrier, check) → hazard_ptr.
+7. Lock-free stack (CAS on head pointer) → lockfree_stack_push.
+8. Lock-free queue (CAS on tail->next) → ms_queue_enq.
+9. SPSC ring buffer (write data, barrier, update index) → lockfree_spsc_queue.
+10. Ticket lock (fetch_add ticket, spin on serving) → ticket_lock.
+11. DCL (check flag, lock, check flag, init, release flag) → dcl_init.
+12. Work stealing (push to bottom, steal from top via CAS) → work_steal.
+13. Coherence (two reads of same addr by same thread) → corr/cowr/coww.
+14. CUDA __syncthreads() → gpu_mp_wg; __threadfence() → gpu_mp_dev.
 {target_info}
+
+EXAMPLES:
+Code: "data=1; flag=1; // T1: if(flag) use(data);"  →  {{"patterns":["mp"],"confidence":0.9,"reasoning":"store-store then load-load across threads is message passing"}}
+Code: "x=1; r0=y; // T1: y=1; r1=x;"  →  {{"patterns":["sb"],"confidence":0.9,"reasoning":"each thread stores then loads other's variable"}}
+Code: "data=v; smp_wmb(); flag=1; // T1: while(!flag); smp_rmb(); use(data);"  →  {{"patterns":["mp_fence"],"confidence":0.95,"reasoning":"MP with explicit fences"}}
 
 CODE:
 ```
 {code}
 ```
 
-Respond with ONLY a JSON object:
-{{"patterns": ["pattern_name_1", "pattern_name_2"], "confidence": 0.8, "reasoning": "brief explanation"}}"""
+Respond with ONLY valid JSON:
+{{"patterns": ["pattern_name"], "confidence": 0.8, "reasoning": "brief"}}"""
 
 
 def llm_recognize_patterns(code: str, target_arch: str = None,

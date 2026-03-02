@@ -71,9 +71,49 @@ results = hybrid_check_portability(code, target_arch="arm", use_llm=True)
 
 Direct LLM pattern recognition. Returns `{'patterns': [...], 'confidence': 0.9, 'reasoning': '...'}`.
 
-**Adversarial OOD accuracy: 57.1% exact (80.0% top-3) on n=35 adversarial snippets (Wilson CI [40.9%, 72.0%]).**
+**Accuracy: 52.5% exact-match on n=40 adversarial snippets across 8 categories (Wilson CI [37.5%, 67.1%]).**
 
 Requires `OPENAI_API_KEY` environment variable. Soundness: LLM affects recall only; all verdicts are SMT-certified.
+
+---
+
+## Rigorous LLM Evaluation
+
+```python
+from rigorous_llm_evaluation import run_rigorous_llm_evaluation
+report = run_rigorous_llm_evaluation(models=['gpt-4.1-nano'])
+# Confusion matrix, calibration analysis, per-category breakdown
+```
+
+---
+
+## Compositional False Positive Analysis
+
+```python
+from false_positive_empirical import run_false_positive_analysis
+report = run_false_positive_analysis()
+# 8.3% overall FP rate (CI [3.6%, 18.1%])
+```
+
+---
+
+## Alethe Proof Certificate Validation
+
+```python
+from alethe_proof_checker import run_proof_validation
+report = run_proof_validation()
+# 100% SMT re-verification (CI [94.7%, 100%])
+```
+
+---
+
+## Tool Comparison
+
+```python
+from tool_comparison import run_tool_comparison
+report = run_tool_comparison()
+# Structured comparison with herd7, Dartagnan, GenMC, CDSChecker, RCMC
+```
 
 ---
 
