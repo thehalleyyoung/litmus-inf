@@ -1,5 +1,0 @@
-{
-  "category": "B",
-  "key_quote": "The proof certificates prove the wrong level of abstraction... The gap between 'this litmus test is safe' and 'your code is safe' is the entire concurrent program analysis problem.",
-  "rationale": "All five reviewers acknowledge novel contributions (cross-solver validation, sound LLM integration, Alethe certificates), but consensus weaknesses—pattern-level-only proofs, catastrophic AST failure on OOD code (0% vs 96.6%), uncharacterized compositional overapproximation, and missing statistical rigor in LLM evaluation—are depth/execution gaps that prevent acceptance without substantial revision."
-}
