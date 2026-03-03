@@ -49,3 +49,4 @@ pub mod partial_order;
 pub mod happens_before;
 pub mod write_serialization;
 pub mod portability;
+pub mod proof_certificate;

@@ -216,12 +216,51 @@ impl std::error::Error for ParseError {}
 /// Parser for litmus test files, supporting multiple formats.
 pub struct LitmusParser;
 
+/// Structured litmus test format for TOML/JSON files.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StructuredLitmusTest {
+    /// Test name.
+    pub name: String,
+    /// Shared memory locations with initial values.
+    #[serde(default)]
+    pub locations: HashMap<String, u64>,
+    /// Thread definitions.
+    pub threads: Vec<StructuredThread>,
+    /// Expected outcome constraint.
+    #[serde(default)]
+    pub forbidden: Option<HashMap<String, u64>>,
+    #[serde(default)]
+    pub allowed: Option<HashMap<String, u64>>,
+}
+
+/// A thread in the structured format.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct StructuredThread {
+    /// Thread ID (optional, defaults to index).
+    #[serde(default)]
+    pub id: Option<usize>,
+    /// List of operations: "W(x, 1)", "R(y) r0", "fence"
+    pub ops: Vec<String>,
+}
+
 impl LitmusParser {
     pub fn new() -> Self { LitmusParser }
 
     /// Auto-detect format and parse.
     pub fn parse(&self, input: &str) -> Result<LitmusTest, ParseError> {
         let trimmed = input.trim();
+        // TOML: contains [threads] or [[threads]] sections
+        if trimmed.contains("[[threads]]") || (trimmed.contains("[threads") && trimmed.contains("name")) {
+            return self.parse_toml(input);
+        }
+        // JSON: starts with { and contains "threads"
+        if trimmed.starts_with('{') && trimmed.contains("\"threads\"") {
+            return self.parse_json(input);
+        }
+        // herd7 .litmus format: starts with an arch keyword line (e.g. "X86 SB")
+        if self.looks_like_litmus_file(trimmed) {
+            return self.parse_litmus_file(input);
+        }
         if trimmed.starts_with('{') || trimmed.contains("exists") {
             self.parse_herd(input)
         } else if trimmed.starts_with("LISA") || trimmed.contains("LISA") {
@@ -231,6 +270,386 @@ impl LitmusParser {
         } else {
             self.parse_simple(input)
         }
+    }
+
+    /// Detect standard herd7 .litmus file format.
+    fn looks_like_litmus_file(&self, trimmed: &str) -> bool {
+        let first_line = trimmed.lines().next().unwrap_or("").trim();
+        let arch_keywords = ["X86", "AArch64", "RISCV", "PPC", "ARM", "MIPS", "SPARC", "C", "C11"];
+        for kw in &arch_keywords {
+            if first_line.starts_with(kw) && first_line.len() > kw.len()
+                && first_line.as_bytes()[kw.len()] == b' '
+            {
+                return true;
+            }
+        }
+        false
+    }
+
+    /// Parse a herd7 `.litmus` file.
+    ///
+    /// Expected format:
+    /// ```text
+    /// ARCH TestName
+    /// "Optional quoted comment"
+    /// { x=0; y=0; }
+    /// P0          | P1          ;
+    /// MOV [x],$1  | MOV EAX,[y] ;
+    /// MOV EBX,[y] | MOV [x],$1  ;
+    /// exists (0:EBX=0 /\ 1:EAX=0)
+    /// ```
+    pub fn parse_litmus_file(&self, input: &str) -> Result<LitmusTest, ParseError> {
+        let lines: Vec<&str> = input.lines().collect();
+        let mut i = 0;
+
+        // Skip blank/comment lines
+        while i < lines.len() && (lines[i].trim().is_empty() || lines[i].trim().starts_with("(*")) {
+            if lines[i].contains("*)") { i += 1; continue; }
+            if lines[i].trim().starts_with("(*") {
+                while i < lines.len() && !lines[i].contains("*)") { i += 1; }
+                if i < lines.len() { i += 1; }
+                continue;
+            }
+            i += 1;
+        }
+        if i >= lines.len() {
+            return Err(ParseError { message: "Empty litmus file".to_string(), line: 0, col: 0 });
+        }
+
+        // Line 1: "ARCH TestName"
+        let header = lines[i].trim();
+        let header_parts: Vec<&str> = header.splitn(2, ' ').collect();
+        let _arch = header_parts[0];
+        let test_name = if header_parts.len() > 1 { header_parts[1].trim() } else { "unnamed" };
+        let mut test = LitmusTest::new(test_name);
+        i += 1;
+
+        // Skip optional quoted comment line
+        while i < lines.len() {
+            let line = lines[i].trim();
+            if line.is_empty() || line.starts_with('"') || line.starts_with("(*") {
+                if line.starts_with("(*") {
+                    while i < lines.len() && !lines[i].contains("*)") { i += 1; }
+                }
+                i += 1;
+                continue;
+            }
+            break;
+        }
+
+        // Parse initial state block: { x=0; y=0; } or multi-line
+        if i < lines.len() && lines[i].trim().starts_with('{') {
+            let block = self.extract_block(&lines, &mut i, '{', '}');
+            for stmt in block.split(';') {
+                let stmt = stmt.trim();
+                if stmt.is_empty() { continue; }
+                let parts: Vec<&str> = stmt.split('=').collect();
+                if parts.len() == 2 {
+                    let var = parts[0].trim().trim_start_matches('*');
+                    let val: Value = parts[1].trim().parse().unwrap_or(0);
+                    test.initial_state.insert(self.addr_from_name(var), val);
+                }
+            }
+            i += 1;
+        }
+
+        // Parse thread columns: "P0 | P1 ;" header followed by instruction rows
+        // First, find the header row with P0, P1, etc.
+        let mut num_threads = 0usize;
+        let mut threads: Vec<Thread> = Vec::new();
+
+        while i < lines.len() {
+            let line = lines[i].trim();
+            if line.is_empty() { i += 1; continue; }
+            if line.starts_with("exists") || line.starts_with("forall")
+                || line.starts_with("~exists") || line.starts_with("locations")
+            {
+                break;
+            }
+
+            // Check for thread header line containing P0, P1, etc.
+            let cols: Vec<&str> = line.split('|').collect();
+            let is_header = cols.iter().any(|c| {
+                let t = c.trim().trim_end_matches(';').trim();
+                t.starts_with('P') && t[1..].chars().all(|ch| ch.is_ascii_digit())
+            });
+
+            if is_header {
+                num_threads = cols.len();
+                for col in &cols {
+                    let tid = self.extract_thread_id(col.trim().trim_end_matches(';').trim());
+                    threads.push(Thread::new(tid));
+                }
+                i += 1;
+                continue;
+            }
+
+            // Instruction row: columns separated by |
+            if num_threads > 0 && line.contains('|') {
+                let inst_cols: Vec<&str> = line.split('|').collect();
+                for (col_idx, col) in inst_cols.iter().enumerate() {
+                    if col_idx >= threads.len() { break; }
+                    let inst = col.trim().trim_end_matches(';').trim();
+                    if inst.is_empty() { continue; }
+                    self.parse_litmus_instruction(inst, &mut threads[col_idx]);
+                }
+                i += 1;
+                continue;
+            }
+
+            // Single-thread instruction lines (P0: inst; inst;)
+            if line.starts_with('P') || line.starts_with('T') {
+                if threads.is_empty() || !line.contains(':') {
+                    let tid = self.extract_thread_id(line);
+                    if tid >= threads.len() {
+                        while threads.len() <= tid { threads.push(Thread::new(threads.len())); }
+                    }
+                    if let Some(colon_pos) = line.find(':') {
+                        let inst_str = &line[colon_pos + 1..];
+                        self.parse_litmus_instruction(inst_str.trim().trim_end_matches(';'), &mut threads[tid]);
+                    }
+                }
+                i += 1;
+                continue;
+            }
+
+            i += 1;
+        }
+
+        // Parse exists/forall clause
+        while i < lines.len() {
+            let line = lines[i].trim();
+            if line.starts_with("exists") || line.starts_with("forall") || line.starts_with("~exists") {
+                let outcome_str = self.extract_outcome_block(&lines, i);
+                if let Some(outcome) = self.parse_litmus_outcome(&outcome_str) {
+                    if line.starts_with("~exists") || line.starts_with("forall") {
+                        test.expected_outcomes.push((outcome, LitmusOutcome::Forbidden));
+                    } else {
+                        test.expected_outcomes.push((outcome, LitmusOutcome::Allowed));
+                    }
+                }
+                break;
+            }
+            i += 1;
+        }
+
+        for t in threads {
+            if !t.instructions.is_empty() {
+                test.add_thread(t);
+            }
+        }
+
+        if test.threads.is_empty() {
+            return Err(ParseError { message: "No threads found in .litmus file".to_string(), line: 0, col: 0 });
+        }
+
+        Ok(test)
+    }
+
+    /// Parse a single instruction from a herd7 .litmus column.
+    /// Supports x86 (MOV), ARM/AArch64 (LDR/STR/DMB), RISC-V (lw/sw/fence),
+    /// and generic W()/R()/fence notation.
+    fn parse_litmus_instruction(&self, text: &str, thread: &mut Thread) {
+        let text = text.trim();
+        if text.is_empty() { return; }
+        let upper = text.to_uppercase();
+
+        // x86-style: MOV [x],$1 (store) or MOV EAX,[y] (load)
+        if upper.starts_with("MOV") {
+            let rest = text[3..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let dst = parts[0].trim();
+                let src = parts[1].trim();
+                if dst.contains('[') {
+                    // MOV [x],$1 → store
+                    let addr = dst.replace(|c: char| c == '[' || c == ']', "").trim().to_string();
+                    let val: Value = src.trim_start_matches('$').trim_start_matches('#').parse().unwrap_or(1);
+                    thread.add(Instruction::Store { addr: self.addr_from_name(&addr), value: val, ordering: Ordering::Relaxed });
+                } else {
+                    // MOV EAX,[y] → load
+                    let addr = src.replace(|c: char| c == '[' || c == ']', "").trim().to_string();
+                    let reg = self.reg_from_name(dst);
+                    thread.add(Instruction::Load { reg, addr: self.addr_from_name(&addr), ordering: Ordering::Relaxed });
+                }
+                return;
+            }
+        }
+
+        // MFENCE / LFENCE / SFENCE (x86)
+        if upper.starts_with("MFENCE") || upper.starts_with("LFENCE") || upper.starts_with("SFENCE") {
+            thread.add(Instruction::Fence { ordering: Ordering::SeqCst, scope: crate::checker::litmus::Scope::None });
+            return;
+        }
+
+        // ARM/AArch64: STR Wn,[Xm,addr] / LDR Wn,[Xm,addr] / DMB
+        if upper.starts_with("STR") {
+            let rest = text[3..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let val_reg = parts[0].trim();
+                let addr = parts[1].replace(|c: char| c == '[' || c == ']', "").trim().to_string();
+                // Use register name hash as value
+                let val: Value = val_reg.bytes().fold(0u64, |a, b| a.wrapping_add(b as u64)) & 0xFF;
+                thread.add(Instruction::Store { addr: self.addr_from_name(&addr), value: val.max(1) as Value, ordering: Ordering::Relaxed });
+            }
+            return;
+        }
+        if upper.starts_with("LDR") {
+            let rest = text[3..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let reg = self.reg_from_name(parts[0].trim());
+                let addr = parts[1].replace(|c: char| c == '[' || c == ']', "").trim().to_string();
+                thread.add(Instruction::Load { reg, addr: self.addr_from_name(&addr), ordering: Ordering::Relaxed });
+            }
+            return;
+        }
+        if upper.starts_with("DMB") || upper.starts_with("DSB") || upper.starts_with("ISB") {
+            thread.add(Instruction::Fence { ordering: Ordering::SeqCst, scope: crate::checker::litmus::Scope::None });
+            return;
+        }
+
+        // RISC-V: lw reg,addr / sw reg,addr / fence
+        if upper.starts_with("LW") || upper.starts_with("LD") && !upper.starts_with("LDR") {
+            let rest = text[2..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let reg = self.reg_from_name(parts[0].trim());
+                let addr = parts[1].replace(|c: char| c == '(' || c == ')', "").trim().to_string();
+                thread.add(Instruction::Load { reg, addr: self.addr_from_name(&addr), ordering: Ordering::Relaxed });
+            }
+            return;
+        }
+        if upper.starts_with("SW") || (upper.starts_with("SD") && !upper.starts_with("SFENCE")) {
+            let rest = text[2..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let addr = parts[1].replace(|c: char| c == '(' || c == ')', "").trim().to_string();
+                thread.add(Instruction::Store { addr: self.addr_from_name(&addr), value: 1, ordering: Ordering::Relaxed });
+            }
+            return;
+        }
+        if upper == "FENCE" || upper.starts_with("FENCE ") || upper.starts_with("FENCE.") {
+            thread.add(Instruction::Fence { ordering: Ordering::SeqCst, scope: crate::checker::litmus::Scope::None });
+            return;
+        }
+
+        // PPC: lwz, stw, sync, lwsync
+        if upper.starts_with("LWZ") || upper.starts_with("LBZ") {
+            let rest = text[3..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let reg = self.reg_from_name(parts[0].trim());
+                let addr = parts[1].replace(|c: char| c == '(' || c == ')', "").trim().to_string();
+                thread.add(Instruction::Load { reg, addr: self.addr_from_name(&addr), ordering: Ordering::Relaxed });
+            }
+            return;
+        }
+        if upper.starts_with("STW") || upper.starts_with("STB") {
+            let rest = text[3..].trim();
+            let parts: Vec<&str> = rest.splitn(2, ',').collect();
+            if parts.len() == 2 {
+                let addr = parts[1].replace(|c: char| c == '(' || c == ')', "").trim().to_string();
+                thread.add(Instruction::Store { addr: self.addr_from_name(&addr), value: 1, ordering: Ordering::Relaxed });
+            }
+            return;
+        }
+        if upper == "SYNC" || upper.starts_with("LWSYNC") || upper.starts_with("ISYNC") || upper.starts_with("EIEIO") {
+            thread.add(Instruction::Fence { ordering: Ordering::SeqCst, scope: crate::checker::litmus::Scope::None });
+            return;
+        }
+
+        // Fallback: try W()/R()/fence notation
+        self.parse_instructions(text, thread);
+    }
+
+    /// Parse outcome from herd7 .litmus exists clause.
+    /// Handles "exists (0:EAX=0 /\ 1:EBX=0)" format.
+    fn parse_litmus_outcome(&self, text: &str) -> Option<Outcome> {
+        let clean = text.replace("exists", "").replace("forall", "")
+            .replace("~exists", "").replace("not exists", "")
+            .replace("(", "").replace(")", "")
+            .replace("/\\", ",").replace("\\", ",")
+            .replace("&", ",");
+        let mut outcome = Outcome::new();
+        let mut found = false;
+        for part in clean.split(',') {
+            let part = part.trim();
+            if part.contains('=') {
+                let kv: Vec<&str> = part.split('=').collect();
+                if kv.len() == 2 {
+                    let key = kv[0].trim();
+                    if let Ok(val) = kv[1].trim().parse::<Value>() {
+                        // Handle "0:EAX" or plain "x" variable names
+                        let var_name = if key.contains(':') {
+                            key.split(':').last().unwrap_or(key)
+                        } else {
+                            key
+                        };
+                        outcome.memory.insert(self.addr_from_name(var_name), val);
+                        found = true;
+                    }
+                }
+            }
+        }
+        if found { Some(outcome) } else { None }
+    }
+
+    /// Parse a TOML litmus test file.
+    pub fn parse_toml(&self, input: &str) -> Result<LitmusTest, ParseError> {
+        let spec: StructuredLitmusTest = toml::from_str(input).map_err(|e| ParseError {
+            message: format!("TOML parse error: {}", e),
+            line: 0, col: 0,
+        })?;
+        self.from_structured(spec)
+    }
+
+    /// Parse a JSON litmus test file.
+    pub fn parse_json(&self, input: &str) -> Result<LitmusTest, ParseError> {
+        let spec: StructuredLitmusTest = serde_json::from_str(input).map_err(|e| ParseError {
+            message: format!("JSON parse error: {}", e),
+            line: 0, col: 0,
+        })?;
+        self.from_structured(spec)
+    }
+
+    /// Convert a structured spec into a LitmusTest.
+    fn from_structured(&self, spec: StructuredLitmusTest) -> Result<LitmusTest, ParseError> {
+        let mut test = LitmusTest::new(&spec.name);
+
+        // Set initial memory state
+        for (var, val) in &spec.locations {
+            test.set_initial(self.addr_from_name(var), *val);
+        }
+
+        // Build threads
+        for (idx, st) in spec.threads.iter().enumerate() {
+            let tid = st.id.unwrap_or(idx);
+            let mut thread = Thread::new(tid);
+            for op_str in &st.ops {
+                self.parse_instructions(op_str, &mut thread);
+            }
+            test.add_thread(thread);
+        }
+
+        // Set expected outcomes
+        if let Some(ref forbidden) = spec.forbidden {
+            let mut outcome = Outcome::new();
+            for (var, val) in forbidden {
+                outcome.memory.insert(self.addr_from_name(var), *val);
+            }
+            test.expected_outcomes.push((outcome, LitmusOutcome::Forbidden));
+        }
+        if let Some(ref allowed) = spec.allowed {
+            let mut outcome = Outcome::new();
+            for (var, val) in allowed {
+                outcome.memory.insert(self.addr_from_name(var), *val);
+            }
+            test.expected_outcomes.push((outcome, LitmusOutcome::Allowed));
+        }
+
+        Ok(test)
     }
 
     /// Parse Herd-style litmus test format.
@@ -836,5 +1255,71 @@ Thread 0
         assert_eq!(parser.parse_ptx_ordering("st.global.relaxed.sys"), Ordering::Relaxed);
         assert_eq!(parser.parse_ptx_ordering("ld.global.acquire.gpu"), Ordering::Acquire);
         assert_eq!(parser.parse_ptx_ordering("st.global.release.cta"), Ordering::Release);
+    }
+
+    #[test]
+    fn test_parse_litmus_x86() {
+        let input = r#"X86 SB
+"Store Buffering"
+{ x=0; y=0; }
+ P0          | P1          ;
+ MOV [x],$1  | MOV [y],$1  ;
+ MOV EAX,[y] | MOV EBX,[x] ;
+exists (0:EAX=0 /\ 1:EBX=0)
+"#;
+        let parser = LitmusParser::new();
+        let test = parser.parse_litmus_file(input).unwrap();
+        assert_eq!(test.name, "SB");
+        assert_eq!(test.num_threads(), 2);
+        assert_eq!(test.num_events(), 4);
+        assert_eq!(test.expected_outcomes.len(), 1);
+    }
+
+    #[test]
+    fn test_parse_litmus_arm() {
+        let input = r#"AArch64 MP
+{ x=0; y=0; }
+ P0          | P1          ;
+ STR W0,[x]  | LDR W0,[y]  ;
+ DMB SY      | LDR W1,[x]  ;
+ STR W1,[y]  |             ;
+exists (1:W0=1 /\ 1:W1=0)
+"#;
+        let parser = LitmusParser::new();
+        let test = parser.parse_litmus_file(input).unwrap();
+        assert_eq!(test.name, "MP");
+        assert_eq!(test.num_threads(), 2);
+        assert!(test.num_events() >= 4);
+    }
+
+    #[test]
+    fn test_parse_litmus_riscv() {
+        let input = r#"RISCV SB
+{ x=0; y=0; }
+ P0         | P1         ;
+ sw x1,x    | sw x1,y    ;
+ lw x2,y    | lw x2,x    ;
+exists (0:x2=0 /\ 1:x2=0)
+"#;
+        let parser = LitmusParser::new();
+        let test = parser.parse_litmus_file(input).unwrap();
+        assert_eq!(test.name, "SB");
+        assert_eq!(test.num_threads(), 2);
+        assert_eq!(test.num_events(), 4);
+    }
+
+    #[test]
+    fn test_parse_litmus_autodetect() {
+        let input = r#"X86 SB
+{ x=0; y=0; }
+ P0          | P1          ;
+ MOV [x],$1  | MOV [y],$1  ;
+ MOV EAX,[y] | MOV EBX,[x] ;
+exists (0:EAX=0 /\ 1:EBX=0)
+"#;
+        let parser = LitmusParser::new();
+        let test = parser.parse(input).unwrap();
+        assert_eq!(test.name, "SB");
+        assert_eq!(test.num_threads(), 2);
     }
 }

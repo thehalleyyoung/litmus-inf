@@ -23,6 +23,7 @@ petgraph = "0.7"
 num-traits = "0.2"
 regex = "1"
 ndarray = "0.16"
+toml = "0.8"
 
 [dev-dependencies]
 criterion = "0.5"
@@ -35,6 +36,10 @@ path = "src/bin/main.rs"
 [[bin]]
 name = "exec-graph-bench"
 path = "src/bin/exec_graph_bench.rs"
+
+[[bin]]
+name = "litmus-experiments"
+path = "src/bin/experiments.rs"
 
 [[bench]]
 name = "compression_bench"

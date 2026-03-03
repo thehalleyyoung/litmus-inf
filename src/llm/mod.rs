@@ -10,6 +10,7 @@
 pub mod prompt_engine;
 pub mod validation_loop;
 pub mod pattern_prompts;
+pub mod evaluation;
 
 pub use prompt_engine::{
     LlmPromptEngine, PromptConfig, PromptTemplate, ShotExample,

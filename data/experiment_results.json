@@ -1,0 +1,218 @@
+{
+  "total_pairs": 140,
+  "unsat_count": 107,
+  "sat_count": 33,
+  "smt_reverification_pass": 140,
+  "structural_pass": 140,
+  "rule_validity_pass": 140,
+  "premise_resolution_pass": 140,
+  "structural_rate": 1.0,
+  "structural_ci": [
+    0.9732928443510084,
+    1.0
+  ],
+  "smt_rate": 1.0,
+  "smt_ci": [
+    0.9732928443510084,
+    1.0
+  ],
+  "avg_proof_steps": 9.542056074766355,
+  "median_proof_steps": 9,
+  "max_proof_steps": 13,
+  "avg_generation_time_us": 3.8642857142857143,
+  "patterns": [
+    "mp",
+    "sb",
+    "lb",
+    "iriw",
+    "2+2w",
+    "wrc",
+    "mp_fence",
+    "sb_fence",
+    "lb_fence",
+    "iriw_fence",
+    "coh_ww",
+    "coh_wr",
+    "coh_rw",
+    "coh_rr"
+  ],
+  "architectures": [
+    "SC",
+    "x86-TSO",
+    "SPARC-PSO",
+    "ARMv8",
+    "RISC-V",
+    "PTX-CTA",
+    "PTX-GPU",
+    "OpenCL-WG",
+    "OpenCL-Dev",
+    "Vulkan-WG"
+  ]
+}
+{
+  "categories": [
+    {
+      "category": "disjoint_baseline",
+      "total": 6,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    },
+    {
+      "category": "flag_sharing",
+      "total": 9,
+      "false_positives": 3,
+      "fp_rate": 0.3333333333333333
+    },
+    {
+      "category": "counter_sharing",
+      "total": 6,
+      "false_positives": 3,
+      "fp_rate": 0.5
+    },
+    {
+      "category": "data_sharing",
+      "total": 9,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    },
+    {
+      "category": "benign_sharing",
+      "total": 6,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    },
+    {
+      "category": "pointer_sharing",
+      "total": 9,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    },
+    {
+      "category": "mixed_sharing",
+      "total": 6,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    },
+    {
+      "category": "transitive_sharing",
+      "total": 3,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    },
+    {
+      "category": "fenced_sharing",
+      "total": 3,
+      "false_positives": 0,
+      "fp_rate": 0.0
+    }
+  ],
+  "total_analyses": 57,
+  "total_false_positives": 6,
+  "overall_fp_rate": 0.10526315789473684,
+  "ci_lower": 0.04914398953912691,
+  "ci_upper": 0.21123049107939723
+}
+{
+  "tests": [
+    {
+      "test_name": "mp",
+      "interference_free": true,
+      "single_writer": 1,
+      "release_acquire": 0,
+      "fenced": 0,
+      "multi_writer_relaxed": 0,
+      "overapprox_bound": 0
+    },
+    {
+      "test_name": "sb",
+      "interference_free": true,
+      "single_writer": 1,
+      "release_acquire": 0,
+      "fenced": 0,
+      "multi_writer_relaxed": 0,
+      "overapprox_bound": 0
+    },
+    {
+      "test_name": "lb",
+      "interference_free": true,
+      "single_writer": 1,
+      "release_acquire": 0,
+      "fenced": 0,
+      "multi_writer_relaxed": 0,
+      "overapprox_bound": 0
+    },
+    {
+      "test_name": "mp_fence",
+      "interference_free": true,
+      "single_writer": 1,
+      "release_acquire": 0,
+      "fenced": 0,
+      "multi_writer_relaxed": 0,
+      "overapprox_bound": 0
+    },
+    {
+      "test_name": "mp_ra",
+      "interference_free": true,
+      "single_writer": 1,
+      "release_acquire": 0,
+      "fenced": 0,
+      "multi_writer_relaxed": 0,
+      "overapprox_bound": 0
+    },
+    {
+      "test_name": "multi_writer",
+      "interference_free": false,
+      "single_writer": 0,
+      "release_acquire": 0,
+      "fenced": 0,
+      "multi_writer_relaxed": 1,
+      "overapprox_bound": 1
+    }
+  ],
+  "total_tests": 6,
+  "interference_free_count": 5,
+  "avg_overapprox_bound": 0.16666666666666666,
+  "classification_summary": {
+    "fenced": 0,
+    "multi_writer_relaxed": 1,
+    "release_acquire": 0,
+    "single_writer": 5
+  }
+}
+{
+  "benchmark_size": 205,
+  "categories": [
+    "application",
+    "coherence",
+    "dependency_patterns",
+    "gpu",
+    "kernel_patterns",
+    "lock_free",
+    "message_passing",
+    "store_buffering"
+  ],
+  "per_category_counts": {
+    "application": 25,
+    "coherence": 25,
+    "dependency_patterns": 25,
+    "gpu": 25,
+    "kernel_patterns": 25,
+    "lock_free": 30,
+    "message_passing": 25,
+    "store_buffering": 25
+  },
+  "difficulty_distribution": {
+    "1": 2,
+    "2": 20,
+    "3": 74,
+    "4": 76,
+    "5": 33
+  },
+  "ood_count": 109,
+  "power_analysis": {
+    "n_vs_random_50pct": 3134,
+    "n_per_category_ci_15": 171,
+    "current_n": 205,
+    "adequate_overall": false
+  }
+}

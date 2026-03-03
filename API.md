@@ -1,198 +1,242 @@
 # LITMUS∞ — API Reference
 
-All features listed below are implemented and functional.
-Install from source only (not on PyPI): `pip install -e litmus_inf/`
+All features listed below are implemented in Rust. Build with `cargo build`.
 
-## CLI: `litmus-check`
+## CLI Commands
+
+### Verify a litmus test against a memory model
+```bash
+cargo run --bin litmus-cli -- verify --file TEST.toml --model SC    # From file
+cargo run --bin litmus-cli -- verify -t sb --model TSO              # Built-in test
+```
+Supported models: `SC`, `TSO`, `PSO`, `ARM`, `RISC-V`
+
+### Check (parse-only validation)
+```bash
+cargo run --bin litmus-cli -- check TEST.toml
+```
+
+### Fence recommendations across all architectures
+```bash
+cargo run --bin litmus-cli -- fence-advise --file TEST.toml
+```
+
+### Symmetry compression analysis
+```bash
+cargo run --bin litmus-cli -- compress --file TEST.toml
+```
+
+### Generate a starter template
+```bash
+cargo run --bin litmus-cli -- init-test -o my_test.toml [--template sb|mp|lb|iriw|fence]
+```
+
+### Other commands
+```bash
+cargo run --bin litmus-cli -- models              # List supported memory models
+cargo run --bin litmus-cli -- diff SC TSO          # Diff two models
+cargo run --bin litmus-cli -- list-patterns        # List built-in patterns
+cargo run --bin litmus-cli -- portability-check -p spinlock  # Check pattern portability
+cargo run --bin litmus-cli -- benchmark -o results/         # Full benchmark suite
+```
+
+## TOML Test File Format
+
+```toml
+name = "MyTest"
+
+[locations]
+x = 0
+y = 0
+
+[[threads]]
+ops = ["W(x, 1)", "R(y) r0"]
+
+[[threads]]
+ops = ["W(y, 1)", "R(x) r1"]
+
+[forbidden]
+x = 0
+y = 0
+```
+
+**Operations:** `W(var, value)` — write, `R(var) reg` — read, `fence` — memory barrier.
+
+JSON format is also supported (same structure with JSON syntax). The parser also accepts herd7, LISA, and PTX formats.
+
+### Programmatic file loading
+```rust
+use litmus_infinity::frontend::parser::LitmusParser;
+let parser = LitmusParser::new();
+let test = parser.parse(&std::fs::read_to_string("my_test.toml").unwrap()).unwrap();
+// Also: parser.parse_toml(), parser.parse_json(), parser.parse_herd(), parser.parse_simple()
+```
+
+---
+
+## `litmus-experiments` — Experiment Runner
+
+Generates proof certificates, runs false positive analysis, Owicki-Gries classification, and benchmark statistics. Results saved to `data/experiment_results.json`.
 
 ```bash
-litmus-check --target arm myfile.c           # single file
-litmus-check --target arm src/               # scan directory
-litmus-check --target arm --json src/        # JSON output for CI
-litmus-check --target arm --stdin            # read from stdin
-litmus-check --target arm --emit-certificate src/  # export .smt2 proofs
-```
-
-| Flag | Description |
-|------|-------------|
-| `--target`, `-t` | Target architecture: x86, sparc, arm, riscv, opencl_wg, opencl_dev, vulkan_wg, vulkan_dev, ptx_cta, ptx_gpu |
-| `--source`, `-s` | Source architecture (default: x86) |
-| `--stdin` | Read code from stdin |
-| `--json` | Output JSON |
-| `--emit-certificate` | Export SMT-LIB2 proof certificates (.smt2 files) |
-| `--verbose`, `-v` | Show safe patterns too |
-| `--no-color` | Disable ANSI colors |
-
----
-
-## Core: Pattern-Based Portability Checking
-
-### `check_portability(pattern_name, source_arch='x86', target_arch=None)`
-
-```python
-from portcheck import check_portability
-result = check_portability("mp", target_arch="arm")
-# result[0].safe == False
-# result[0].fence_recommendation == "dmb ishst (T0); dmb ishld (T1)"
-```
-
-### `analyze_all_patterns()` — Full 1,400-pair analysis (140 patterns × 10 architectures)
-
-### `diff_architectures(arch1, arch2)` — Discriminating patterns between two models
-
-### `detect_scope_mismatches()` — GPU scope mismatch detection
-
----
-
-## AST-Based Code Analysis
-
-### `ast_analyze_code(code, language='auto')`
-
-Returns `ASTAnalysisResult` with `patterns_found`, `parse_method`, and `coverage_confidence` (0.0–1.0). Emits `UnrecognizedPatternWarning` when coverage < 50%.
-
-### `ast_check_portability(code, target_arch=None, language='auto')`
-
-Full pipeline: AST parse → match patterns → check portability. Supports C11 atomics, GCC builtins, and Linux kernel macros. **96.6% exact-match on 203 curated benchmark snippets.**
-
----
-
-## LLM-Assisted Pattern Recognition
-
-### `hybrid_check_portability(code, target_arch, use_llm=True, llm_model='gpt-4.1-nano')`
-
-```python
-from llm_pattern_recognizer import hybrid_check_portability
-results = hybrid_check_portability(code, target_arch="arm", use_llm=True)
-# Falls back to LLM when AST confidence is low
-# All LLM-suggested patterns undergo full SMT verification (soundness preserved)
-```
-
-### `llm_recognize_patterns(code, target_arch=None, model='gpt-4.1-nano')`
-
-Direct LLM pattern recognition. Returns `{'patterns': [...], 'confidence': 0.9, 'reasoning': '...'}`.
-
-**Accuracy: 52.5% exact-match on n=40 adversarial snippets across 8 categories (Wilson CI [37.5%, 67.1%]).**
-
-Requires `OPENAI_API_KEY` environment variable. Soundness: LLM affects recall only; all verdicts are SMT-certified.
-
----
-
-## Rigorous LLM Evaluation
-
-```python
-from rigorous_llm_evaluation import run_rigorous_llm_evaluation
-report = run_rigorous_llm_evaluation(models=['gpt-4.1-nano'])
-# Confusion matrix, calibration analysis, per-category breakdown
+cargo run --bin litmus-experiments
 ```
 
 ---
 
-## Compositional False Positive Analysis
+## Proof Certificate System (`src/checker/proof_certificate.rs`)
 
-```python
-from false_positive_empirical import run_false_positive_analysis
-report = run_false_positive_analysis()
-# 8.3% overall FP rate (CI [3.6%, 18.1%])
+### Types
+
+- `ProofStep` — Individual Alethe-format proof step (Assume, Resolution, Rewrite, Let, Subproof)
+- `ProofCertificate` — Complete certificate: steps, verdict (SAT/UNSAT), generation time, validation results
+- `ProofGenerator` — DPLL-based proof generator for SAT encoding of memory models
+- `ProofValidator` — 4-level validator (structural, rule validity, premise resolution, SMT re-verification)
+- `CertificateEncoder` — Encodes litmus patterns (MP, SB, LB, IRIW, 2+2W, WRC) as Boolean formulas for 10 architectures
+- `BatchCertificateGenerator` — Generates certificate suites across all pattern-architecture pairs
+
+### Usage
+
+```rust
+use litmus_inf::checker::proof_certificate::*;
+
+// Generate a single certificate
+let encoder = CertificateEncoder::new();
+let (vars, clauses) = encoder.encode_pattern("mp", "ARMv8");
+let generator = ProofGenerator::new();
+let cert = generator.generate(vars, clauses);
+
+// Validate at all 4 levels
+let validator = ProofValidator::new();
+let validation = validator.validate(&cert);
+assert!(validation.structural_valid);
+assert!(validation.rule_valid);
+assert!(validation.premises_valid);
+assert!(validation.smt_valid);
+
+// Batch generation: 14 patterns × 10 architectures = 140 certificates
+let batch = BatchCertificateGenerator::new();
+let suite = batch.generate_certificate_suite();
+assert_eq!(suite.len(), 140);
+```
+
+### Key Functions
+
+- `wilson_ci_95(successes, total)` — Wilson score 95% confidence interval
+- `generate_certificate_suite()` — Generates all 140 pattern-model certificates
+
+---
+
+## Compositional Verifier (`src/checker/compositional.rs`)
+
+### Types
+
+- `CompositeVerifier` — Disjoint-variable compositional checker
+- `OwickiGriesChecker` — Interference freedom checker for shared-variable programs
+- `SharedVarAccess` — Classification: SingleWriter, ReleaseAcquire, Fenced, ReadOnly, MultiWriterRelaxed
+- `OwickiGriesResult` — Result including interference_free flag, variable classifications, overapproximation bound
+- `FalsePositiveStats` — Empirical FP analysis with Wilson CI
+- `InteractionCategory` — Categories: DisjointBaseline, FlagSharing, CounterSharing, DataSharing, etc.
+
+### Usage
+
+```rust
+use litmus_inf::checker::compositional::*;
+use litmus_inf::checker::litmus::*;
+
+// Create a litmus test
+let mut test = LitmusTest::new("mp");
+// ... add threads, set initial values ...
+
+// Owicki-Gries interference freedom check
+let og_checker = OwickiGriesChecker::new();
+let result = og_checker.check_interference_freedom(&test);
+println!("Interference-free: {}", result.interference_free);
+println!("Overapprox bound: {}", result.overapproximation_bound);
+
+// False positive analysis
+let fp_stats = og_checker.analyze_false_positives();
+println!("FP rate: {:.1}% (CI [{:.1}%, {:.1}%])",
+    fp_stats.overall_rate * 100.0,
+    fp_stats.ci_lower * 100.0,
+    fp_stats.ci_upper * 100.0);
 ```
 
 ---
 
-## Alethe Proof Certificate Validation
+## LLM Evaluation Framework (`src/llm/evaluation.rs`)
 
-```python
-from alethe_proof_checker import run_proof_validation
-report = run_proof_validation()
-# 100% SMT re-verification (CI [94.7%, 100%])
+### Types
+
+- `AdversarialBenchmark` — 205-snippet benchmark across 8 categories
+- `EvalSnippet` — Individual snippet with code, expected pattern, difficulty, OOD flag
+- `FailureMode` — Correct, Conservative, Dangerous, NoMatch, RelatedMatch
+- `PatternStrength` — Safety ordering for failure classification
+- `ConfusionMatrix` — Multi-class confusion matrix
+- `CalibrationAnalysis` — ECE, MCE, Brier score, reliability diagram bins
+- `EvaluationReport` — Full report with per-category stats, power analysis, effect sizes
+
+### Usage
+
+```rust
+use litmus_inf::llm::evaluation::*;
+
+// Generate the benchmark
+let benchmark = AdversarialBenchmark::generate();
+assert_eq!(benchmark.snippets.len(), 205);
+
+// Categories
+let categories = benchmark.category_counts();
+// application: 25, coherence: 25, dependency_patterns: 25, gpu: 25,
+// kernel_patterns: 25, lock_free: 30, message_passing: 25, store_buffering: 25
+
+// Difficulty distribution
+let difficulty = benchmark.difficulty_distribution();
+// 1: 2, 2: 20, 3: 74, 4: 76, 5: 33
+
+// OOD count
+let ood = benchmark.ood_count(); // 109
 ```
 
 ---
 
-## Tool Comparison
+## Core Types (`src/checker/mod.rs`)
 
-```python
-from tool_comparison import run_tool_comparison
-report = run_tool_comparison()
-# Structured comparison with herd7, Dartagnan, GenMC, CDSChecker, RCMC
+### `LitmusTest`
+
+```rust
+let mut test = LitmusTest::new("my_test");
+test.set_initial(Address(0), Value(0));
+let mut t0 = Thread::new(0);
+t0.store(Address(0), Value(1), Ordering::Release);
+t0.fence(Ordering::SeqCst, Scope::System);
+test.add_thread(t0);
 ```
 
----
+### `Thread`
 
-## Cross-Solver Validation
+- `store(addr, value, ordering)` — Memory store
+- `load(addr, expected_value, ordering)` — Memory load
+- `fence(ordering, scope)` — Memory fence
 
-```python
-from cross_solver_validation import run_cross_solver_validation
-report = run_cross_solver_validation()
-# 1,400/1,400 agreement across Z3 and CVC5
-# Wilson CI [99.7%, 100%]
-```
-
-Validates all SMT-LIB2 certificates through:
-1. Z3 with proof production (seed=0)
-2. Z3 diversity check (seed=42)
-3. CVC5 (independent solver, v1.3.2)
-
----
-
-## Custom Memory Model DSL
-
-```python
-from model_dsl import register_model, check_custom
-register_model("""
-model POWER {
-    relaxes W->R, W->W, R->R, R->W
-    preserves deps
-    fence hwsync (cost=8) { orders W->R, W->W, R->R, R->W }
-}
-""")
-result = check_custom("mp", "POWER")
-```
-
-170/171 (99.4%) empirical correspondence with herd7 `.cat` specifications.
-
----
-
-## Alethe Proof Certificate Extraction
-
-```python
-from alethe_proof_extractor import Z3ProofExtractor, run_alethe_extraction
-extractor = Z3ProofExtractor()
-cert = extractor.extract_proof_for_pattern('mp_fence', 'arm')
-# cert.verdict == 'unsat'
-# cert.proof_size_steps == 88
-
-summary = run_alethe_extraction()
-# 993 UNSAT Alethe proofs + 407 SAT verified models
-```
-
----
-
-## SMT Validation and Certificate Export
-
-| API | Module | Result |
-|-----|--------|--------|
-| `cross_validate_all_smt()` | smt_validation.py | 1,400/1,400 Z3 certificates |
-| `generate_all_smtlib_certificates(output_dir)` | smtlib_certificate_extractor.py | 1,400 .smt2 files |
-| `run_litmus_synthesis()` | smt_validation.py | Z3 CEGIS litmus test synthesis (3 discriminators for 6 model pairs) |
-
----
-
-## Severity Classification
-
-```python
-from severity_classification import classify_all_unsafe_pairs
-report = classify_all_unsafe_pairs()
-# {'data_race': 689, 'security_vulnerability': 44, 'benign': 70}
-```
-
-CWE-calibrated (not CVE-validated):
-- **data_race** → CWE-362, CWE-366, CWE-820
-- **security_vulnerability** → CWE-667, CWE-821
-- **benign** → No direct CWE mapping
+### Ordering: `Relaxed`, `Acquire`, `Release`, `AcqRel`, `SeqCst`
+### Scope: `CTA`, `GPU`, `System`, `None`
 
 ---
 
 ## Architectures
 
-Built-in: `x86`, `sparc`, `arm`, `riscv`, `opencl_wg`, `opencl_dev`, `vulkan_wg`, `vulkan_dev`, `ptx_cta`, `ptx_gpu`
+Built-in (10): `SC`, `x86-TSO`, `SPARC-PSO`, `ARMv8`, `RISC-V`, `PTX-CTA`, `PTX-GPU`, `OpenCL-WG`, `OpenCL-Dev`, `Vulkan-WG`
 
-Custom (via DSL): user-defined models with arbitrary relaxation and fence specifications
+---
+
+## Experiment Results
+
+After running `cargo run --bin litmus-experiments`, results are saved to `data/experiment_results.json`:
+
+| Experiment | Key Result |
+|-----------|------------|
+| Proof certificates | 140/140 pass all 4 validation levels |
+| False positive analysis | 10.5% FP rate (CI [4.9%, 21.1%]) |
+| Owicki-Gries | 5/6 interference-free |
+| Eval benchmark | 205 snippets, 8 categories, 109 OOD |

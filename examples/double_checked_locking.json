@@ -1,0 +1,9 @@
+{
+  "name": "DoubleCheckedLocking",
+  "locations": { "obj": 0, "ptr": 0 },
+  "threads": [
+    { "ops": ["W(obj, 1)", "fence", "W(ptr, 1)"] },
+    { "ops": ["R(ptr) r0", "R(obj) r1"] }
+  ],
+  "forbidden": { "ptr": 1, "obj": 0 }
+}

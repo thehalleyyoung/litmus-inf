@@ -1,5 +1,6 @@
 use clap::{Parser, Subcommand};
 use litmus_infinity::checker::litmus::*;
+use litmus_infinity::checker::execution::{Address, Value};
 use litmus_infinity::checker::portability;
 use litmus_infinity::checker::memory_model::*;
 use litmus_infinity::checker::verifier::*;
@@ -7,6 +8,7 @@ use litmus_infinity::algebraic::symmetry::LitmusTest as AlgLitmusTest;
 use litmus_infinity::algebraic::symmetry::{MemoryOp, Opcode};
 use litmus_infinity::algebraic::compress::StateSpaceCompressor;
 use litmus_infinity::frontend::model_dsl;
+use litmus_infinity::frontend::parser::LitmusParser;
 use std::time::Instant;
 
 #[derive(Parser)]
@@ -22,7 +24,7 @@ struct Cli {
 enum Commands {
     /// List all supported memory models
     Models,
-    /// Run a built-in litmus test
+    /// Run a built-in litmus test or verify a test from a file
     Verify {
         /// Test name: sb, mp, lb, iriw, 2+2w, rwc, wrc, sb4, dekker, mp+fence
         #[arg(short, long, default_value = "sb")]
@@ -30,12 +32,24 @@ enum Commands {
         /// Memory model: SC, TSO, PSO, ARM, RISC-V
         #[arg(short, long, default_value = "SC")]
         model: String,
+        /// Path to a litmus test file (simple, herd7, LISA, or PTX format)
+        #[arg(short, long)]
+        file: Option<String>,
+        /// Output format: text, json, dot
+        #[arg(long, default_value = "text")]
+        output_format: String,
+        /// Target architecture hint: x86-TSO, ARM, RISC-V, Power
+        #[arg(long)]
+        arch: Option<String>,
     },
-    /// Show compression ratio for a built-in litmus test
+    /// Show compression ratio for a built-in or file-based litmus test
     Compress {
         /// Test name: sb, mp, lb, iriw, 2+2w, rwc, wrc, sb4, dekker, mp+fence
         #[arg(short, long, default_value = "sb")]
         test: String,
+        /// Path to a litmus test file
+        #[arg(short, long)]
+        file: Option<String>,
     },
     /// Diff two memory models
     Diff {
@@ -49,6 +63,9 @@ enum Commands {
         /// Test name: sb, mp, lb, iriw, 2+2w, dekker
         #[arg(short, long, default_value = "sb")]
         test: String,
+        /// Path to a litmus test file
+        #[arg(short, long)]
+        file: Option<String>,
     },
     /// Run full benchmark suite and output CSV data
     Benchmark {
@@ -64,6 +81,20 @@ enum Commands {
     },
     /// List all built-in concurrent patterns
     ListPatterns,
+    /// Validate a litmus test file (parse only, no verification)
+    Check {
+        /// Path to a litmus test file
+        file: String,
+    },
+    /// Generate a starter litmus test template file
+    InitTest {
+        /// Output file path
+        #[arg(short, long, default_value = "my_test.toml")]
+        output: String,
+        /// Template: sb, mp, lb, iriw, fence
+        #[arg(long, default_value = "sb")]
+        template: String,
+    },
 }
 
 fn build_sb_test() -> LitmusTest {
@@ -570,6 +601,212 @@ fn run_benchmarks(output_dir: &str) {
     println!("\nBenchmark results written to {}/", output_dir);
 }
 
+/// Load a litmus test from a file, auto-detecting format.
+fn load_litmus_file(path: &str) -> LitmusTest {
+    let content = std::fs::read_to_string(path).unwrap_or_else(|e| {
+        eprintln!("Error reading file '{}': {}", path, e);
+        std::process::exit(1);
+    });
+    let parser = LitmusParser::new();
+    match parser.parse(&content) {
+        Ok(test) => test,
+        Err(e) => {
+            eprintln!("Parse error in '{}': {}", path, e);
+            std::process::exit(1);
+        }
+    }
+}
+
+/// Convert a checker LitmusTest to an algebraic LitmusTest for compression.
+fn litmus_to_algebraic(test: &LitmusTest) -> AlgLitmusTest {
+    let num_threads = test.threads.len();
+    // Collect all unique addresses and values
+    let mut addrs: Vec<Address> = Vec::new();
+    let mut vals: Vec<Value> = Vec::new();
+    for thread in &test.threads {
+        for inst in &thread.instructions {
+            match inst {
+                Instruction::Store { addr, value, .. } => {
+                    if !addrs.contains(addr) { addrs.push(*addr); }
+                    if !vals.contains(value) { vals.push(*value); }
+                }
+                Instruction::Load { addr, .. } => {
+                    if !addrs.contains(addr) { addrs.push(*addr); }
+                }
+                _ => {}
+            }
+        }
+    }
+    // Include value 0 (initial) if not present
+    if !vals.contains(&0) { vals.push(0); }
+    vals.sort();
+    addrs.sort();
+
+    let num_addrs = addrs.len().max(1);
+    let num_vals = vals.len().max(2);
+
+    let mut alg = AlgLitmusTest::new(&test.name, num_threads, num_addrs, num_vals);
+    for (tid, thread) in test.threads.iter().enumerate() {
+        for (op_idx, inst) in thread.instructions.iter().enumerate() {
+            match inst {
+                Instruction::Store { addr, value, .. } => {
+                    let addr_idx = addrs.iter().position(|a| a == addr).unwrap_or(0);
+                    let val_idx = vals.iter().position(|v| v == value).unwrap_or(0);
+                    alg.threads[tid].push(MemoryOp {
+                        thread_id: tid, op_index: op_idx,
+                        opcode: Opcode::Store,
+                        address: Some(addr_idx), value: Some(val_idx),
+                        depends_on: vec![],
+                    });
+                }
+                Instruction::Load { addr, .. } => {
+                    let addr_idx = addrs.iter().position(|a| a == addr).unwrap_or(0);
+                    alg.threads[tid].push(MemoryOp {
+                        thread_id: tid, op_index: op_idx,
+                        opcode: Opcode::Load,
+                        address: Some(addr_idx), value: None,
+                        depends_on: vec![],
+                    });
+                }
+                Instruction::Fence { .. } => {
+                    alg.threads[tid].push(MemoryOp {
+                        thread_id: tid, op_index: op_idx,
+                        opcode: Opcode::Fence(litmus_infinity::algebraic::symmetry::FenceType::Full),
+                        address: None, value: None,
+                        depends_on: vec![],
+                    });
+                }
+                _ => {}
+            }
+        }
+    }
+    alg
+}
+
+/// Resolve a litmus test from either --file or --test.
+fn resolve_litmus(file: &Option<String>, test_name: &str) -> LitmusTest {
+    if let Some(path) = file {
+        load_litmus_file(path)
+    } else {
+        match build_test(test_name) {
+            Some(t) => t,
+            None => {
+                eprintln!("Unknown test: {}. Available: sb, mp, lb, iriw, 2+2w, rwc, wrc, sb4, dekker, mp+fence\nOr use --file to load from a file.", test_name);
+                std::process::exit(1);
+            }
+        }
+    }
+}
+
+const TEMPLATE_SB: &str = r#"# Store-Buffering litmus test
+# Two threads each write to one location and read from the other.
+# Under SC, the outcome where both reads see 0 is forbidden.
+
+name = "SB"
+
+[locations]
+x = 0
+y = 0
+
+[[threads]]
+ops = ["W(x, 1)", "R(y) r0"]
+
+[[threads]]
+ops = ["W(y, 1)", "R(x) r1"]
+
+[forbidden]
+x = 0
+y = 0
+"#;
+
+const TEMPLATE_MP: &str = r#"# Message-Passing litmus test
+# Thread 0 writes data then a flag; Thread 1 reads flag then data.
+# If Thread 1 sees the flag, it must also see the data.
+
+name = "MP"
+
+[locations]
+data = 0
+flag = 0
+
+[[threads]]
+ops = ["W(data, 1)", "W(flag, 1)"]
+
+[[threads]]
+ops = ["R(flag) r0", "R(data) r1"]
+
+[forbidden]
+flag = 1
+data = 0
+"#;
+
+const TEMPLATE_LB: &str = r#"# Load-Buffering litmus test
+# Two threads each read one location and then write the other.
+# Forbidden under SC: both reads see the "future" write.
+
+name = "LB"
+
+[locations]
+x = 0
+y = 0
+
+[[threads]]
+ops = ["R(x) r0", "W(y, 1)"]
+
+[[threads]]
+ops = ["R(y) r1", "W(x, 1)"]
+
+[forbidden]
+x = 1
+y = 1
+"#;
+
+const TEMPLATE_IRIW: &str = r#"# Independent Reads of Independent Writes
+# Four threads: two writers, two observers reading in opposite order.
+
+name = "IRIW"
+
+[locations]
+x = 0
+y = 0
+
+[[threads]]
+ops = ["W(x, 1)"]
+
+[[threads]]
+ops = ["W(y, 1)"]
+
+[[threads]]
+ops = ["R(x) r0", "R(y) r1"]
+
+[[threads]]
+ops = ["R(y) r2", "R(x) r3"]
+
+[forbidden]
+x = 1
+y = 0
+"#;
+
+const TEMPLATE_FENCE: &str = r#"# Message-Passing with fence
+# A fence between the two stores in Thread 0 ensures ordering.
+
+name = "MP-fence"
+
+[locations]
+data = 0
+flag = 0
+
+[[threads]]
+ops = ["W(data, 1)", "fence", "W(flag, 1)"]
+
+[[threads]]
+ops = ["R(flag) r0", "R(data) r1"]
+
+[forbidden]
+flag = 1
+data = 0
+"#;
+
 fn main() {
     let cli = Cli::parse();
 
@@ -583,18 +820,28 @@ fn main() {
             }
             println!("╚══════════════════════════════════════════╝");
         }
-        Commands::Verify { test, model } => {
-            let litmus = match build_test(&test) {
-                Some(t) => t,
-                None => {
-                    eprintln!("Unknown test: {}. Available: sb, mp, lb, iriw, 2+2w, rwc, wrc, sb4, dekker, mp+fence", test);
-                    std::process::exit(1);
+        Commands::Verify { test, model, file, output_format, arch } => {
+            let litmus = resolve_litmus(&file, &test);
+            // If --arch is provided, map it to a model name (override --model)
+            let effective_model = if let Some(ref arch_name) = arch {
+                match arch_name.to_uppercase().replace("-", "").as_str() {
+                    "X86TSO" | "X86" | "TSO" => "TSO".to_string(),
+                    "ARM" | "ARMV8" | "AARCH64" => "ARM".to_string(),
+                    "RISCV" | "RV" | "RVWMO" => "RISC-V".to_string(),
+                    "POWER" | "PPC" | "POWERPC" => "PSO".to_string(),
+                    "SC" => "SC".to_string(),
+                    _ => {
+                        eprintln!("Unknown architecture: {}. Available: x86-TSO, ARM, RISC-V, Power, SC", arch_name);
+                        std::process::exit(1);
+                    }
                 }
+            } else {
+                model.clone()
             };
-            let builtin = match resolve_model(&model) {
+            let builtin = match resolve_model(&effective_model) {
                 Some(m) => m,
                 None => {
-                    eprintln!("Unknown model: {}. Available: SC, TSO, PSO, ARM, RISC-V", model);
+                    eprintln!("Unknown model: {}. Available: SC, TSO, PSO, ARM, RISC-V", effective_model);
                     std::process::exit(1);
                 }
             };
@@ -602,28 +849,78 @@ fn main() {
             let mut verifier = Verifier::new(mem_model);
             let result = verifier.verify_litmus(&litmus);
             let _stats = verifier.stats();
-            println!("╔══════════════════════════════════════════╗");
-            println!("║       LITMUS∞ Verification Result        ║");
-            println!("╠══════════════════════════════════════════╣");
-            println!("║  Test:       {:<27} ║", litmus.name);
-            println!("║  Model:      {:<27} ║", builtin.name());
-            println!("║  Consistent: {:<27} ║", result.consistent_executions);
-            println!("║  Checked:    {:<27} ║", result.total_executions);
-            println!("╚══════════════════════════════════════════╝");
-        }
-        Commands::Compress { test } => {
-            let litmus = match build_test(&test) {
-                Some(t) => t,
-                None => {
-                    eprintln!("Unknown test: {}. Available: sb, mp, lb, iriw, 2+2w, rwc, wrc, sb4, dekker, mp+fence", test);
-                    std::process::exit(1);
+
+            match output_format.as_str() {
+                "json" => {
+                    let json_out = serde_json::json!({
+                        "test": litmus.name,
+                        "model": builtin.name(),
+                        "total_executions": result.total_executions,
+                        "consistent_executions": result.consistent_executions,
+                        "inconsistent_executions": result.inconsistent_executions,
+                        "pass": result.pass,
+                        "forbidden_observed": result.forbidden_observed.len(),
+                        "observed_outcomes": result.observed_outcomes.len(),
+                    });
+                    println!("{}", serde_json::to_string_pretty(&json_out).unwrap());
                 }
-            };
-            let alg_test = match build_alg_test(&test) {
-                Some(t) => t,
-                None => {
-                    eprintln!("Compression not available for test: {}", test);
-                    std::process::exit(1);
+                "dot" => {
+                    // Generate DOT visualization of the litmus test structure
+                    println!("digraph litmus {{");
+                    println!("  rankdir=LR;");
+                    println!("  label=\"{} under {}\";", litmus.name, builtin.name());
+                    println!("  labelloc=t;");
+                    println!("  node [shape=record, fontsize=10];");
+                    for (tid, thread) in litmus.threads.iter().enumerate() {
+                        println!("  subgraph cluster_t{} {{", tid);
+                        println!("    label=\"Thread {}\";", tid);
+                        println!("    style=dashed;");
+                        for (oidx, inst) in thread.instructions.iter().enumerate() {
+                            let label = match inst {
+                                Instruction::Store { addr, value, ordering } =>
+                                    format!("W({:#x},{}) {:?}", addr, value, ordering),
+                                Instruction::Load { reg, addr, ordering } =>
+                                    format!("R({:#x})→r{} {:?}", addr, reg, ordering),
+                                Instruction::Fence { ordering, scope } =>
+                                    format!("fence {:?} {:?}", ordering, scope),
+                                _ => "op".to_string(),
+                            };
+                            println!("    t{}_{} [label=\"{}\"];", tid, oidx, label);
+                            if oidx > 0 {
+                                println!("    t{}_{} -> t{}_{} [style=bold, label=\"po\"];",
+                                    tid, oidx - 1, tid, oidx);
+                            }
+                        }
+                        println!("  }}");
+                    }
+                    println!("  // Result: {} consistent / {} total",
+                        result.consistent_executions, result.total_executions);
+                    println!("}}");
+                }
+                _ => {
+                    // Default text output
+                    println!("╔══════════════════════════════════════════╗");
+                    println!("║       LITMUS∞ Verification Result        ║");
+                    println!("╠══════════════════════════════════════════╣");
+                    println!("║  Test:       {:<27} ║", litmus.name);
+                    println!("║  Model:      {:<27} ║", builtin.name());
+                    if arch.is_some() {
+                        println!("║  Arch:       {:<27} ║", arch.as_deref().unwrap_or(""));
+                    }
+                    println!("║  Consistent: {:<27} ║", result.consistent_executions);
+                    println!("║  Checked:    {:<27} ║", result.total_executions);
+                    println!("╚══════════════════════════════════════════╝");
+                }
+            }
+        }
+        Commands::Compress { test, file } => {
+            let litmus = resolve_litmus(&file, &test);
+            let alg_test = if file.is_some() {
+                litmus_to_algebraic(&litmus)
+            } else {
+                match build_alg_test(&test) {
+                    Some(t) => t,
+                    None => litmus_to_algebraic(&litmus),
                 }
             };
             let compressor = StateSpaceCompressor::new(alg_test);
@@ -662,15 +959,9 @@ fn main() {
             println!("║  {}", diff);
             println!("╚══════════════════════════════════════════╝");
         }
-        Commands::FenceAdvise { test } => {
-            let litmus = match build_test(&test) {
-                Some(t) => t,
-                None => {
-                    eprintln!("Unknown test: {}. Available: sb, mp, lb, iriw, 2+2w, dekker", test);
-                    std::process::exit(1);
-                }
-            };
-            fence_advise(&test, &litmus);
+        Commands::FenceAdvise { test, file } => {
+            let litmus = resolve_litmus(&file, &test);
+            fence_advise(&litmus.name.clone(), &litmus);
         }
         Commands::Benchmark { output } => {
             run_benchmarks(&output);
@@ -695,6 +986,69 @@ fn main() {
             for pat in portability::builtin_patterns() {
                 println!("  {:<30} {}", pat.name, pat.description);
             }
+        }
+        Commands::Check { file } => {
+            let content = std::fs::read_to_string(&file).unwrap_or_else(|e| {
+                eprintln!("Error reading file '{}': {}", file, e);
+                std::process::exit(1);
+            });
+            let parser = LitmusParser::new();
+            match parser.parse(&content) {
+                Ok(test) => {
+                    println!("╔══════════════════════════════════════════╗");
+                    println!("║       LITMUS∞ File Check                 ║");
+                    println!("╠══════════════════════════════════════════╣");
+                    println!("║  File:     {:<29} ║", file);
+                    println!("║  Test:     {:<29} ║", test.name);
+                    println!("║  Threads:  {:<29} ║", test.threads.len());
+                    let total_ops: usize = test.threads.iter().map(|t| t.instructions.len()).sum();
+                    println!("║  Ops:      {:<29} ║", total_ops);
+                    let n_outcomes = test.expected_outcomes.len();
+                    println!("║  Outcomes: {:<29} ║", n_outcomes);
+                    println!("║  Status:   {:<29} ║", "✓ valid");
+                    println!("╠══════════════════════════════════════════╣");
+                    for (tid, thread) in test.threads.iter().enumerate() {
+                        println!("║  T{}: {} ops                              ", tid, thread.instructions.len());
+                    }
+                    println!("╚══════════════════════════════════════════╝");
+                }
+                Err(e) => {
+                    println!("╔══════════════════════════════════════════╗");
+                    println!("║       LITMUS∞ File Check                 ║");
+                    println!("╠══════════════════════════════════════════╣");
+                    println!("║  File:     {:<29} ║", file);
+                    println!("║  Status:   ✗ PARSE ERROR                ║");
+                    println!("║  Error:    {:<29} ║", format!("{}", e));
+                    println!("╚══════════════════════════════════════════╝");
+                    std::process::exit(1);
+                }
+            }
+        }
+        Commands::InitTest { output, template } => {
+            let content = match template.as_str() {
+                "sb" => TEMPLATE_SB,
+                "mp" => TEMPLATE_MP,
+                "lb" => TEMPLATE_LB,
+                "iriw" => TEMPLATE_IRIW,
+                "fence" => TEMPLATE_FENCE,
+                _ => {
+                    eprintln!("Unknown template: {}. Available: sb, mp, lb, iriw, fence", template);
+                    std::process::exit(1);
+                }
+            };
+            if std::path::Path::new(&output).exists() {
+                eprintln!("File already exists: {}. Use a different --output path.", output);
+                std::process::exit(1);
+            }
+            std::fs::write(&output, content).unwrap_or_else(|e| {
+                eprintln!("Error writing '{}': {}", output, e);
+                std::process::exit(1);
+            });
+            println!("✓ Created {} template: {}", template, output);
+            println!("  Edit the file, then run:");
+            println!("    litmus-cli check {}", output);
+            println!("    litmus-cli verify --file {}", output);
+            println!("    litmus-cli fence-advise --file {}", output);
         }
     }
 }

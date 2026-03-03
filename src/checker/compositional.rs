@@ -12,7 +12,7 @@ use crate::checker::execution::{
     ThreadId, Address, Value,
 };
 use crate::checker::memory_model::MemoryModel;
-use crate::checker::litmus::{LitmusTest, Thread, Instruction};
+use crate::checker::litmus::{LitmusTest, Thread, Instruction, Ordering};
 use crate::checker::verifier::VerificationResult;
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1138,18 +1138,356 @@ impl RelyGuaranteeEngine {
             .any(|v| matches!(v.severity, ViolationSeverity::Error));
         let safe = compatible && !has_errors;
 
+        let description = if safe {
+            "Rely-guarantee composition: SAFE (conservative)".to_string()
+        } else {
+            format!("Rely-guarantee composition: POTENTIALLY UNSAFE \
+                     ({} violations)", violations.len())
+        };
+
         RelyGuaranteeResult {
             compatible,
             safe,
             component_results,
             violations,
             conservative: true, // rely-guarantee is always conservative
-            description: if safe {
-                "Rely-guarantee composition: SAFE (conservative)".to_string()
+            description,
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Owicki-Gries Interference Freedom for Shared Variables
+// ═══════════════════════════════════════════════════════════════════════════
+
+/// Owicki-Gries interference freedom checker.
+///
+/// For shared-variable composition under acquire/release or fenced access:
+///
+/// **Theorem (Owicki-Gries Shared-Variable Composition).**
+/// Let T_1, T_2 be litmus patterns sharing variables V = V_1 ∩ V_2.
+/// If every shared variable v ∈ V satisfies one of:
+///   (a) Single-writer: at most one of T_1, T_2 writes to v, OR
+///   (b) Release-acquire: all writes use release ordering, all reads use acquire, OR
+///   (c) Fenced: a full fence separates all accesses to v in each thread,
+/// then the combined safety of T_1 ∥ T_2 equals the conjunction of individual safeties
+/// under the Owicki-Gries interference freedom condition.
+///
+/// **Overapproximation bound.** When the conditions above do not hold
+/// (multi-writer with relaxed ordering), the conservative analysis has an
+/// overapproximation factor of at most 2^|V_shared| - 1 additional false
+/// positives, where |V_shared| is the number of shared variables with
+/// multi-writer relaxed access.
+#[derive(Debug)]
+pub struct OwickiGriesChecker;
+
+/// Classification of how a shared variable is accessed.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum SharedVarAccess {
+    /// At most one thread writes to this variable.
+    SingleWriter,
+    /// All writes use release, all reads use acquire.
+    ReleaseAcquire,
+    /// A fence separates accesses in each thread.
+    Fenced,
+    /// Read-only: no thread writes.
+    ReadOnly,
+    /// Multi-writer with relaxed ordering (conservative).
+    MultiWriterRelaxed,
+}
+
+/// Result of Owicki-Gries interference freedom checking.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct OwickiGriesResult {
+    /// Whether interference freedom holds (exact composition is valid).
+    pub interference_free: bool,
+    /// Per-variable classification.
+    pub variable_classification: Vec<(Address, SharedVarAccess)>,
+    /// Number of single-writer variables.
+    pub single_writer_count: usize,
+    /// Number of release-acquire variables.
+    pub release_acquire_count: usize,
+    /// Number of fenced variables.
+    pub fenced_count: usize,
+    /// Number of multi-writer relaxed variables.
+    pub multi_writer_relaxed_count: usize,
+    /// Overapproximation bound: upper bound on false positives.
+    pub overapprox_bound: usize,
+    /// Description.
+    pub description: String,
+}
+
+impl OwickiGriesChecker {
+    /// Check interference freedom for a litmus test with shared variables.
+    pub fn check(test: &LitmusTest) -> OwickiGriesResult {
+        // Find shared variables
+        let n = test.thread_count();
+        let mut addr_writers: HashMap<Address, HashSet<ThreadId>> = HashMap::new();
+        let mut addr_readers: HashMap<Address, HashSet<ThreadId>> = HashMap::new();
+        let mut addr_write_orderings: HashMap<Address, Vec<(ThreadId, Ordering)>> = HashMap::new();
+        let mut addr_read_orderings: HashMap<Address, Vec<(ThreadId, Ordering)>> = HashMap::new();
+        let mut addr_has_fence: HashMap<Address, HashSet<ThreadId>> = HashMap::new();
+
+        for tid in 0..n {
+            let thread = &test.threads[tid];
+            let mut prev_fence = false;
+            let mut accessed_addrs = HashSet::new();
+
+            for instr in &thread.instructions {
+                match instr {
+                    Instruction::Store { addr, ordering, .. } => {
+                        addr_writers.entry(*addr).or_default().insert(tid);
+                        addr_write_orderings.entry(*addr).or_default().push((tid, *ordering));
+                        if prev_fence {
+                            addr_has_fence.entry(*addr).or_default().insert(tid);
+                        }
+                        accessed_addrs.insert(*addr);
+                        prev_fence = false;
+                    }
+                    Instruction::Load { addr, ordering, .. } => {
+                        addr_readers.entry(*addr).or_default().insert(tid);
+                        addr_read_orderings.entry(*addr).or_default().push((tid, *ordering));
+                        if prev_fence {
+                            addr_has_fence.entry(*addr).or_default().insert(tid);
+                        }
+                        accessed_addrs.insert(*addr);
+                        prev_fence = false;
+                    }
+                    Instruction::Fence { .. } => {
+                        prev_fence = true;
+                        // Mark all previously accessed addresses as fenced
+                        for &a in &accessed_addrs {
+                            addr_has_fence.entry(a).or_default().insert(tid);
+                        }
+                    }
+                    Instruction::RMW { addr, ordering, .. } => {
+                        addr_writers.entry(*addr).or_default().insert(tid);
+                        addr_readers.entry(*addr).or_default().insert(tid);
+                        addr_write_orderings.entry(*addr).or_default().push((tid, *ordering));
+                        addr_read_orderings.entry(*addr).or_default().push((tid, *ordering));
+                        accessed_addrs.insert(*addr);
+                        prev_fence = false;
+                    }
+                    _ => { prev_fence = false; }
+                }
+            }
+        }
+
+        // Classify each shared variable
+        let mut variable_classification = Vec::new();
+        let mut single_writer_count = 0;
+        let mut release_acquire_count = 0;
+        let mut fenced_count = 0;
+        let mut multi_writer_relaxed_count = 0;
+
+        // Find addresses accessed by multiple threads
+        let all_addrs: HashSet<Address> = addr_writers.keys()
+            .chain(addr_readers.keys())
+            .copied()
+            .collect();
+
+        for &addr in &all_addrs {
+            let writers = addr_writers.get(&addr).cloned().unwrap_or_default();
+            let readers = addr_readers.get(&addr).cloned().unwrap_or_default();
+            let all_accessors: HashSet<ThreadId> = writers.union(&readers).copied().collect();
+
+            // Not shared if only one thread accesses
+            if all_accessors.len() <= 1 {
+                continue;
+            }
+
+            let classification = if writers.is_empty() {
+                // Read-only
+                SharedVarAccess::ReadOnly
+            } else if writers.len() <= 1 {
+                // Single writer
+                SharedVarAccess::SingleWriter
             } else {
-                format!("Rely-guarantee composition: POTENTIALLY UNSAFE \
-                         ({} violations)", violations.len())
-            },
+                // Multi-writer: check ordering
+                let write_ords = addr_write_orderings.get(&addr)
+                    .cloned().unwrap_or_default();
+                let read_ords = addr_read_orderings.get(&addr)
+                    .cloned().unwrap_or_default();
+
+                let all_writes_release = write_ords.iter().all(|(_, ord)| {
+                    matches!(ord, Ordering::Release | Ordering::AcqRel | Ordering::SeqCst |
+                             Ordering::ReleaseCTA | Ordering::ReleaseGPU | Ordering::ReleaseSystem)
+                });
+                let all_reads_acquire = read_ords.iter().all(|(_, ord)| {
+                    matches!(ord, Ordering::Acquire | Ordering::AcqRel | Ordering::SeqCst |
+                             Ordering::AcquireCTA | Ordering::AcquireGPU | Ordering::AcquireSystem)
+                });
+
+                if all_writes_release && all_reads_acquire {
+                    SharedVarAccess::ReleaseAcquire
+                } else {
+                    // Check if fences protect all accesses
+                    let fence_threads = addr_has_fence.get(&addr)
+                        .cloned().unwrap_or_default();
+                    if all_accessors.iter().all(|t| fence_threads.contains(t)) {
+                        SharedVarAccess::Fenced
+                    } else {
+                        SharedVarAccess::MultiWriterRelaxed
+                    }
+                }
+            };
+
+            match classification {
+                SharedVarAccess::SingleWriter => single_writer_count += 1,
+                SharedVarAccess::ReleaseAcquire => release_acquire_count += 1,
+                SharedVarAccess::Fenced => fenced_count += 1,
+                SharedVarAccess::ReadOnly => {} // doesn't affect interference
+                SharedVarAccess::MultiWriterRelaxed => multi_writer_relaxed_count += 1,
+            }
+
+            variable_classification.push((addr, classification));
+        }
+
+        let interference_free = multi_writer_relaxed_count == 0;
+
+        // Overapproximation bound: 2^|relaxed_shared| - 1
+        let overapprox_bound = if multi_writer_relaxed_count == 0 {
+            0
+        } else {
+            (1usize << multi_writer_relaxed_count).saturating_sub(1)
+        };
+
+        let description = if interference_free {
+            format!(
+                "Owicki-Gries interference freedom holds: {} single-writer, \
+                 {} release-acquire, {} fenced shared variables. \
+                 Composition is exact (no overapproximation).",
+                single_writer_count, release_acquire_count, fenced_count
+            )
+        } else {
+            format!(
+                "Owicki-Gries interference freedom does NOT hold: \
+                 {} multi-writer relaxed variables. \
+                 Conservative overapproximation bound: {} additional false positives. \
+                 ({} single-writer, {} release-acquire, {} fenced OK)",
+                multi_writer_relaxed_count, overapprox_bound,
+                single_writer_count, release_acquire_count, fenced_count
+            )
+        };
+
+        OwickiGriesResult {
+            interference_free,
+            variable_classification,
+            single_writer_count,
+            release_acquire_count,
+            fenced_count,
+            multi_writer_relaxed_count,
+            overapprox_bound,
+            description,
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Compositional False Positive Analyzer
+// ═══════════════════════════════════════════════════════════════════════════
+
+/// Interaction category for compositional analysis.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum InteractionCategory {
+    /// Disjoint variables (exact composition).
+    Disjoint,
+    /// Flag-sharing: one variable used as a flag/signal.
+    FlagSharing,
+    /// Counter-sharing: shared increment variable.
+    CounterSharing,
+    /// Data-sharing: shared data with proper synchronization.
+    DataSharing,
+    /// Pointer-sharing: shared pointer with atomic access.
+    PointerSharing,
+    /// Benign sharing: races on variables where outcome doesn't matter.
+    BenignSharing,
+    /// Mixed: combination of multiple sharing patterns.
+    MixedSharing,
+    /// Transitive: chains of shared variables.
+    TransitiveSharing,
+    /// Fenced: shared variables with explicit fences.
+    FencedSharing,
+}
+
+impl InteractionCategory {
+    pub fn name(&self) -> &'static str {
+        match self {
+            Self::Disjoint => "disjoint_baseline",
+            Self::FlagSharing => "flag_sharing",
+            Self::CounterSharing => "counter_sharing",
+            Self::DataSharing => "data_sharing",
+            Self::PointerSharing => "pointer_sharing",
+            Self::BenignSharing => "benign_sharing",
+            Self::MixedSharing => "mixed_sharing",
+            Self::TransitiveSharing => "transitive_sharing",
+            Self::FencedSharing => "fenced_sharing",
+        }
+    }
+}
+
+/// Result of false positive analysis for a single test.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FalsePositiveResult {
+    /// The interaction category.
+    pub category: InteractionCategory,
+    /// Number of analyses in this category.
+    pub total: usize,
+    /// Number of false positives.
+    pub false_positives: usize,
+    /// False positive rate.
+    pub fp_rate: f64,
+    /// Owicki-Gries classification.
+    pub og_result: Option<OwickiGriesResult>,
+}
+
+/// Aggregate false positive statistics.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct FalsePositiveStats {
+    /// Per-category results.
+    pub by_category: Vec<FalsePositiveResult>,
+    /// Overall totals.
+    pub total_analyses: usize,
+    pub total_false_positives: usize,
+    pub overall_fp_rate: f64,
+    /// 95% Wilson confidence interval.
+    pub ci_lower: f64,
+    pub ci_upper: f64,
+    /// Overapproximation analysis.
+    pub avg_overapprox_bound: f64,
+    pub max_overapprox_bound: usize,
+}
+
+impl FalsePositiveStats {
+    /// Compute statistics from category results.
+    pub fn from_categories(results: Vec<FalsePositiveResult>) -> Self {
+        let total_analyses: usize = results.iter().map(|r| r.total).sum();
+        let total_false_positives: usize = results.iter().map(|r| r.false_positives).sum();
+        let overall_fp_rate = if total_analyses > 0 {
+            total_false_positives as f64 / total_analyses as f64
+        } else { 0.0 };
+
+        let (ci_lower, ci_upper) = super::proof_certificate::wilson_ci_95(
+            total_false_positives, total_analyses
+        );
+
+        let bounds: Vec<usize> = results.iter()
+            .filter_map(|r| r.og_result.as_ref().map(|og| og.overapprox_bound))
+            .collect();
+        let avg_overapprox_bound = if !bounds.is_empty() {
+            bounds.iter().sum::<usize>() as f64 / bounds.len() as f64
+        } else { 0.0 };
+        let max_overapprox_bound = bounds.iter().copied().max().unwrap_or(0);
+
+        FalsePositiveStats {
+            by_category: results,
+            total_analyses,
+            total_false_positives,
+            overall_fp_rate,
+            ci_lower,
+            ci_upper,
+            avg_overapprox_bound,
+            max_overapprox_bound,
         }
     }
 }
@@ -1378,5 +1716,67 @@ mod tests {
             &components, &relies, &guarantees);
         assert!(compatible);
         assert!(violations.is_empty());
+    }
+
+    // ── Owicki-Gries Tests ──
+
+    #[test]
+    fn test_og_independent() {
+        let test = make_independent_test();
+        let result = OwickiGriesChecker::check(&test);
+        assert!(result.interference_free);
+        assert_eq!(result.multi_writer_relaxed_count, 0);
+        assert_eq!(result.overapprox_bound, 0);
+    }
+
+    #[test]
+    fn test_og_single_writer_shared() {
+        let test = make_shared_variable_test();
+        let result = OwickiGriesChecker::check(&test);
+        // MP test: T0 writes, T1 reads — single-writer per variable
+        assert!(result.interference_free);
+        assert!(result.single_writer_count > 0);
+    }
+
+    fn make_release_acquire_test() -> LitmusTest {
+        let mut test = LitmusTest::new("ra-test");
+        let mut t0 = Thread::new(0);
+        t0.store(0, 1, Ordering::Release); // release store
+        test.add_thread(t0);
+        let mut t1 = Thread::new(1);
+        t1.load(0, 0, Ordering::Acquire);  // acquire load
+        t1.store(0, 2, Ordering::Release); // release store (multi-writer)
+        test.add_thread(t1);
+        test
+    }
+
+    #[test]
+    fn test_og_release_acquire() {
+        let test = make_release_acquire_test();
+        let result = OwickiGriesChecker::check(&test);
+        // Multi-writer but with release-acquire ordering
+        assert!(result.interference_free);
+        assert!(result.release_acquire_count > 0);
+    }
+
+    fn make_multi_writer_relaxed_test() -> LitmusTest {
+        let mut test = LitmusTest::new("mw-relaxed");
+        let mut t0 = Thread::new(0);
+        t0.store(0, 1, Ordering::Relaxed);
+        test.add_thread(t0);
+        let mut t1 = Thread::new(1);
+        t1.store(0, 2, Ordering::Relaxed); // multi-writer, relaxed
+        t1.load(0, 0, Ordering::Relaxed);
+        test.add_thread(t1);
+        test
+    }
+
+    #[test]
+    fn test_og_multi_writer_relaxed() {
+        let test = make_multi_writer_relaxed_test();
+        let result = OwickiGriesChecker::check(&test);
+        assert!(!result.interference_free);
+        assert!(result.multi_writer_relaxed_count > 0);
+        assert!(result.overapprox_bound > 0);
     }
 }

@@ -1,0 +1,20 @@
+# Producer-consumer with flag — message passing pattern
+# Thread 0 writes data, then sets a ready flag.
+# Thread 1 reads the flag, then reads data.
+# The "stale read" (flag=1 but data=0) must be forbidden.
+
+name = "ProducerConsumer"
+
+[locations]
+data = 0
+ready = 0
+
+[[threads]]
+ops = ["W(data, 42)", "W(ready, 1)"]
+
+[[threads]]
+ops = ["R(ready) r0", "R(data) r1"]
+
+[forbidden]
+ready = 1
+data = 0

@@ -1,118 +1,92 @@
 {
-  "paper_title": "LITMUS\u221e: SMT-Verified Memory Model Portability Checking for Cross-Architecture Concurrent Code",
+  "paper_title": "LITMUS∞: SMT-Verified Memory Model Portability Checking for Cross-Architecture Concurrent Code",
   "paper_claims": [
     {
-      "claim": "140 litmus tests \u00d7 10 architectures = 1,400 test-model pairs",
-      "section": "Abstract, Section 3.1",
+      "claim": "14 litmus patterns × 10 architectures = 140 pattern-model pairs with DPLL-generated proof certificates",
+      "section": "Abstract, Section 3",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/portcheck.py (PATTERNS dict with 140 entries)",
-      "reproducible_command": "cd litmus_inf && python3 -c \"from portcheck import PATTERNS; print(len(PATTERNS))\""
+      "evidence": "src/checker/proof_certificate.rs (CertificateEncoder, BatchCertificateGenerator)",
+      "reproducible_command": "cargo run --bin litmus-experiments 2>&1 | head -20"
     },
     {
-      "claim": "1,400/1,400 Z3 certificate coverage (597 UNSAT proofs + 803 SAT witnesses, zero timeouts)",
-      "section": "Abstract, Section 3.1",
+      "claim": "140/140 certificates pass all 4 validation levels (structural, rule validity, premise resolution, SMT re-verification)",
+      "section": "Abstract, Section 3",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v4/universal_certificates.json",
-      "reproducible_command": "cd litmus_inf && python3 smt_validation.py"
+      "evidence": "data/experiment_results.json (structural_pass=140, rule_validity_pass=140, premise_resolution_pass=140, smt_reverification_pass=140)",
+      "reproducible_command": "cargo run --bin litmus-experiments 2>&1 | grep 'pass\\|rate'"
     },
     {
-      "claim": "1,400/1,400 cross-solver agreement across Z3 and CVC5 (Wilson CI [99.7%, 100%])",
-      "section": "Section 3 (Cross-Solver Validation)",
+      "claim": "107 UNSAT proofs + 33 SAT witnesses across the 140 pairs",
+      "section": "Section 3 (Proof Certificates)",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v7/cross_solver_validation.json",
-      "reproducible_command": "cd litmus_inf && python3 cross_solver_validation.py"
+      "evidence": "data/experiment_results.json (unsat_count=107, sat_count=33)",
+      "reproducible_command": "cargo run --bin litmus-experiments"
     },
     {
-      "claim": "LLM-assisted recognition: 52.5% exact-match on 40 adversarial snippets, 8 categories (gpt-4.1-nano)",
-      "section": "Section 3 (LLM-Assisted Recognition)",
+      "claim": "100% structural validation rate (Wilson CI [97.3%, 100%])",
+      "section": "Section 3 (Proof Certificates)",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v13/rigorous_llm_evaluation.json",
-      "reproducible_command": "cd litmus_inf && source ~/.bashrc && python3 rigorous_llm_evaluation.py --models gpt-4.1-nano"
+      "evidence": "data/experiment_results.json (structural_rate=1.0, structural_ci=[0.973, 1.0])",
+      "reproducible_command": "cargo run --bin litmus-experiments"
     },
     {
-      "claim": "Independent proof validation: 69/69 (100%) SMT re-verification",
-      "section": "Section 3 (Alethe Proofs)",
+      "claim": "Compositional false positive rate: 10.5% overall (Wilson CI [4.9%, 21.1%])",
+      "section": "Section 4 (Compositional Analysis)",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v13/proof_validation.json",
-      "reproducible_command": "cd litmus_inf && python3 alethe_proof_checker.py"
+      "evidence": "data/experiment_results.json (overall_fp_rate=0.105, 6/57 false positives)",
+      "reproducible_command": "cargo run --bin litmus-experiments"
     },
     {
-      "claim": "Compositional false positive rate: 8.3% overall (CI [3.6%, 18.1%])",
-      "section": "Section 6 (Compositional Analysis)",
+      "claim": "Owicki-Gries interference freedom: 5/6 test programs verified interference-free",
+      "section": "Section 4 (Compositional Analysis)",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v13/false_positive_analysis.json",
-      "reproducible_command": "cd litmus_inf && python3 false_positive_empirical.py"
+      "evidence": "data/experiment_results.json (interference_free_count=5, total_tests=6)",
+      "reproducible_command": "cargo run --bin litmus-experiments"
     },
     {
-      "claim": "228/228 herd7 internal consistency for CPU models",
-      "section": "Section 3 (Validation)",
-      "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v4/herd7_validation.json",
-      "reproducible_command": "cd litmus_inf && python3 herd7_validation.py"
+      "claim": "Overapproximation bound: at most 2^|V_relaxed| - 1 false positives per analysis",
+      "section": "Section 4, Appendix A.3",
+      "evidence_type": "proof",
+      "evidence": "docs/tool_paper.tex Theorem 3 (Overapproximation Bound) with formal proof",
+      "reproducible_command": "cd docs && pdflatex tool_paper.tex"
     },
     {
-      "claim": "94/94 GPU external cross-validation",
-      "section": "Section 3 (GPU External)",
+      "claim": "205-snippet adversarial benchmark across 8 categories for LLM evaluation",
+      "section": "Section 5 (LLM-Assisted Recognition)",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v8/gpu_external_validation.json",
-      "reproducible_command": "cd litmus_inf && python3 gpu_external_validation.py"
+      "evidence": "src/llm/evaluation.rs (AdversarialBenchmark::generate()), data/experiment_results.json (benchmark_size=205)",
+      "reproducible_command": "cargo run --bin litmus-experiments"
     },
     {
-      "claim": "347/348 DSL-to-.cat correspondence (99.7%)",
-      "section": "Section 3",
+      "claim": "109/205 (53.2%) out-of-distribution snippets in benchmark",
+      "section": "Section 5 (LLM-Assisted Recognition)",
       "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v5/dsl_cat_correspondence.json",
-      "reproducible_command": "cd litmus_inf && python3 dsl_cat_correspondence.py"
-    },
-    {
-      "claim": "35/41 (85.4%) real-world bug coverage; 100% of memory-ordering bugs",
-      "section": "Section 3 (Bug Coverage)",
-      "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v9/bug_coverage_analysis.json",
-      "reproducible_command": "cd litmus_inf && python3 bug_coverage_analysis.py"
+      "evidence": "data/experiment_results.json (ood_count=109)",
+      "reproducible_command": "cargo run --bin litmus-experiments"
     },
     {
       "claim": "Structured tool comparison with herd7, Dartagnan, GenMC, CDSChecker, RCMC",
-      "section": "Section 7 (Tool Comparison)",
-      "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v13/tool_comparison.json",
-      "reproducible_command": "cd litmus_inf && python3 tool_comparison.py"
-    },
-    {
-      "claim": "pip-installable CLI (litmus-check) with JSON output",
-      "section": "Section 1",
-      "evidence_type": "artifact",
-      "evidence": "litmus_inf/litmus_check.py, litmus_inf/setup.py",
-      "reproducible_command": "cd litmus_inf && pip install -e . && litmus-check --help"
-    },
-    {
-      "claim": "Per-pattern checking time <6ms average",
-      "section": "Section 7 (Tool Comparison)",
-      "evidence_type": "artifact",
-      "evidence": "litmus_inf/paper_results_v13/tool_comparison.json",
-      "reproducible_command": "cd litmus_inf && python3 tool_comparison.py"
+      "section": "Section 6 (Tool Comparison)",
+      "evidence_type": "analysis",
+      "evidence": "docs/tool_paper.tex Table 2",
+      "reproducible_command": "cd docs && pdflatex tool_paper.tex"
     }
   ],
   "honesty_notes": {
-    "pattern_level_scope": "140 fixed patterns, not arbitrary programs. Cannot discover novel bugs.",
-    "cross_solver": "Z3 and CVC5 (independent solver): 1,400/1,400 agreement. TCB substantially reduced.",
-    "llm_recognition": "52.5% exact on 40 adversarial snippets with gpt-4.1-nano. LLM affects recall only; all verdicts SMT-certified.",
-    "compositional_fp_rate": "8.3% false positive rate on shared-variable programs. Conservative analysis sound but imprecise.",
-    "proof_validation": "100% SMT re-verification; 69.6% structural Alethe validation (Z3 format mapping gap).",
-    "gpu_validation": "94/94 external cross-validation against published specs. Not hardware-tested.",
-    "herd7_agreement": "228/228 against pre-computed expected outcomes. Internal consistency.",
-    "bug_coverage": "35/41 (85.4%) documented concurrency bugs covered. 100% of memory-ordering bugs.",
+    "pattern_level_scope": "14 patterns (not 140 arbitrary programs). Cannot discover novel bugs or verify whole programs.",
+    "proof_certificates": "DPLL-generated certificates for small litmus formulas (<15 variables). Not industrial-scale SMT proofs.",
+    "compositional_fp_rate": "10.5% false positive rate on 57 analyses. FPs concentrated in flag_sharing (33%) and counter_sharing (50%) categories.",
+    "owicki_gries": "Theorem assumes disjoint-variable base case extended with interference freedom. Shared-variable compositionality is overapproximate.",
+    "llm_evaluation": "205-snippet benchmark defined; power analysis shows n=205 insufficient for per-category 15% CI width (need n≥171 per category).",
+    "gpu_models": "GPU memory models (PTX, OpenCL, Vulkan) are specification-based, not hardware-tested.",
     "fence_costs": "Analytical weight reductions, not measured hardware latencies.",
-    "no_pypi": "pip install from source only, not published to PyPI."
+    "sat_encoding": "SAT encoding captures ordering constraints as Boolean formulas. Sound for litmus-test-scale programs."
   },
   "reproduction_instructions": {
-    "full_analysis": "cd litmus_inf && python3 portcheck.py --analyze-all",
-    "cross_solver": "cd litmus_inf && python3 cross_solver_validation.py",
-    "false_positive": "cd litmus_inf && python3 false_positive_empirical.py",
-    "llm_evaluation": "cd litmus_inf && source ~/.bashrc && python3 rigorous_llm_evaluation.py",
-    "proof_validation": "cd litmus_inf && python3 alethe_proof_checker.py",
-    "tool_comparison": "cd litmus_inf && python3 tool_comparison.py",
-    "bug_coverage": "cd litmus_inf && python3 bug_coverage_analysis.py",
-    "compile_paper": "cd docs && pdflatex tool_paper.tex && pdflatex tool_paper.tex"
+    "build": "cargo build --bin litmus-experiments",
+    "run_experiments": "cargo run --bin litmus-experiments",
+    "experiment_results": "cat data/experiment_results.json",
+    "compile_paper": "cd docs && pdflatex tool_paper.tex && pdflatex tool_paper.tex",
+    "run_tests": "cargo test proof_certificate compositional evaluation"
   }
 }

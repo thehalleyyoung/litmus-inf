@@ -1,0 +1,37 @@
+═══════════════════════════════════════════════════════════════
+ LITMUS∞ Experiment Runner
+═══════════════════════════════════════════════════════════════
+
+[1/4] Generating proof certificate suite...
+  Generated 140 certificates in 0.01s
+  UNSAT: 107, SAT: 33
+  SMT re-verification: 140/140
+  Structural validation: 140/140
+  Rule validity: 140/140
+  Premise resolution: 140/140
+
+[2/4] Running compositional false positive analysis...
+  Total analyses: 57
+  False positives: 6
+  FP rate: 10.5% (CI [4.9%, 21.1%])
+
+[3/4] Running Owicki-Gries classification...
+  Total tests: 6
+  Interference-free: 5/6
+
+[4/4] Running LLM evaluation benchmark (AST-only mode)...
+  Benchmark size: 205
+  Categories: 8
+  OOD snippets: 109
+    application: 25
+    coherence: 25
+    dependency_patterns: 25
+    gpu: 25
+    kernel_patterns: 25
+    lock_free: 30
+    message_passing: 25
+    store_buffering: 25
+
+═══════════════════════════════════════════════════════════════
+ All experiments complete.
+═══════════════════════════════════════════════════════════════
